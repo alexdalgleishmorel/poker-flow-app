@@ -14,6 +14,7 @@ export class HubComponent {
   ) {}
 
   joinGame() {
+    //test
     this.router.navigate(['/', 'pool']);
   }
 }
