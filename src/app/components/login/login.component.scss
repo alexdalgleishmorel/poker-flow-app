@@ -1,0 +1,64 @@
+@import '../../../mixins.scss';
+
+.google-container {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    mat-icon {
+        transform: scale(1.5);
+    }
+}
+
+mat-divider {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.divider-container {
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+        color: grey;
+    }
+}
+
+.form-container {
+    height: 75vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+mat-form-field {
+    width: 50%;
+    @include mobile {
+        width: 90%;
+    }
+}
+
+.name-fields-container {
+    display: flex;
+    flex-direction: row;
+    @include mobile {
+        flex-direction: column;
+    }
+
+    mat-form-field {
+        width: 50%;
+        @include mobile {
+            width: 90%;
+        }
+    }
+}
+
+button {
+    transform: scale(1.25);
+    border-radius: 90px;
+}

@@ -3,16 +3,64 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { HttpClientModule } from "@angular/common/http";
+import { LoginComponent } from './components/login/login.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { PoolService } from './services/pool/pool.service';
+import { ProfileService } from './services/profile/profile.service';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { WelcomeComponent } from './components/welcome/welcome.component';
+import { HubComponent } from './components/hub/hub.component';
+import { PoolComponent } from './components/pool/pool.component';
+import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LoginComponent,
+    ToolbarComponent,
+    WelcomeComponent,
+    HubComponent,
+    PoolComponent,
+    PoolDonutChartComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
+    MatStepperModule,
+    MatTabsModule,
+    MatToolbarModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    PoolService,
+    ProfileService,
+    FormBuilder
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

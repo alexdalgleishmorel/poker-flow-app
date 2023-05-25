@@ -1,0 +1,54 @@
+<div class="content">
+    <div class="back-button">
+        <button
+            mat-mini-fab color="primary"
+            (click)="goToHub()"
+        >
+            <mat-icon>keyboard_arrow_left</mat-icon>
+        </button>
+    </div>
+    <div class="information-container">
+        <mat-tab-group id="information-tab-group" animationDuration="0ms">
+            <mat-tab label="POOL">
+                <ng-template matTabContent>
+                    <app-pool-donut-chart [id]="id"></app-pool-donut-chart>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="ACTIVITY"></mat-tab>
+        </mat-tab-group>
+    </div>
+    <div class="flow-container">
+        <mat-stepper orientation="vertical" #stepper>
+            <mat-step state="deposit-money">
+                <ng-template matStepLabel>Buy In</ng-template>
+                <ng-template matStepContent>
+                    Deposit money to the pool and withdraw chips
+                    <br><br>
+                    <button 
+                    mat-raised-button color="accent"
+                    >
+                    BUY IN
+                    </button>
+                </ng-template>
+                <ng-template matStepperIcon="edit">
+                    <mat-icon>bubble_chart</mat-icon>
+                </ng-template>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Cash Out</ng-template>
+                <ng-template matStepContent>
+                    Deposit chips and withdraw your earnings from the pool
+                    <br><br>
+                    <button 
+                    mat-raised-button color="accent"
+                    >
+                    Cash Out
+                    </button>
+                </ng-template>
+            </mat-step>
+            <ng-template matStepperIcon="deposit-money">
+                <mat-icon>call_end</mat-icon>
+            </ng-template>
+        </mat-stepper>
+    </div>
+</div>

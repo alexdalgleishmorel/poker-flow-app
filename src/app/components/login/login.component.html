@@ -1,0 +1,74 @@
+<mat-tab-group animationDuration="0ms">
+    <mat-tab label="LOGIN">
+        <div class="google-container">
+            <button mat-raised-button>
+                <mat-icon svgIcon="google"></mat-icon>
+                Sign in with Google
+            </button>
+        </div>
+        <div class="divider-container">
+            <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
+        </div>
+        <div class="form-container">
+            <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <button 
+            mat-raised-button color="primary"
+            (click)="login()"
+            >
+                LOGIN
+            </button>
+        </div>
+    </mat-tab>
+    <mat-tab label="CREATE ACCOUNT">
+        <div class="google-container">
+            <button mat-raised-button>
+                <mat-icon svgIcon="google"></mat-icon>
+                Create account with Google
+            </button>
+        </div>
+        <div class="divider-container">
+            <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
+        </div>
+        <div class="form-container">
+            <mat-form-field appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Last Name</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Email</mat-label>
+                <input matInput>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Confirm Password</mat-label>
+                <input matInput [type]="hidePassword ? 'password' : 'text'">
+                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+            <button mat-raised-button color="primary">
+                JOIN NOW
+            </button>
+        </div>
+    </mat-tab>
+</mat-tab-group>

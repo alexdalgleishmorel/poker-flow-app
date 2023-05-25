@@ -1,0 +1,39 @@
+<div class="toolbar">
+    <mat-toolbar color="primary">
+        <div class="logo-container">
+            <img class="logo" (click)="goToWelcome()" src="../../assets/logo/svg/white_log_no_background.svg">
+        </div>
+        <span class="spacer"></span>
+        <div class="login-button-container" *ngIf="!loggedIn && !loginPending">
+            <button
+            mat-raised-button
+            (click)="login()"
+            >
+            LOGIN
+            </button>
+        </div>
+        <div class="account-button-container" *ngIf="loggedIn">
+            <button 
+            mat-icon-button
+            [matMenuTriggerFor]="menu"
+            >
+                <mat-icon>account_circle</mat-icon>
+            </button>
+        </div>
+        <mat-menu #menu="matMenu">
+            <button
+            mat-menu-item
+            (click)="logout()"
+            >
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+        </mat-menu>
+        <mat-spinner
+            *ngIf="!loggedIn && loginPending"
+            [color]="spinnerColor"
+            [diameter]="40"
+        >
+        </mat-spinner>
+    </mat-toolbar>
+</div>

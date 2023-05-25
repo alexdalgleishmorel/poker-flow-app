@@ -1,0 +1,9 @@
+@import '../../../mixins.scss';
+
+#pool-donut-chart {
+    padding-top: 10px;
+    @include mobile {
+        width: fit-content;
+        height: fit-content;
+    }
+}
