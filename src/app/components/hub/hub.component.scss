@@ -1,4 +1,4 @@
-.join-game-container {
+.main-button-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -7,22 +7,5 @@
     button {
         transform: scale(1.5);
         border-radius: 90px;
-    }
-}
-
-mat-divider {
-    width: 100%;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.divider-container {
-    height: 5vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    a {
-        color: grey;
     }
 }

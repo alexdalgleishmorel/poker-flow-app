@@ -8,13 +8,18 @@ import { ProfileService } from 'src/app/services/profile/profile.service';
   styleUrls: ['./hub.component.scss']
 })
 export class HubComponent {
+  public deviceConnected: boolean = false;
+
   constructor(
     private profileService: ProfileService,
     private router: Router
   ) {}
 
   joinGame() {
-    //test
     this.router.navigate(['/', 'pool']);
   }
+
+  newGame() {}
+
+  connectToDevice() {}
 }

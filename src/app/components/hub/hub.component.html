@@ -1,14 +1,21 @@
-<div class="join-game-container">
-    <button 
+<div class="main-button-container">
+    <button
+        *ngIf="deviceConnected"
         mat-raised-button
         color="primary"
-        (click)="joinGame()"
+        (click)="newGame()"
     >
         JOIN GAME
     </button>
-</div>
-<div class="divider-container">
-    <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
+    <button
+        *ngIf="!deviceConnected"
+        class="connect-device-button"
+        mat-raised-button
+        color="accent"
+        (click)="connectToDevice()"
+    >
+        CONNECT TO A DEVICE
+    </button>
 </div>
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="ACTIVE GAMES">
