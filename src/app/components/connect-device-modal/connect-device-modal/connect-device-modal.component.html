@@ -1,0 +1,62 @@
+<div *ngIf="!searchingForDevices else searching">
+    <div class="dialog-container">
+        <div mat-dialog-content *ngIf="devicesFound">
+            <h1 mat-dialog-title *ngIf="results.length === 1">PokerFlow device found</h1>
+            <h1 mat-dialog-title *ngIf="results.length > 1">PokerFlow devices found</h1>
+            <div class="device-row" *ngFor="let device of results">
+                {{device.id}}
+                <span class="spacer"></span>
+                <button
+                class="connect-button"
+                mat-raised-button
+                color="accent"
+                (click)="selectDevice(device)"
+                >
+                    CONNECT
+                </button>
+            </div>
+        </div>
+        <div mat-dialog-content *ngIf="!devicesFound">
+            <h1 mat-dialog-title>No PokerFlow devices found</h1>
+            <mat-dialog-actions align="center">
+                <button
+                mat-raised-button
+                (click)="cancelSearch()"
+                >
+                    CANCEL
+                </button>
+                <button
+                mat-raised-button
+                color="accent"
+                (click)="searchForDevices()"
+                >
+                    RETRY
+                </button>
+            </mat-dialog-actions>
+        </div>
+    </div>
+</div>
+
+<ng-template #searching>
+    <div class="dialog-container">
+        <div mat-dialog-content>
+            <div *ngIf="searching" class="loading-container">
+                <mat-spinner
+                [color]="spinnerColor"
+                >
+                </mat-spinner>
+                <div class="search-message">Searching for PokerFlow devices</div>
+            </div>
+            <div *ngIf="searching" class="cancel-button-container">
+                <button
+                class="cancel-button"
+                mat-raised-button
+                color="primary"
+                (click)="cancelSearch()"
+                >
+                    CANCEL
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>
