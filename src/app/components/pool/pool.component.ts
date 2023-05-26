@@ -25,8 +25,7 @@ export class PoolComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.id = this.activatedRoute.snapshot.params['poolID'];
-    console.log(this.id);
+    this.id = this.activatedRoute.snapshot.params['id'];
   }
 
   goToHub() {

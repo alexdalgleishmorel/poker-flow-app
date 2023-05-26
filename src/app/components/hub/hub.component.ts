@@ -32,11 +32,7 @@ export class HubComponent {
     });
     createGameModalRef.afterClosed().subscribe((response) => {
       this.enableHub();
-      this.router.navigate(['/', 'pool'], {
-        queryParams: {
-          poolID: response.id
-        }
-      });
+      this.router.navigate(['/', `pool`, response.id]);
     });
   }
 
