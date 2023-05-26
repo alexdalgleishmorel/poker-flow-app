@@ -4,8 +4,9 @@
         mat-raised-button
         color="primary"
         (click)="newGame()"
+        [disabled]="!hubEnabled"
     >
-        JOIN GAME
+        CREATE A GAME
     </button>
     <button
         *ngIf="!deviceConnected"
@@ -13,13 +14,14 @@
         mat-raised-button
         color="accent"
         (click)="connectToDevice()"
+        [disabled]="!hubEnabled"
     >
         CONNECT TO A DEVICE
     </button>
 </div>
 <mat-tab-group animationDuration="0ms">
-    <mat-tab label="ACTIVE GAMES">
+    <mat-tab label="ACTIVE GAMES" [disabled]="!hubEnabled">
     </mat-tab>
-    <mat-tab label="PAST GAMES">
+    <mat-tab label="PAST GAMES" [disabled]="!hubEnabled">
     </mat-tab>
 </mat-tab-group>

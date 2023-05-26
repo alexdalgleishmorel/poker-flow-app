@@ -10,6 +10,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { LoginComponent } from './components/login/login.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -26,6 +27,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HubComponent } from './components/hub/hub.component';
 import { PoolComponent } from './components/pool/pool.component';
 import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
+import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal/connect-device-modal.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donu
     WelcomeComponent,
     HubComponent,
     PoolComponent,
-    PoolDonutChartComponent
+    PoolDonutChartComponent,
+    ConnectDeviceModalComponent
   ],
   imports: [
     BrowserModule,
@@ -44,6 +47,7 @@ import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donu
     HttpClientModule,
     MatButtonModule,
     MatCardModule,
+    MatDialogModule,
     MatDividerModule,
     MatFormFieldModule,
     MatInputModule,
