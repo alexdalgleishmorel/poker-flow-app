@@ -27,7 +27,8 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HubComponent } from './components/hub/hub.component';
 import { PoolComponent } from './components/pool/pool.component';
 import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
-import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal/connect-device-modal.component';
+import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal.component';
+import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ConnectDeviceModalComponent } from './components/connect-device-modal/c
     HubComponent,
     PoolComponent,
     PoolDonutChartComponent,
-    ConnectDeviceModalComponent
+    ConnectDeviceModalComponent,
+    CreateGameModalComponent
   ],
   imports: [
     BrowserModule,

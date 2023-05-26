@@ -41,6 +41,10 @@ export class PoolService {
       ]
     });
   }
+
+  createGame() {
+    return of({id: 'mock_pool_id'});
+  }
 }
 
 export interface PoolData {

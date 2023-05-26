@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ConnectDeviceModalComponent } from '../connect-device-modal/connect-device-modal/connect-device-modal.component';
+import { ConnectDeviceModalComponent } from '../connect-device-modal/connect-device-modal.component';
+import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 
 @Component({
@@ -25,7 +26,19 @@ export class HubComponent {
     this.router.navigate(['/', 'pool']);
   }
 
-  createNewGame() {}
+  createNewGame() {
+    this.disableHub();
+    let createGameModalRef = this.dialog.open(CreateGameModalComponent, {
+    });
+    createGameModalRef.afterClosed().subscribe((response) => {
+      this.enableHub();
+      this.router.navigate(['/', 'pool'], {
+        queryParams: {
+          poolID: response.id
+        }
+      });
+    });
+  }
 
   connectToDevice() {
     this.disableHub();

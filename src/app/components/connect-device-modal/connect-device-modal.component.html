@@ -1,5 +1,5 @@
 <div *ngIf="!searchingForDevices else searching">
-    <div class="dialog-container">
+    <div>
         <div mat-dialog-content *ngIf="devicesFound">
             <h1 mat-dialog-title *ngIf="results.length === 1">PokerFlow device found</h1>
             <h1 mat-dialog-title *ngIf="results.length > 1">PokerFlow devices found</h1>
@@ -38,7 +38,7 @@
 </div>
 
 <ng-template #searching>
-    <div class="dialog-container">
+    <div>
         <div mat-dialog-content>
             <div *ngIf="searching" class="loading-container">
                 <mat-spinner
