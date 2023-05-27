@@ -1,0 +1,29 @@
+<div *ngIf="!searching else searching">
+    connected!
+</div>
+
+<ng-template #searching>
+    <div>
+        <div mat-dialog-content>
+            <div *ngIf="searching" class="loading-container">
+                <mat-spinner
+                [color]="spinnerColor"
+                >
+                </mat-spinner>
+                <span class="spacer"></span>
+                <div class="search-message">Connecting to PokerFlow device</div>
+            </div>
+            <div class="spacer"></div>
+            <div *ngIf="searching" class="cancel-button-container">
+                <button
+                class="cancel-button"
+                mat-raised-button
+                color="primary"
+                (click)="cancelSearch()"
+                >
+                    CANCEL
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

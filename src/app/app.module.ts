@@ -29,6 +29,7 @@ import { PoolComponent } from './components/pool/pool.component';
 import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
 import { SearchDeviceModalComponent } from './components/search-device-modal/search-device-modal.component';
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
+import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { CreateGameModalComponent } from './components/create-game-modal/create-
     PoolComponent,
     PoolDonutChartComponent,
     SearchDeviceModalComponent,
-    CreateGameModalComponent
+    CreateGameModalComponent,
+    ConnectDeviceModalComponent
   ],
   imports: [
     BrowserModule,

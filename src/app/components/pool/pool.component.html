@@ -2,6 +2,7 @@
     <div class="back-button">
         <button
             mat-mini-fab color="primary"
+            [disabled]="disabled"
             (click)="goToHub()"
         >
             <mat-icon>keyboard_arrow_left</mat-icon>
@@ -9,12 +10,12 @@
     </div>
     <div class="information-container">
         <mat-tab-group id="information-tab-group" animationDuration="0ms">
-            <mat-tab label="POOL">
+            <mat-tab label="POOL" [disabled]="disabled">
                 <ng-template matTabContent>
                     <app-pool-donut-chart [id]="id"></app-pool-donut-chart>
                 </ng-template>
             </mat-tab>
-            <mat-tab label="ACTIVITY"></mat-tab>
+            <mat-tab label="ACTIVITY" [disabled]="disabled"></mat-tab>
         </mat-tab-group>
     </div>
     <div class="flow-container">
@@ -25,7 +26,9 @@
                     Deposit money to the pool and withdraw chips
                     <br><br>
                     <button 
-                    mat-raised-button color="accent"
+                        mat-raised-button color="accent"
+                        [disabled]="disabled"
+                        (click)="buyIn()"
                     >
                     BUY IN
                     </button>
@@ -40,7 +43,8 @@
                     Deposit chips and withdraw your earnings from the pool
                     <br><br>
                     <button 
-                    mat-raised-button color="accent"
+                        mat-raised-button color="accent"
+                        [disabled]="disabled"
                     >
                     Cash Out
                     </button>
