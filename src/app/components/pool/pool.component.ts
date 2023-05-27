@@ -36,6 +36,9 @@ export class PoolComponent {
       hasBackdrop: false,
       autoFocus: false
     });
+    buyInModalRef.afterClosed().subscribe(() => {
+      this.disabled = false;
+    });
   }
 
   goToHub() {
