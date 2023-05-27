@@ -4,18 +4,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DeviceService } from 'src/app/services/device/device.service';
 
 @Component({
-  selector: 'app-connect-device-modal',
-  templateUrl: './connect-device-modal.component.html',
-  styleUrls: ['./connect-device-modal.component.scss']
+  selector: 'app-search-device-modal',
+  templateUrl: './search-device-modal.component.html',
+  styleUrls: ['./search-device-modal.component.scss']
 })
-export class ConnectDeviceModalComponent implements OnInit {
+export class SearchDeviceModalComponent implements OnInit {
   public spinnerColor: ThemePalette = 'accent';
   public searchingForDevices: boolean = true;
   public devicesFound: boolean = false;
   public results: any[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<ConnectDeviceModalComponent>,
+    public dialogRef: MatDialogRef<SearchDeviceModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private deviceService: DeviceService,
   ) {}

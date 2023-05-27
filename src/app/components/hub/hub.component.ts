@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { ConnectDeviceModalComponent } from '../connect-device-modal/connect-device-modal.component';
+import { SearchDeviceModalComponent } from '../search-device-modal/search-device-modal.component';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { ProfileService } from 'src/app/services/profile/profile.service';
 
@@ -38,7 +38,7 @@ export class HubComponent {
 
   connectToDevice() {
     this.disableHub();
-    let deviceSearchModalRef = this.dialog.open(ConnectDeviceModalComponent, {
+    let deviceSearchModalRef = this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false
     });

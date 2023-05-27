@@ -15,6 +15,16 @@
                     CONNECT
                 </button>
             </div>
+            <span class="spacer"></span>
+            <div class="cancel-button-container">
+                <button
+                mat-raised-button
+                color="primary"
+                (click)="cancelSearch()"
+                >
+                    CANCEL
+                </button>
+            </div>
         </div>
         <div mat-dialog-content *ngIf="!devicesFound">
             <h1 mat-dialog-title>No PokerFlow devices found</h1>

@@ -19,7 +19,7 @@
     </div>
     <div class="flow-container">
         <mat-stepper orientation="vertical" #stepper>
-            <mat-step state="deposit-money">
+            <mat-step state completed="false">
                 <ng-template matStepLabel>Buy In</ng-template>
                 <ng-template matStepContent>
                     Deposit money to the pool and withdraw chips
@@ -46,9 +46,6 @@
                     </button>
                 </ng-template>
             </mat-step>
-            <ng-template matStepperIcon="deposit-money">
-                <mat-icon>call_end</mat-icon>
-            </ng-template>
         </mat-stepper>
     </div>
 </div>

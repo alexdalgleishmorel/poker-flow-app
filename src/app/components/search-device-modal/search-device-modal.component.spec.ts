@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConnectDeviceModalComponent } from './connect-device-modal.component';
+import { SearchDeviceModalComponent } from './search-device-modal.component';
 
 describe('ConnectDeviceModalComponent', () => {
-  let component: ConnectDeviceModalComponent;
-  let fixture: ComponentFixture<ConnectDeviceModalComponent>;
+  let component: SearchDeviceModalComponent;
+  let fixture: ComponentFixture<SearchDeviceModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ConnectDeviceModalComponent ]
+      declarations: [ SearchDeviceModalComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ConnectDeviceModalComponent);
+    fixture = TestBed.createComponent(SearchDeviceModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
