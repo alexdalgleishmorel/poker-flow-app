@@ -15,4 +15,14 @@ export class DeviceService {
       ]), 3000);
     });
   }
+
+  connectToDevice(device: any) {
+    return new Promise<any>(resolve => {
+      setTimeout(() => resolve({}), 3000);
+    });
+  }
+}
+
+export interface PokerFlowDevice {
+  name: string;
 }

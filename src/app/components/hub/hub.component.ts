@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatDialog, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { SearchDeviceModalComponent } from '../search-device-modal/search-device-modal.component';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
