@@ -12,14 +12,8 @@ import { PokerFlowDevice } from 'src/app/services/device/device.service';
   styleUrls: ['./pool.component.scss']
 })
 export class PoolComponent {
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
-  });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
-  });
-  isLinear = false;
-
+  public buyInEnabled: boolean;
+  public cashOutEnabled: boolean;
   public id: string;
   public disabled: boolean = false;
   public device: PokerFlowDevice;
@@ -32,6 +26,8 @@ export class PoolComponent {
   ) {
     this.id = this.activatedRoute.snapshot.params['id'];
     this.device = {name: 'mock_device_name'};
+    this.buyInEnabled = true;
+    this.cashOutEnabled = false;
   }
 
   buyIn() {
@@ -39,13 +35,61 @@ export class PoolComponent {
     let connectDeviceModal = this.dialog.open(ConnectDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false,
-      data: this.device
+      data: {
+        device: this.device,
+        searchMessage: 'Connecting to PokerFlow device',
+        cancelEnabled: true
+      }
     });
     connectDeviceModal.afterClosed().subscribe((deviceConnection) => {
-      let buyInModal = this.dialog.open(BuyInModalComponent, {
-        hasBackdrop: false,
-        data: deviceConnection
-      });
+      if (deviceConnection) {
+        let buyInModal = this.dialog.open(BuyInModalComponent, {
+          hasBackdrop: false,
+          autoFocus: false,
+          data: deviceConnection
+        });
+        buyInModal.afterClosed().subscribe((buyIn) => {
+          if (buyIn !== 0) {
+            let withdrawChipsModal = this.dialog.open(ConnectDeviceModalComponent, {
+              hasBackdrop: false,
+              autoFocus: false,
+              data: {
+                device: this.device,
+                searchMessage: 'Your chips are now being dispensed',
+                cancelEnabled: false
+              }
+            });
+            withdrawChipsModal.afterClosed().subscribe((success) => {
+              this.buyInEnabled = false;
+              this.cashOutEnabled = true;
+              this.disabled = false;
+            });
+          } else {
+            this.disabled = false;
+          }
+        });
+      } else {
+        this.disabled = false;
+      }
+    });
+  }
+
+  cashOut() {
+    this.disabled = true;
+    let connectDeviceModal = this.dialog.open(ConnectDeviceModalComponent, {
+      hasBackdrop: false,
+      autoFocus: false,
+      data: {
+        device: this.device,
+        searchMessage: 'Connecting to PokerFlow device',
+        cancelEnabled: true
+      }
+    });
+    connectDeviceModal.afterClosed().subscribe((deviceConnection) => {
+      if (deviceConnection) {
+      } else {
+        this.disabled = false;
+      }
     });
   }
 

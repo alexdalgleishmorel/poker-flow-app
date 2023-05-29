@@ -9,15 +9,19 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
   styleUrls: ['./connect-device-modal.component.scss']
 })
 export class ConnectDeviceModalComponent implements OnInit {
+  public cancelEnabled: boolean;
+  public searchMessage: string;
   public spinnerColor: ThemePalette = 'accent';
   private device: PokerFlowDevice;
   
   constructor(
     public dialogRef: MatDialogRef<ConnectDeviceModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PokerFlowDevice,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private deviceService: DeviceService,
   ) {
-    this.device = data;
+    this.device = data.device;
+    this.searchMessage  = data.searchMessage;
+    this.cancelEnabled = data.cancelEnabled;
   }
 
   ngOnInit(): void {

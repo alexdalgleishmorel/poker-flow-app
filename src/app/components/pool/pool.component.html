@@ -23,15 +23,20 @@
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy In</ng-template>
                 <ng-template matStepContent>
-                    Deposit money to the pool and withdraw chips
-                    <br><br>
-                    <button 
-                        mat-raised-button color="accent"
-                        [disabled]="disabled"
-                        (click)="buyIn()"
-                    >
-                    BUY IN
-                    </button>
+                    <div *ngIf="buyInEnabled">
+                        Deposit money to the pool and withdraw chips
+                        <br><br>
+                        <button 
+                            mat-raised-button color="accent"
+                            [disabled]="disabled"
+                            (click)="buyIn()"
+                        >
+                        BUY IN
+                        </button>
+                    </div>
+                    <div class="disabled-step" *ngIf="!buyInEnabled">
+                        You must cash out to re-enable buy in
+                    </div>
                 </ng-template>
                 <ng-template matStepperIcon="edit">
                     <mat-icon>bubble_chart</mat-icon>
@@ -40,14 +45,20 @@
             <mat-step>
                 <ng-template matStepLabel>Cash Out</ng-template>
                 <ng-template matStepContent>
-                    Deposit chips and withdraw your earnings from the pool
-                    <br><br>
-                    <button 
-                        mat-raised-button color="accent"
-                        [disabled]="disabled"
-                    >
-                    Cash Out
-                    </button>
+                    <div *ngIf="cashOutEnabled">
+                        Deposit chips and withdraw your earnings from the pool
+                        <br><br>
+                        <button 
+                            mat-raised-button color="accent"
+                            [disabled]="disabled"
+                            (click)="cashOut()"
+                        >
+                        Cash Out
+                        </button>
+                    </div>
+                    <div class="disabled-step" *ngIf="!cashOutEnabled">
+                        Buy in first to enable cash out
+                    </div>
                 </ng-template>
             </mat-step>
         </mat-stepper>

@@ -1,0 +1,26 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    border-radius: 90px;
+}
+
+.spacer {
+    padding: 10px;
+}
