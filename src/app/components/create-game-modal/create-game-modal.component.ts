@@ -28,4 +28,8 @@ export class CreateGameModalComponent {
       this.dialogRef.close(response);
     });
   }
+
+  cancel() {
+    this.dialogRef.close(null);
+  }
 }

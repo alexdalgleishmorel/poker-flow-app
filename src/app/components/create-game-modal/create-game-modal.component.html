@@ -2,17 +2,17 @@
     <h1 mat-dialog-title class="title">Create a new game</h1>
     <div mat-dialog-content>
         <mat-stepper orientation="vertical" #stepper>
-            <mat-step [stepControl]="firstFormGroup">
-              <form [formGroup]="firstFormGroup">
+            <mat-step>
+              <ng-template matStepLabel>Name your game</ng-template>
+              Set a name for your new game
+            </mat-step>
+            <mat-step>
                 <ng-template matStepLabel>Chip Values</ng-template>
                 Choose the values for each chip
-              </form>
             </mat-step>
-            <mat-step [stepControl]="secondFormGroup">
-              <form [formGroup]="secondFormGroup">
+            <mat-step>
                 <ng-template matStepLabel>Buy-In Limits</ng-template>
                 Choose the minimum and maximum buy-in values for the game
-              </form>
             </mat-step>
             <mat-step>
               <ng-template matStepLabel>Entry Password</ng-template>
@@ -21,6 +21,14 @@
           </mat-stepper>
     </div>
     <div mat-dialog-actions>
+        <button
+            class="cancel-button"
+            mat-raised-button
+            (click)="cancel()"
+        >
+            CANCEL
+        </button>
+        <div class="spacer"></div>
         <button
             class="create-button"
             mat-raised-button

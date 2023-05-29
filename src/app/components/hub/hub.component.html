@@ -1,22 +1,11 @@
 <div class="main-button-container">
     <button
-        *ngIf="deviceConnected"
         mat-raised-button
         color="primary"
         (click)="createNewGame()"
         [disabled]="!hubEnabled"
     >
         CREATE A GAME
-    </button>
-    <button
-        *ngIf="!deviceConnected"
-        class="connect-device-button"
-        mat-raised-button
-        color="accent"
-        (click)="connectToDevice()"
-        [disabled]="!hubEnabled"
-    >
-        CONNECT TO A DEVICE
     </button>
 </div>
 <mat-tab-group animationDuration="0ms">

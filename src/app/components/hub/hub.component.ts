@@ -28,16 +28,6 @@ export class HubComponent {
 
   createNewGame() {
     this.disableHub();
-    let createGameModalRef = this.dialog.open(CreateGameModalComponent, {
-    });
-    createGameModalRef.afterClosed().subscribe((response) => {
-      this.enableHub();
-      this.router.navigate(['/', `pool`, response.id]);
-    });
-  }
-
-  connectToDevice() {
-    this.disableHub();
     let deviceSearchModalRef = this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false
@@ -45,8 +35,17 @@ export class HubComponent {
     deviceSearchModalRef.afterClosed().subscribe((device) => {
       this.enableHub();
       if (device) {
-        this.deviceConnected = true;
-        this.connectedDevice = device;
+        let createGameModalRef = this.dialog.open(CreateGameModalComponent, {
+          data: {
+            device: device
+          }
+        });
+        createGameModalRef.afterClosed().subscribe((response) => {
+          this.enableHub();
+          if (response) {
+            this.router.navigate(['/', `pool`, response.id]);
+          }
+        });
       }
     });
   }
