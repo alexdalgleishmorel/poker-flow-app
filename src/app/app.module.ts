@@ -31,6 +31,7 @@ import { SearchDeviceModalComponent } from './components/search-device-modal/sea
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
 import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
+import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.comp
     SearchDeviceModalComponent,
     CreateGameModalComponent,
     ConnectDeviceModalComponent,
-    BuyInModalComponent
+    BuyInModalComponent,
+    ChipDepositModalComponent
   ],
   imports: [
     BrowserModule,

@@ -18,7 +18,7 @@ export class BuyInModalComponent {
   
   constructor(
     public dialogRef: MatDialogRef<BuyInModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PokerFlowDevice,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private deviceService: DeviceService,
     private formBuilder: FormBuilder
   ) {

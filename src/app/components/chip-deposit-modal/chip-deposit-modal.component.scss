@@ -12,25 +12,18 @@
     width: 100%;
 }
 
-.search-message {
-    padding-top: 10px;
+.message {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
     text-align: center;
-}
-
-.input-container {
-    display: flex;
     justify-content: center;
-    align-items: center;
 }
 
 .title {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
     text-align: center;
+    justify-content: center;
 }
 
 button {
@@ -39,4 +32,8 @@ button {
 
 .spacer {
     padding: 10px;
+}
+
+.done-text {
+    color: #E91E63;
 }

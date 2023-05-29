@@ -1,8 +1,8 @@
 <div *ngIf="!searchingForDevices else searching">
     <div>
         <div mat-dialog-content *ngIf="devicesFound">
-            <h1 mat-dialog-title *ngIf="results.length === 1">PokerFlow device found</h1>
-            <h1 mat-dialog-title *ngIf="results.length > 1">PokerFlow devices found</h1>
+            <h1 mat-dialog-title class="title" *ngIf="results.length === 1">PokerFlow device found</h1>
+            <h1 mat-dialog-title class="title" *ngIf="results.length > 1">PokerFlow devices found</h1>
             <div class="device-row" *ngFor="let device of results">
                 {{device.id}}
                 <span class="spacer"></span>

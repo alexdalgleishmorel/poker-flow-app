@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConnectDeviceModalComponent } from '../connect-device-modal/connect-device-modal.component';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { PokerFlowDevice } from 'src/app/services/device/device.service';
+import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -45,7 +46,7 @@ export class PoolComponent {
       if (deviceConnection) {
         let buyInModal = this.dialog.open(BuyInModalComponent, {
           hasBackdrop: false,
-          autoFocus: false,
+          autoFocus: true,
           data: deviceConnection
         });
         buyInModal.afterClosed().subscribe((buyIn) => {
@@ -55,7 +56,7 @@ export class PoolComponent {
               autoFocus: false,
               data: {
                 device: this.device,
-                searchMessage: 'Your chips are now being dispensed',
+                searchMessage: 'Your chips are being dispensed',
                 cancelEnabled: false
               }
             });
@@ -87,6 +88,16 @@ export class PoolComponent {
     });
     connectDeviceModal.afterClosed().subscribe((deviceConnection) => {
       if (deviceConnection) {
+        let chipDepositModal = this.dialog.open(ChipDepositModalComponent, {
+          hasBackdrop: false,
+          autoFocus: false,
+          data: deviceConnection
+        });
+        chipDepositModal.afterClosed().subscribe((receipt) => {
+          this.disabled = false;
+          this.buyInEnabled = true;
+          this.cashOutEnabled = false;
+        });
       } else {
         this.disabled = false;
       }
