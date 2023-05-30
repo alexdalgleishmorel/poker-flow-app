@@ -40,11 +40,8 @@
                         You must cash out to re-enable buy in
                     </div>
                 </ng-template>
-                <ng-template matStepperIcon="edit">
-                    <mat-icon>bubble_chart</mat-icon>
-                </ng-template>
             </mat-step>
-            <mat-step>
+            <mat-step state completed="false">
                 <ng-template matStepLabel>Cash Out</ng-template>
                 <ng-template matStepContent>
                     <div *ngIf="cashOutEnabled">

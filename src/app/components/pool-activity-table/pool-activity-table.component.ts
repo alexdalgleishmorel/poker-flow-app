@@ -8,7 +8,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 })
 export class PoolActivityTableComponent implements OnInit {
   public dataSource: any;
-  public displayedColumns: string[] = ['transaction'];
+  public displayedColumns: string[] = ['name', 'type', 'amount'];
 
   @Input() poolID: string = '';
 

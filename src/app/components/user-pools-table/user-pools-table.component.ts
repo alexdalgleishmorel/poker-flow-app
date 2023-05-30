@@ -27,10 +27,10 @@ export class UserPoolsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.history) {
-      this.displayedColumns = ['created', 'pool-name', 'pot', 'members'];
+    if (!this.history) {
+      this.displayedColumns = ['join', 'pool-name', 'pot', 'members', 'created'];
     } else {
-      this.displayedColumns = ['active-pool-name'];
+      this.displayedColumns = ['created', 'pool-name', 'members'];
     }
   }
 

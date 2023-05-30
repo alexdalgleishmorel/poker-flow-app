@@ -1,4 +1,22 @@
-.mat-column-transaction {
-    font-size: large;
+.buy-in {
+    color: #E91E63;
+}
+
+.cash-out {
+    color: #3F51B5;
+}
+
+.mat-column-name {
+    font-size: medium;
+    text-align: center;
+}
+
+.mat-column-type {
+    font-size: medium;
+    text-align: center;
+}
+
+.mat-column-amount {
+    font-size: medium;
     text-align: center;
 }

@@ -45,10 +45,25 @@ export class PoolService {
         transactions: [
           {
             id: 'mock_transaction_id',
-            user_id: 'alex@local.com',
+            profile: {
+              email: 'alex@local.com',
+              firstName: 'Alex',
+              lastName: 'Dalgleish-Morel'
+            },
             date: '01/01/2023 15:21 MDT',
             type: TransactionType.BUY_IN,
             amount: 50.51
+          },
+          {
+            id: 'mock_transaction_id',
+            profile: {
+              email: 'alex@local.com',
+              firstName: 'Alex',
+              lastName: 'Dalgleish-Morel'
+            },
+            date: '01/01/2023 16:21 MDT',
+            type: TransactionType.CASH_OUT,
+            amount: 40.44
           }
         ]
       }
@@ -90,10 +105,25 @@ export class PoolService {
       transactions: [
         {
           id: 'mock_transaction_id',
-          user_id: 'alex@local.com',
+          profile: {
+            email: 'alex@local.com',
+            firstName: 'Alex',
+            lastName: 'Dalgleish-Morel'
+          },
           date: '01/01/2023 15:21 MDT',
           type: TransactionType.BUY_IN,
           amount: 50.51
+        },
+        {
+          id: 'mock_transaction_id',
+          profile: {
+            email: 'alex@local.com',
+            firstName: 'Alex',
+            lastName: 'Dalgleish-Morel'
+          },
+          date: '01/01/2023 16:21 MDT',
+          type: TransactionType.CASH_OUT,
+          amount: 40.44
         }
       ]
     });
@@ -119,13 +149,13 @@ export interface PoolMember {
 }
 
 export enum TransactionType {
-  BUY_IN = 'buy-in',
-  CASH_OUT = 'cash-out'
+  BUY_IN = 'BUY-IN',
+  CASH_OUT = 'CASH-OUT'
 }
 
 export interface PoolTransaction {
   id: string;
-  user_id: string;
+  profile: Profile;
   date: string;
   type: TransactionType;
   amount: number;
