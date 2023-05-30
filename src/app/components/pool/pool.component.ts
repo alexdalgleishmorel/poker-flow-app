@@ -95,8 +95,10 @@ export class PoolComponent {
         });
         chipDepositModal.afterClosed().subscribe((receipt) => {
           this.disabled = false;
-          this.buyInEnabled = true;
-          this.cashOutEnabled = false;
+          if (receipt !== -1) {
+            this.buyInEnabled = true;
+            this.cashOutEnabled = false;
+          }
         });
       } else {
         this.disabled = false;

@@ -16,8 +16,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PoolService } from './services/pool/pool.service';
@@ -32,6 +34,8 @@ import { CreateGameModalComponent } from './components/create-game-modal/create-
 import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
+import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
+import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +50,9 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     CreateGameModalComponent,
     ConnectDeviceModalComponent,
     BuyInModalComponent,
-    ChipDepositModalComponent
+    ChipDepositModalComponent,
+    UserPoolsTableComponent,
+    PoolActivityTableComponent
   ],
   imports: [
     BrowserModule,
@@ -61,8 +67,10 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     MatInputModule,
     MatIconModule,
     MatMenuModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatStepperModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     FormsModule,

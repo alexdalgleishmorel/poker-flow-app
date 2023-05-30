@@ -9,8 +9,56 @@ export class PoolService {
 
   constructor() {}
 
-  getPoolData(): Observable<PoolData> {
+  getUserPools(userID: string): Observable<PoolData[]> {
+    return of([
+      {
+        name: 'mock_pool_name',
+        date_created: '01/01/2023 15:21 MDT',
+        id: 'mock_id',
+        total: 123.45,
+        members: [
+          {
+            profile: {
+              email: 'alex@local.com',
+              firstName: 'Alex',
+              lastName: 'Dalgleish-Morel'
+            },
+            contribution: 83.45
+          },
+          {
+            profile: {
+              email: 'landan@local.com',
+              firstName: 'Landan',
+              lastName: 'Butt'
+            },
+            contribution: 20.55
+          },
+          {
+            profile: {
+              email: 'kian@local.com',
+              firstName: 'Kian',
+              lastName: 'Reilly'
+            },
+            contribution: 20.45
+          }
+        ],
+        transactions: [
+          {
+            id: 'mock_transaction_id',
+            user_id: 'alex@local.com',
+            date: '01/01/2023 15:21 MDT',
+            type: TransactionType.BUY_IN,
+            amount: 50.51
+          }
+        ]
+      }
+    ]);
+  }
+
+  getPoolData(poolID: string): Observable<PoolData> {
     return of({
+      name: 'mock_pool_name',
+      date_created: '01/01/2023 15:21 MDT',
       id: 'mock_id',
       total: 123.45,
       members: [
@@ -38,6 +86,15 @@ export class PoolService {
           },
           contribution: 20.45
         }
+      ],
+      transactions: [
+        {
+          id: 'mock_transaction_id',
+          user_id: 'alex@local.com',
+          date: '01/01/2023 15:21 MDT',
+          type: TransactionType.BUY_IN,
+          amount: 50.51
+        }
       ]
     });
   }
@@ -48,12 +105,28 @@ export class PoolService {
 }
 
 export interface PoolData {
+  name: string;
+  date_created: string;
   id: string;
   total: number;
   members: PoolMember[];
+  transactions: PoolTransaction[]
 }
 
 export interface PoolMember {
   profile: Profile;
   contribution: number;
+}
+
+export enum TransactionType {
+  BUY_IN = 'buy-in',
+  CASH_OUT = 'cash-out'
+}
+
+export interface PoolTransaction {
+  id: string;
+  user_id: string;
+  date: string;
+  type: TransactionType;
+  amount: number;
 }

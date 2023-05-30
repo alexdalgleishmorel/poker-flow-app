@@ -1,0 +1,19 @@
+@import '../../../mixins.scss';
+
+button {
+    border-radius: 90px;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+.mat-column-active-pool-name {
+    font-size: large;
+    text-align: center;
+}
+
+mat-paginator {
+    display: flex;
+    justify-content: center;
+} 

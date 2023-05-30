@@ -15,7 +15,9 @@
                     <app-pool-donut-chart [id]="id"></app-pool-donut-chart>
                 </ng-template>
             </mat-tab>
-            <mat-tab label="ACTIVITY" [disabled]="disabled"></mat-tab>
+            <mat-tab label="ACTIVITY" [disabled]="disabled">
+                <app-pool-activity-table></app-pool-activity-table>
+            </mat-tab>
         </mat-tab-group>
     </div>
     <div class="flow-container">

@@ -10,7 +10,9 @@
 </div>
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="ACTIVE GAMES" [disabled]="!hubEnabled">
+        <app-user-pools-table></app-user-pools-table>
     </mat-tab>
     <mat-tab label="PAST GAMES" [disabled]="!hubEnabled">
+        <app-user-pools-table [history]="true"></app-user-pools-table>
     </mat-tab>
 </mat-tab-group>

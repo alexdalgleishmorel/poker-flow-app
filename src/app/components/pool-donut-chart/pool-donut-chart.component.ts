@@ -8,7 +8,7 @@ import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.se
   styleUrls: ['./pool-donut-chart.component.scss']
 })
 export class PoolDonutChartComponent implements OnInit {
-  @Input() id: string = '';
+  @Input() poolID: string = '';
   public chart: any;
   private colors: string[] = [
     '#4dc9f6',
@@ -27,7 +27,7 @@ export class PoolDonutChartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.poolService.getPoolData().subscribe((response: PoolData) => {
+    this.poolService.getPoolData(this.poolID).subscribe((response: PoolData) => {
       this.createChart(response);
     });
   }
