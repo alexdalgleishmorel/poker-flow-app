@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { SearchDeviceModalComponent } from '../search-device-modal/search-device-modal.component';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { ProfileService } from 'src/app/services/profile/profile.service';
+import { JoinNewGameModalComponent } from '../join-new-game-modal/join-new-game-modal.component';
+import { PoolData } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-hub',
@@ -26,7 +28,7 @@ export class HubComponent {
     this.router.navigate(['/', 'pool']);
   }
 
-  createNewGame() {
+  createGame() {
     this.disableHub();
     let deviceSearchModalRef = this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
@@ -44,6 +46,32 @@ export class HubComponent {
           this.enableHub();
           if (response) {
             this.router.navigate(['/', `pool`, response.id]);
+          }
+        });
+      }
+    });
+  }
+
+  joinNewGame() {
+    this.disableHub();
+    let deviceSearchModalRef = this.dialog.open(SearchDeviceModalComponent, {
+      hasBackdrop: false,
+      autoFocus: false
+    });
+    deviceSearchModalRef.afterClosed().subscribe((device) => {
+      this.enableHub();
+      if (device) {
+        let joinNewGameModalRef = this.dialog.open(JoinNewGameModalComponent, {
+          hasBackdrop: false,
+          autoFocus: false,
+          data: {
+            device: device
+          }
+        });
+        joinNewGameModalRef.afterClosed().subscribe((pool: PoolData) => {
+          this.enableHub();
+          if (pool) {
+            this.router.navigate(['/', `pool`, pool.id]);
           }
         });
       }

@@ -27,14 +27,10 @@ export class UserPoolsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.history) {
-      this.displayedColumns = ['join', 'pool-name', 'pot', 'members', 'created'];
-    } else {
-      this.displayedColumns = ['created', 'pool-name', 'members'];
-    }
+    this.displayedColumns = !this.history ? ['pool-name', 'pot', 'members', 'created'] : ['pool-name', 'members', 'created'];
   }
 
-  joinGame(poolID: string) {
+  openGame(poolID: string) {
     this.router.navigate(['/', `pool`, poolID]);
   }
 }

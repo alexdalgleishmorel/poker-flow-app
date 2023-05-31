@@ -2,7 +2,7 @@
     <div>
         <div mat-dialog-content *ngIf="devicesFound">
             <h1 mat-dialog-title class="title">
-                Choose a PokerFlow device for your game
+                Select your PokerFlow device
             </h1>
             <div class="device-row" *ngFor="let device of results">
                 {{device.id}}
@@ -13,7 +13,7 @@
                 color="accent"
                 (click)="selectDevice(device)"
                 >
-                    CONNECT
+                    SELECT
                 </button>
             </div>
             <span class="spacer"></span>

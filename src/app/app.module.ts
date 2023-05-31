@@ -36,6 +36,7 @@ import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.comp
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
 import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
+import { JoinNewGameModalComponent } from './components/join-new-game-modal/join-new-game-modal.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { PoolActivityTableComponent } from './components/pool-activity-table/poo
     BuyInModalComponent,
     ChipDepositModalComponent,
     UserPoolsTableComponent,
-    PoolActivityTableComponent
+    PoolActivityTableComponent,
+    JoinNewGameModalComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,37 @@
+<div mat-dialog-content *ngIf="games else noGamesFound">
+    <h1 mat-dialog-title class="title">
+        Join a game
+    </h1>
+    <div class="pool-row" *ngFor="let game of games">
+        {{game.name}}
+        <span class="spacer"></span>
+        <button
+        class="connect-button"
+        mat-raised-button
+        color="accent"
+        (click)="joinGame(game)"
+        >
+            JOIN
+        </button>
+    </div>
+    <span class="spacer"></span>
+    <div class="cancel-button-container">
+        <button
+        mat-raised-button
+        (click)="cancel()"
+        >
+            CANCEL
+        </button>
+    </div>
+</div>
+<ng-template mat-dialog-content #noGamesFound>
+    <h1 mat-dialog-title>No PokerFlow devices found</h1>
+    <mat-dialog-actions align="center">
+        <button
+        mat-raised-button
+        (click)="cancel()"
+        >
+            EXIT
+        </button>
+    </mat-dialog-actions>
+</ng-template>

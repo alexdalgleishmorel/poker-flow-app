@@ -8,6 +8,13 @@ button {
     padding: 10px;
 }
 
+.pool-name-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
 .mat-column-join {
     font-size: large;
     text-align: center;

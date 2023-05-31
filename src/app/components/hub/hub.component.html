@@ -2,10 +2,19 @@
     <button
         mat-raised-button
         color="primary"
-        (click)="createNewGame()"
+        (click)="createGame()"
         [disabled]="!hubEnabled"
     >
-        CREATE A GAME
+        CREATE GAME
+    </button>
+    <div class="spacer">or</div>
+    <button
+        mat-raised-button
+        color="accent"
+        (click)="joinNewGame()"
+        [disabled]="!hubEnabled"
+    >
+        JOIN NEW GAME
     </button>
 </div>
 <mat-tab-group animationDuration="0ms">
