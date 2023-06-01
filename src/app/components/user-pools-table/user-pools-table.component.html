@@ -10,6 +10,7 @@
                     class="join-button"
                     mat-raised-button
                     color="accent"
+                    [disabled]="disabled"
                     (click)="openGame(element.id)"
                 >
                     OPEN

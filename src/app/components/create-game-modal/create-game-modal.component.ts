@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-create-game-modal',
@@ -9,23 +8,15 @@ import { PoolService } from 'src/app/services/pool/pool.service';
   styleUrls: ['./create-game-modal.component.scss']
 })
 export class CreateGameModalComponent {
-  firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
-  });
-  secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
-  });
-
   constructor(
-    private _formBuilder: FormBuilder,
-    private poolService: PoolService,
-    public dialogRef: MatDialogRef<CreateGameModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private dialogRef: MatDialogRef<CreateGameModalComponent>,
+    private poolService: PoolService
   ) {}
 
   createGame() {
-    this.poolService.createGame().subscribe((response) => {
-      this.dialogRef.close(response);
+    this.poolService.createPool().subscribe((poolCreationResponse) => {
+      this.dialogRef.close(poolCreationResponse);
     });
   }
 

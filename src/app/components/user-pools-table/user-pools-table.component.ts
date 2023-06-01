@@ -9,22 +9,14 @@ import { Profile, ProfileService } from 'src/app/services/profile/profile.servic
   styleUrls: ['./user-pools-table.component.scss']
 })
 export class UserPoolsTableComponent implements OnInit {
-  public dataSource: PoolData[] = [];
-  public displayedColumns: string[] = [];
+  @Input() disabled: boolean = false;
   @Input() history: boolean = false;
-
-  private profile: Profile;
+  @Input() dataSource: PoolData[] = [];
+  public displayedColumns: string[] = [];
 
   constructor(
-    private poolService: PoolService,
-    private profileService: ProfileService,
     private router: Router
-  ) {
-    this.profile = this.profileService.getProfile();
-    this.poolService.getUserPools(this.profile.email).subscribe((data: PoolData[]) => {
-      this.dataSource = data;
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.displayedColumns = !this.history ? ['pool-name', 'pot', 'members', 'created'] : ['pool-name', 'members', 'created'];

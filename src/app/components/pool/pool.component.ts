@@ -1,111 +1,114 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConnectDeviceModalComponent } from '../connect-device-modal/connect-device-modal.component';
-import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
-import { PokerFlowDevice } from 'src/app/services/device/device.service';
-import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
+import { POLLING_INTERVAL } from '@constants';
+import { ConnectDeviceModalComponent } from 'src/app/components/connect-device-modal/connect-device-modal.component';
+import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
+import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
+import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pool',
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent {
-  public buyInEnabled: boolean;
-  public cashOutEnabled: boolean;
-  public id: string;
+export class PoolComponent implements OnDestroy {
+  public poolData?: PoolData;
   public disabled: boolean = false;
-  public device: PokerFlowDevice;
+  public id: string;
+
+  private poller: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    public dialog: MatDialog,
-    private _formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private poolService: PoolService,
     private router: Router
   ) {
     this.id = this.activatedRoute.snapshot.params['id'];
-    this.device = {name: 'mock_device_name'};
-    this.buyInEnabled = true;
-    this.cashOutEnabled = false;
+
+    this.poller = interval(POLLING_INTERVAL)
+    .pipe(
+      startWith(0),
+      switchMap(() => this.poolService.getPoolByID(this.id))
+    ).subscribe((poolData: PoolData) => {
+      this.poolData = {...poolData};
+    });
+
+    this.dialog.afterOpened.subscribe(() => {
+      this.disabled = true;
+    });
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.disabled = false;
+    });
   }
 
+  ngOnDestroy(): void {
+    this.poller.unsubscribe();
+  }
+
+  /**
+   * Connects to a PokerFlow device, validates user buy-in, and commands device to dispense chips
+   */
   buyIn() {
-    this.disabled = true;
-    let connectDeviceModal = this.dialog.open(ConnectDeviceModalComponent, {
+    this.dialog.open(ConnectDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false,
       data: {
-        device: this.device,
+        device_id: this.poolData?.device_id,
         searchMessage: 'Connecting to PokerFlow device',
         cancelEnabled: true
       }
-    });
-    connectDeviceModal.afterClosed().subscribe((deviceConnection) => {
+    }).afterClosed().subscribe((deviceConnection) => {
       if (deviceConnection) {
-        let buyInModal = this.dialog.open(BuyInModalComponent, {
+        this.dialog.open(BuyInModalComponent, {
           hasBackdrop: false,
           autoFocus: true,
           data: deviceConnection
-        });
-        buyInModal.afterClosed().subscribe((buyIn) => {
-          if (buyIn !== 0) {
-            let withdrawChipsModal = this.dialog.open(ConnectDeviceModalComponent, {
+        }).afterClosed().subscribe((buyIn) => {
+          if (buyIn) {
+            this.dialog.open(ConnectDeviceModalComponent, {
               hasBackdrop: false,
               autoFocus: false,
               data: {
-                device: this.device,
+                device_id: this.poolData?.device_id,
                 searchMessage: 'Your chips are being dispensed',
                 cancelEnabled: false
               }
             });
-            withdrawChipsModal.afterClosed().subscribe((success) => {
-              this.buyInEnabled = false;
-              this.cashOutEnabled = true;
-              this.disabled = false;
-            });
-          } else {
-            this.disabled = false;
           }
         });
-      } else {
-        this.disabled = false;
       }
     });
   }
 
+  /**
+   * Connects to a PokerFlow device, and handles chip deposit
+   */
   cashOut() {
-    this.disabled = true;
-    let connectDeviceModal = this.dialog.open(ConnectDeviceModalComponent, {
+    this.dialog.open(ConnectDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false,
       data: {
-        device: this.device,
+        device_id: this.poolData?.device_id,
         searchMessage: 'Connecting to PokerFlow device',
         cancelEnabled: true
       }
-    });
-    connectDeviceModal.afterClosed().subscribe((deviceConnection) => {
+    }).afterClosed().subscribe((deviceConnection) => {
       if (deviceConnection) {
-        let chipDepositModal = this.dialog.open(ChipDepositModalComponent, {
+        this.dialog.open(ChipDepositModalComponent, {
           hasBackdrop: false,
           autoFocus: false,
           data: deviceConnection
         });
-        chipDepositModal.afterClosed().subscribe((receipt) => {
-          this.disabled = false;
-          if (receipt !== -1) {
-            this.buyInEnabled = true;
-            this.cashOutEnabled = false;
-          }
-        });
-      } else {
-        this.disabled = false;
       }
     });
   }
 
+  /**
+   * Returns the user back to the PokerFlow hub
+   */
   goToHub() {
     this.router.navigate(['/', 'hub']);
   }

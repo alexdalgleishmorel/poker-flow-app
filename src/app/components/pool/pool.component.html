@@ -9,14 +9,14 @@
         </button>
     </div>
     <div class="information-container">
-        <mat-tab-group id="information-tab-group" animationDuration="0ms">
+        <mat-tab-group id="information-tab-group">
             <mat-tab label="POOL" [disabled]="disabled">
                 <ng-template matTabContent>
-                    <app-pool-donut-chart [id]="id"></app-pool-donut-chart>
+                    <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
                 </ng-template>
             </mat-tab>
             <mat-tab label="ACTIVITY" [disabled]="disabled">
-                <app-pool-activity-table></app-pool-activity-table>
+                <app-pool-activity-table [poolData]="poolData"></app-pool-activity-table>
             </mat-tab>
         </mat-tab-group>
     </div>
@@ -25,8 +25,8 @@
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy In</ng-template>
                 <ng-template matStepContent>
-                    <div *ngIf="buyInEnabled">
-                        Deposit money to the pool and withdraw chips
+                    <div>
+                        Deposit money and withdraw chips
                         <br><br>
                         <button 
                             mat-raised-button color="accent"
@@ -36,15 +36,12 @@
                         BUY IN
                         </button>
                     </div>
-                    <div class="disabled-step" *ngIf="!buyInEnabled">
-                        You must cash out to re-enable buy in
-                    </div>
                 </ng-template>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Cash Out</ng-template>
                 <ng-template matStepContent>
-                    <div *ngIf="cashOutEnabled">
+                    <div>
                         Deposit chips and withdraw your earnings from the pool
                         <br><br>
                         <button 
@@ -54,9 +51,6 @@
                         >
                         Cash Out
                         </button>
-                    </div>
-                    <div class="disabled-step" *ngIf="!cashOutEnabled">
-                        Buy in first to enable cash out
                     </div>
                 </ng-template>
             </mat-step>

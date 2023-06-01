@@ -1,24 +1,18 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { Component, Input, OnChanges } from '@angular/core';
+import { PoolData } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-activity-table',
   templateUrl: './pool-activity-table.component.html',
   styleUrls: ['./pool-activity-table.component.scss']
 })
-export class PoolActivityTableComponent implements OnInit {
+export class PoolActivityTableComponent implements OnChanges {
   public dataSource: any;
   public displayedColumns: string[] = ['name', 'type', 'amount'];
 
-  @Input() poolID: string = '';
+  @Input() poolData?: PoolData;
 
-  constructor(
-    private poolService: PoolService,
-  ) {}
-
-  ngOnInit(): void {
-    this.poolService.getPoolData(this.poolID).subscribe((data: PoolData) => {
-      this.dataSource = data.transactions;
-    });
+  ngOnChanges(): void {
+    this.dataSource = this.poolData?.transactions;
   }
 }

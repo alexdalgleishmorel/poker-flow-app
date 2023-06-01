@@ -25,6 +25,7 @@
     ],
     "paths": {
       "@mixins": ["src/mixins"],
+      "@constants": ["src/constants"],
       "@variables": ["src/variables"],
       "@components": ["src/app/components"]
     }

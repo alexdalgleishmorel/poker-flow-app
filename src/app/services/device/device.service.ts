@@ -16,7 +16,7 @@ export class DeviceService {
     });
   }
 
-  connectToDevice(device: any) {
+  connectToDevice(deviceID: string) {
     return new Promise<any>(resolve => {
       setTimeout(() => resolve({}), 3000);
     });

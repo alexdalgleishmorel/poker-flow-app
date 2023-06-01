@@ -15,7 +15,7 @@ export class JoinNewGameModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private poolService: PoolService,
   ) {
-    this.poolService.getDevicePools(data.device.id).subscribe((pools: PoolData[]) => {
+    this.poolService.getPoolsByDeviceID(data.device.id).subscribe((pools: PoolData[]) => {
       this.games = pools;
     });
   }

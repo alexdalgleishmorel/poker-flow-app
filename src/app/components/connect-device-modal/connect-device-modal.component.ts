@@ -12,14 +12,14 @@ export class ConnectDeviceModalComponent implements OnInit {
   public cancelEnabled: boolean;
   public searchMessage: string;
   public spinnerColor: ThemePalette = 'accent';
-  private device: PokerFlowDevice;
+  private deviceID: string;
   
   constructor(
     public dialogRef: MatDialogRef<ConnectDeviceModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private deviceService: DeviceService,
   ) {
-    this.device = data.device;
+    this.deviceID = data.device_id;
     this.searchMessage  = data.searchMessage;
     this.cancelEnabled = data.cancelEnabled;
   }
@@ -31,7 +31,7 @@ export class ConnectDeviceModalComponent implements OnInit {
   }
 
   searchForDevices() {
-    this.deviceService.connectToDevice(this.device).then((connection) => {
+    this.deviceService.connectToDevice(this.deviceID).then((connection) => {
       this.dialogRef.close(connection);
     });
   }

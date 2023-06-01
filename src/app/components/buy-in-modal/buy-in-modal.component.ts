@@ -17,8 +17,8 @@ export class BuyInModalComponent {
   private deviceConnection: any;
   
   constructor(
-    public dialogRef: MatDialogRef<BuyInModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private dialogRef: MatDialogRef<BuyInModalComponent>,
     private deviceService: DeviceService,
     private formBuilder: FormBuilder
   ) {

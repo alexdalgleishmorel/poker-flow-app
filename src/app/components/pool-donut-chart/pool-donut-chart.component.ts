@@ -1,14 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import Chart from 'chart.js/auto';
-import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolMember } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-donut-chart',
   templateUrl: './pool-donut-chart.component.html',
   styleUrls: ['./pool-donut-chart.component.scss']
 })
-export class PoolDonutChartComponent implements OnInit {
-  @Input() poolID: string = '';
+export class PoolDonutChartComponent implements OnInit, OnChanges {
+  @Input() poolData?: PoolData;
   public chart: any;
   private colors: string[] = [
     '#4dc9f6',
@@ -22,22 +22,16 @@ export class PoolDonutChartComponent implements OnInit {
     '#8549ba'
   ];
 
-  constructor(
-    private poolService: PoolService
-  ) {}
-
   ngOnInit(): void {
-    this.poolService.getPoolData(this.poolID).subscribe((response: PoolData) => {
-      this.createChart(response);
-    });
+    this.createChart();
   }
 
-  createChart(poolData: PoolData){
+  createChart(){
     let delayed: boolean;
 
     let names: string[] = [];
     let contributions: number[] = [];
-    poolData.members.map((member: PoolMember) => {
+    this.poolData?.members.map((member: PoolMember) => {
       names.push(`${member.profile.firstName} ${member.profile.lastName}`);
       contributions.push(member.contribution);
     });
@@ -77,5 +71,23 @@ export class PoolDonutChartComponent implements OnInit {
       },
       
     });
+  }
+
+  /**
+   * Updates the chart when the input data receives updates
+   */
+  ngOnChanges() {
+    if (this.chart) {
+      let names: string[] = [];
+      let contributions: number[] = [];
+      this.poolData?.members.map((member: PoolMember) => {
+        names.push(`${member.profile.firstName} ${member.profile.lastName}`);
+        contributions.push(member.contribution);
+      });
+      this.chart.data.labels = names;
+      this.chart.data.datasets[0].data = contributions;
+
+      this.chart.update();
+    }
   }
 }
