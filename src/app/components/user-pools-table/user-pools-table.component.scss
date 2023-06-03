@@ -43,4 +43,11 @@ button {
 mat-paginator {
     display: flex;
     justify-content: center;
-} 
+}
+
+.table-container {
+    height: 60vh;
+    @include mobile {
+        height: 75vh;
+    }
+}
