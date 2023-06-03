@@ -21,8 +21,19 @@ export class DeviceService {
       setTimeout(() => resolve({}), 3000);
     });
   }
+
+  withdrawChips(deviceConnection: any, withdrawalRequest: DeviceWithdrawalRequest) {
+    return new Promise<any>(resolve => {
+      setTimeout(() => resolve({}), 3000);
+    });
+  }
 }
 
 export interface PokerFlowDevice {
   name: string;
+}
+
+export interface DeviceWithdrawalRequest {
+  amount: number;
+  denominations: number[];
 }

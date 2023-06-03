@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -24,11 +24,11 @@ export class BuyInModalComponent {
   ) {
     this.deviceConnection = data;
     this.form = this.formBuilder.group({
-      formField: ['', this.customValidator.bind(this)]
+      formField: ['', this.buyInValidator.bind(this)]
   });
   }
 
-  private customValidator(control: FormControl): void {
+  private buyInValidator(control: FormControl): void {
     if (control.value === 69) {
       this.validBuyIn = true;
       this.customError = false;
@@ -43,10 +43,14 @@ export class BuyInModalComponent {
   }
 
   confirmBuyIn() {
-    this.dialogRef.close(this.buyInValue);
+    const withdrawalRequest: DeviceWithdrawalRequest = {
+      amount: this.buyInValue,
+      denominations: []
+    };
+    this.dialogRef.close(withdrawalRequest);
   }
 
   cancelBuyIn() {
-    this.dialogRef.close(0);
+    this.dialogRef.close(null);
   }
 }

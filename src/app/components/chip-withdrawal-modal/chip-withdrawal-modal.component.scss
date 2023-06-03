@@ -16,27 +16,19 @@ button {
     width: 100%;
 }
 
-.input-container {
+.message {
     display: flex;
+    text-align: center;
     justify-content: center;
-    align-items: center;
 }
 
 .spacer {
     padding: 10px;
 }
 
-.search-message {
-    padding-top: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
 .title {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
     text-align: center;
+    justify-content: center;
 }

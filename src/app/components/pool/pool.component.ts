@@ -7,6 +7,8 @@ import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-moda
 import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
+import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -66,15 +68,14 @@ export class PoolComponent implements OnDestroy {
           hasBackdrop: false,
           autoFocus: true,
           data: deviceConnection
-        }).afterClosed().subscribe((buyIn) => {
-          if (buyIn) {
-            this.dialog.open(ConnectDeviceModalComponent, {
+        }).afterClosed().subscribe((withdrawalRequest: DeviceWithdrawalRequest) => {
+          if (withdrawalRequest) {
+            this.dialog.open(ChipWithdrawalModalComponent, {
               hasBackdrop: false,
               autoFocus: false,
               data: {
-                device_id: this.poolData?.device_id,
-                searchMessage: 'Your chips are being dispensed',
-                cancelEnabled: false
+                device_connection: deviceConnection,
+                withdrawal_request: withdrawalRequest
               }
             });
           }
@@ -101,7 +102,7 @@ export class PoolComponent implements OnDestroy {
           hasBackdrop: false,
           autoFocus: false,
           data: deviceConnection
-        });
+        }).afterClosed().subscribe((cashOutValue: number) => {});
       }
     });
   }

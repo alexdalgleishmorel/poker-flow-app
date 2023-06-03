@@ -33,6 +33,6 @@ export class ChipDepositModalComponent {
   }
 
   cancelDeposit() {
-    this.dialogRef.close(-1);
+    this.dialogRef.close(null);
   }
 }
