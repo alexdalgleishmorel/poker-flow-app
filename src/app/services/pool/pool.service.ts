@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Profile } from 'src/app/services/profile/profile.service';
+import { Profile, ProfileService } from 'src/app/services/profile/profile.service';
 
 export interface PoolData {
   name: string;
@@ -9,7 +9,9 @@ export interface PoolData {
   device_id: string;
   total: number;
   members: PoolMember[];
-  transactions: PoolTransaction[]
+  transactions: PoolTransaction[];
+  admin: Profile;
+  settings: PoolSettings;
 }
 
 export interface PoolMember {
@@ -28,6 +30,13 @@ export interface PoolTransaction {
   date: string;
   type: TransactionType;
   amount: number;
+}
+
+export interface PoolSettings {
+  hasPassword: boolean;
+  minBuyIn: number;
+  maxBuyIn: number;
+  denominations: number[];
 }
 
 const MOCK_POOL_DATA: PoolData = {
@@ -85,7 +94,18 @@ const MOCK_POOL_DATA: PoolData = {
       type: TransactionType.CASH_OUT,
       amount: 40.44
     }
-  ]
+  ],
+  admin: {
+    email: 'alex@local.com',
+    firstName: 'Alex',
+    lastName: 'Dalgleish-Morel'
+  },
+  settings: {
+    hasPassword: false,
+    minBuyIn: 5,
+    maxBuyIn: 100,
+    denominations: []
+  }
 };
 
 @Injectable({
@@ -93,7 +113,9 @@ const MOCK_POOL_DATA: PoolData = {
 })
 export class PoolService {
 
-  constructor() {}
+  constructor(
+    private profileService: ProfileService
+  ) {}
 
   getPoolsByUserID(userID: string): Observable<PoolData[]> {
     return of([MOCK_POOL_DATA]);
@@ -107,7 +129,28 @@ export class PoolService {
     return of(MOCK_POOL_DATA);
   }
 
-  createPool(): Observable<PoolData> {
-    return of(MOCK_POOL_DATA);
+  createPool(
+    name: string,
+    deviceID: string,
+    settings: PoolSettings,
+  ): Observable<PoolData> {
+    const profile: Profile = this.profileService.getProfile();
+    const poolData: PoolData = {
+      name: name,
+      id: 'mock_id',
+      date_created: 'mock_date',
+      device_id: deviceID,
+      total: 0,
+      members: [
+        {
+          profile: profile,
+          contribution: 0
+        }
+      ],
+      transactions: [],
+      admin: profile,
+      settings: settings
+    }
+    return of(poolData);
   }
 }

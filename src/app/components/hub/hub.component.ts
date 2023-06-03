@@ -41,7 +41,7 @@ export class HubComponent implements OnDestroy {
       startWith(0),
       switchMap(() => this.poolService.getPoolsByUserID(this.profile.email))
     ).subscribe((poolData: PoolData[]) => {
-      this.poolData = {...poolData};
+      this.poolData = [...poolData];
     });
 
     this.poolService.getPoolsByUserID(this.profile.email).subscribe((data: PoolData[]) => {
