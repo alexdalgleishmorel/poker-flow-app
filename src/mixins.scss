@@ -1,13 +1,13 @@
 @mixin mobile {
     /* Extra small devices (phones, 600px and down) */
-    @media only screen and (max-width: 850px) {
+    @media only screen and (max-width: 920px) {
         @content;
     }
 }
 
 @mixin mobile-landscape {
     /* Extra small devices (phones, 600px and down) */
-    @media only screen and (max-width: 850px) and (orientation: landscape) {
+    @media only screen and (max-width: 920px) and (orientation: landscape) {
         @content;
     }
 }
