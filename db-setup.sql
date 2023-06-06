@@ -1,5 +1,5 @@
 CREATE TABLE Profile (
-    email varchar(255) NOT NULL,
+    email varchar(320) NOT NULL,
     first_name varchar(255) NOT NULL,
     last_name varchar(255) NOT NULL,
     salt varchar(255) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Pool (
     id varchar(255) NOT NULL,
     device_id varchar(255) NOT NULL,
     pool_name name(255) NOT NULL,
-    date_created varchar(255) NOT NULL,
+    date_created datetime NOT NULL,
     settings_id varchar(255) NOT NULL,
     admin_id varchar(255) NOT NULL,
     PRIMARY KEY (id),
@@ -40,10 +40,10 @@ CREATE TABLE Transaction (
     id varchar(255) NOT NULL,
     pool_id varchar(255) NOT NULL,
     profile_id varchar(255) NOT NULL,
-    date varchar(255) NOT NULL,
-    type varchar(255) NOT NULL,
+    date datetime NOT NULL,
+    type ENUM('BUY_IN', 'CASH_OUT') NOT NULL,
     amount float NOT NULL,
-    status varchar(255) NOT NULL
+    status ENUM('PENDING', 'PROCESSING', 'SUCCEEDED', 'FAILED') NOT NULL
     PRIMARY KEY (id),
     FOREIGN KEY (pool_id) REFERENCES Pool(id),
     FOREIGN KEY (profile_id) REFERENCES Profile(email)
