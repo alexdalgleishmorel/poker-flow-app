@@ -9,7 +9,7 @@ export class ProfileService {
   public loggedIn: Subject<boolean>= new Subject<boolean>();
 
   private profile: Profile = {
-    email: '',
+    email: 'alex@local.com',
     firstName: '',
     lastName: ''
   };

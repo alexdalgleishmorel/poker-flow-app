@@ -19,7 +19,7 @@ export class UserPoolsTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.displayedColumns = !this.history ? ['pool-name', 'pot', 'members', 'created'] : ['pool-name', 'members', 'created'];
+    this.displayedColumns = !this.history ? ['pool-name', 'pot', 'contributors', 'created'] : ['pool-name', 'contributors', 'created'];
   }
 
   openGame(poolID: string) {

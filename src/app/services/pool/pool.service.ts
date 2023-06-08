@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { Profile, ProfileService } from 'src/app/services/profile/profile.service';
+import { ApiService } from '../api/api.service';
 
 export interface PoolData {
   name: string;
@@ -8,7 +9,7 @@ export interface PoolData {
   id: string;
   device_id: string;
   total: number;
-  members: PoolMember[];
+  contributors: PoolMember[];
   transactions: PoolTransaction[];
   admin: Profile;
   settings: PoolSettings;
@@ -45,7 +46,7 @@ const MOCK_POOL_DATA: PoolData = {
   id: 'mock_id',
   device_id: 'mock_device_id',
   total: 123.45,
-  members: [
+  contributors: [
     {
       profile: {
         email: 'alex@local.com',
@@ -114,11 +115,19 @@ const MOCK_POOL_DATA: PoolData = {
 export class PoolService {
 
   constructor(
+    private apiService: ApiService,
     private profileService: ProfileService
   ) {}
 
   getPoolsByUserID(userID: string): Observable<PoolData[]> {
-    return of([MOCK_POOL_DATA]);
+    return this.apiService.getPoolsByUserID(userID).pipe(
+      map(
+        (response) => {
+          console.log(response);
+          return [MOCK_POOL_DATA];
+        }
+      )
+    )
   }
 
   getPoolsByDeviceID(deviceID: string): Observable<PoolData[]> {
@@ -141,7 +150,7 @@ export class PoolService {
       date_created: 'mock_date',
       device_id: deviceID,
       total: 0,
-      members: [
+      contributors: [
         {
           profile: profile,
           contribution: 0
@@ -152,5 +161,9 @@ export class PoolService {
       settings: settings
     }
     return of(poolData);
+  }
+
+  postTransaction(transaction: PoolTransaction) {
+    return of({});
   }
 }

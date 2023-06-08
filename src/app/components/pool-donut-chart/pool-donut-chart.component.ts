@@ -31,7 +31,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
 
     let names: string[] = [];
     let contributions: number[] = [];
-    this.poolData?.members.map((member: PoolMember) => {
+    this.poolData?.contributors.map((member: PoolMember) => {
       names.push(`${member.profile.firstName} ${member.profile.lastName}`);
       contributions.push(member.contribution);
     });
@@ -80,7 +80,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     if (this.chart) {
       let names: string[] = [];
       let contributions: number[] = [];
-      this.poolData?.members.map((member: PoolMember) => {
+      this.poolData?.contributors.map((member: PoolMember) => {
         names.push(`${member.profile.firstName} ${member.profile.lastName}`);
         contributions.push(member.contribution);
       });

@@ -7,13 +7,13 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseURL: string = 'pokerflow.io/api';
+  private baseURL: string = 'http://127.0.0.1:8000/api';
 
   constructor(
     private http: HttpClient
   ) {}
 
-  getData(endpoint: string, options: any) {
-    return this.http.get(`${this.baseURL}/${endpoint}`, options);
+  getPoolsByUserID(userID: string) {
+    return this.http.get(`${this.baseURL}/pool/user/${userID}`);
   }
 }
