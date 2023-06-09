@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
 
 import { BASE_URL } from '../api/api.service';
 
@@ -17,7 +17,7 @@ export class AuthService {
   ) {}
 
   private readonly JWT_TOKEN = 'JWT_TOKEN';
-  private loggedIn$ = new BehaviorSubject<boolean>(false);
+  private loggedIn$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.JWT_TOKEN));
 
   public isLoggedIn$ = this.loggedIn$.asObservable();
 
@@ -64,6 +64,42 @@ export class AuthService {
     return this.http.get<any>(`${BASE_URL}/logout`)
       .pipe(tap(() => this.doLogoutUser()));
   }
+
+  doLogoutAndRedirectToLogin() {
+    this.logout();
+    this.router.navigate(['/', 'login']);
+  }
+}
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(
+    private authService: AuthService
+  ) {}
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    if (this.authService.getToken()) {
+      request = this.addToken(request, this.authService.getToken());
+    }
+
+    return next.handle(request).pipe(
+      catchError(error => {
+        if (error.status === 401) {
+          this.authService.doLogoutAndRedirectToLogin();
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private addToken(request: HttpRequest<any>, token: string | null) {
+    return request.clone({
+      setHeaders: { 'Authorization': `Bearer ${token}` }
+    });
+  }
+
 }
 
 export interface LoginRequest {
