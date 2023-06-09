@@ -6,7 +6,7 @@ import { CreateGameModalComponent } from 'src/app/components/create-game-modal/c
 import { SearchDeviceModalComponent } from 'src/app/components/search-device-modal/search-device-modal.component';
 import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { Profile, ProfileService } from 'src/app/services/profile/profile.service';
+import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, interval, startWith, switchMap } from 'rxjs';
 
 @Component({
@@ -18,13 +18,13 @@ export class HubComponent implements OnDestroy {
   public disabled: boolean = true;
   public poolData?: PoolData[];
 
-  private profile: Profile;
+  private profile?: Profile;
   private poller: Subscription;
 
   constructor(
+    private authService: AuthService,
     private dialog: MatDialog,
     private poolService: PoolService,
-    private profileService: ProfileService,
     private router: Router
   ) {
     this.dialog.afterOpened.subscribe(() => {
@@ -34,17 +34,17 @@ export class HubComponent implements OnDestroy {
       this.disabled = false;
     });
 
-    this.profile = this.profileService.getProfile();
+    this.profile = this.authService.getCurrentUser();
 
     this.poller = interval(POLLING_INTERVAL)
     .pipe(
       startWith(0),
-      switchMap(() => this.poolService.getPoolsByUserID(this.profile.email))
+      switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id))
     ).subscribe((poolData: PoolData[]) => {
       this.poolData = [...poolData];
     });
 
-    this.poolService.getPoolsByUserID(this.profile.email).subscribe((data: PoolData[]) => {
+    this.poolService.getPoolsByUserID(this.profile?.id).subscribe((data: PoolData[]) => {
       this.poolData = data;
     });
   }

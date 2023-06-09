@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { Profile, ProfileService } from 'src/app/services/profile/profile.service';
 
 @Component({
   selector: 'app-user-pools-table',

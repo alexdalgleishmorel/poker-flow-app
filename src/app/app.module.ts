@@ -22,8 +22,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { AuthService } from './services/auth/auth.service';
 import { PoolService } from './services/pool/pool.service';
-import { ProfileService } from './services/profile/profile.service';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HubComponent } from './components/hub/hub.component';
@@ -81,8 +81,8 @@ import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal
     ReactiveFormsModule
   ],
   providers: [
+    AuthService,
     PoolService,
-    ProfileService,
     FormBuilder
   ],
   bootstrap: [AppComponent]

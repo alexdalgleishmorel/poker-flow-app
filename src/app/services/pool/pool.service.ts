@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of } from 'rxjs';
-import { Profile, ProfileService } from 'src/app/services/profile/profile.service';
 import { ApiService } from '../api/api.service';
+import { AuthService, Profile } from '../auth/auth.service';
 
 export interface PoolData {
   name: string;
@@ -116,10 +116,10 @@ export class PoolService {
 
   constructor(
     private apiService: ApiService,
-    private profileService: ProfileService
+    private authService: AuthService
   ) {}
 
-  getPoolsByUserID(userID: string): Observable<PoolData[]> {
+  getPoolsByUserID(userID: string | undefined): Observable<PoolData[]> {
     return this.apiService.getPoolsByUserID(userID).pipe(
       map(
         (response) => {
@@ -143,7 +143,10 @@ export class PoolService {
     deviceID: string,
     settings: PoolSettings,
   ): Observable<PoolData> {
-    const profile: Profile = this.profileService.getProfile();
+    const profile: Profile | undefined = this.authService.getCurrentUser();
+
+    if (!profile) return of();
+
     const poolData: PoolData = {
       name: name,
       id: 'mock_id',
