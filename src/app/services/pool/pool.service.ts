@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
 
@@ -40,74 +40,11 @@ export interface PoolSettings {
   denominations: number[];
 }
 
-const MOCK_POOL_DATA: PoolData = {
-  name: 'mock_pool_name',
-  date_created: '01/01/2023 15:21 MDT',
-  id: 'mock_id',
-  device_id: 'mock_device_id',
-  total: 123.45,
-  contributors: [
-    {
-      profile: {
-        email: 'alex@local.com',
-        firstName: 'Alex',
-        lastName: 'Dalgleish-Morel'
-      },
-      contribution: 83.45
-    },
-    {
-      profile: {
-        email: 'landan@local.com',
-        firstName: 'Landan',
-        lastName: 'Butt'
-      },
-      contribution: 20.55
-    },
-    {
-      profile: {
-        email: 'kian@local.com',
-        firstName: 'Kian',
-        lastName: 'Reilly'
-      },
-      contribution: 20.45
-    }
-  ],
-  transactions: [
-    {
-      id: 'mock_transaction_id',
-      profile: {
-        email: 'alex@local.com',
-        firstName: 'Alex',
-        lastName: 'Dalgleish-Morel'
-      },
-      date: '01/01/2023 15:21 MDT',
-      type: TransactionType.BUY_IN,
-      amount: 50.51
-    },
-    {
-      id: 'mock_transaction_id',
-      profile: {
-        email: 'alex@local.com',
-        firstName: 'Alex',
-        lastName: 'Dalgleish-Morel'
-      },
-      date: '01/01/2023 16:21 MDT',
-      type: TransactionType.CASH_OUT,
-      amount: 40.44
-    }
-  ],
-  admin: {
-    email: 'alex@local.com',
-    firstName: 'Alex',
-    lastName: 'Dalgleish-Morel'
-  },
-  settings: {
-    hasPassword: false,
-    minBuyIn: 5,
-    maxBuyIn: 100,
-    denominations: []
-  }
-};
+export interface PoolCreationRequest {
+  name: string;
+  device_id: string;
+  settings: PoolSettings;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -119,51 +56,25 @@ export class PoolService {
     private authService: AuthService
   ) {}
 
-  getPoolsByUserID(userID: string | undefined): Observable<PoolData[]> {
-    return this.apiService.getPoolsByUserID(userID).pipe(
-      map(
-        (response) => {
-          console.log(response);
-          return [MOCK_POOL_DATA];
-        }
-      )
-    )
+  getPoolsByUserID(userID: string | undefined): Observable<any> {
+    return this.apiService.get(`/pool/user/${userID}`);
   }
 
-  getPoolsByDeviceID(deviceID: string): Observable<PoolData[]> {
-    return of([MOCK_POOL_DATA]);
+  getPoolsByDeviceID(deviceID: string): Observable<any> {
+    return this.apiService.get(`/pool/device/${deviceID}`);
   }
 
-  getPoolByID(poolID: string): Observable<PoolData> {
-    return of(MOCK_POOL_DATA);
+  getPoolByID(poolID: string): Observable<any> {
+    return this.apiService.get(`/pool/${poolID}`);
   }
 
-  createPool(
-    name: string,
-    deviceID: string,
-    settings: PoolSettings,
-  ): Observable<PoolData> {
-    const profile: Profile | undefined = this.authService.getCurrentUser();
-
-    if (!profile) return of();
-
-    const poolData: PoolData = {
+  createPool(name: string, deviceID: string, settings: PoolSettings): Observable<any> {
+    const poolCreationRequest: PoolCreationRequest = {
       name: name,
-      id: 'mock_id',
-      date_created: 'mock_date',
       device_id: deviceID,
-      total: 0,
-      contributors: [
-        {
-          profile: profile,
-          contribution: 0
-        }
-      ],
-      transactions: [],
-      admin: profile,
       settings: settings
-    }
-    return of(poolData);
+    };
+    return this.apiService.post(`/pool/create`, poolCreationRequest);
   }
 
   postTransaction(transaction: PoolTransaction) {

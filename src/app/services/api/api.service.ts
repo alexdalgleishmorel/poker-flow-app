@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-export const BASE_URL: string = 'http://127.0.0.1:8000/api';
+export const BASE_URL: string = 'http://localhost:8000/api';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,11 @@ export class ApiService {
     private http: HttpClient
   ) {}
 
-  getPoolsByUserID(userID: string | undefined) {
-    return this.http.get(`${BASE_URL}/pool/user/${userID}`);
+  get(endpoint: string) {
+    return this.http.get(`${BASE_URL}${endpoint}`);
+  }
+
+  post(endpoint: string, options: any) {
+    return this.http.post(`${BASE_URL}${endpoint}`, options);
   }
 }
