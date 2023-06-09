@@ -30,7 +30,7 @@ export class CreateGameModalComponent {
   createGame() {
     this.poolService.createPool(
       this.poolName,
-      this.device.name,
+      this.device.id,
       this.poolSettings
     ).subscribe((poolCreationResponse) => {
       this.dialogRef.close(poolCreationResponse);

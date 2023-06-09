@@ -30,7 +30,7 @@ export class DeviceService {
 }
 
 export interface PokerFlowDevice {
-  name: string;
+  id: string;
 }
 
 export interface DeviceWithdrawalRequest {
