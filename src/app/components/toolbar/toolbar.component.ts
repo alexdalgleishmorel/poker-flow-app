@@ -1,6 +1,7 @@
 import { Component} from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemePalette } from '@angular/material/core';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,14 +14,18 @@ export class ToolbarComponent {
   public loggedIn: boolean = false;
 
   constructor (
+    private authService: AuthService,
     private router: Router
-    ) {}
+  ) {
+    this.authService.isLoggedIn$.subscribe((loggedIn: boolean) => this.loggedIn = loggedIn);
+  }
 
-  login() {
+  goToLogin() {
     this.router.navigate(['/', 'login']);
   }
 
   logout() {
+    this.authService.doLogoutUser();
     this.goToWelcome();
   }
 

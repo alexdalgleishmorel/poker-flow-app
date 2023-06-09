@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 
 import { BASE_URL } from '../api/api.service';
 
@@ -17,12 +17,17 @@ export class AuthService {
   ) {}
 
   private readonly JWT_TOKEN = 'JWT_TOKEN';
+  private loggedIn$ = new BehaviorSubject<boolean>(false);
+
+  public isLoggedIn$ = this.loggedIn$.asObservable();
 
   doLoginUser(token: any): void {
+    this.loggedIn$.next(true);
     localStorage.setItem(this.JWT_TOKEN, token.jwt);
   }
 
   doLogoutUser(): void {
+    this.loggedIn$.next(false);
     localStorage.removeItem(this.JWT_TOKEN);
   }
 
@@ -30,8 +35,10 @@ export class AuthService {
     const token = this.getToken();
     if (token) {
       const payload: any = jwt_decode(token);
+      this.loggedIn$.next(true);
       return payload.profile;
     } else {
+      this.loggedIn$.next(false);
       return undefined;
     }
   }
@@ -56,10 +63,6 @@ export class AuthService {
   logout() {
     return this.http.get<any>(`${BASE_URL}/logout`)
       .pipe(tap(() => this.doLogoutUser()));
-  }
-
-  isLoggedIn$(): boolean {
-    return !!this.getCurrentUser();
   }
 }
 
