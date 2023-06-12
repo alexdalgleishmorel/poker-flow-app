@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { PoolData } from 'src/app/services/pool/pool.service';
+import { PoolData, TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-activity-table',
@@ -14,5 +14,13 @@ export class PoolActivityTableComponent implements OnChanges {
 
   ngOnChanges(): void {
     this.dataSource = this.poolData?.transactions;
+  }
+
+  isBuyIn(transactionType: TransactionType) {
+    return transactionType === TransactionType.BUY_IN
+  }
+
+  isCashOut(transactionType: TransactionType) {
+    return transactionType === TransactionType.CASH_OUT
   }
 }

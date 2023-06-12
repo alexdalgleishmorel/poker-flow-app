@@ -4,7 +4,13 @@
         <mat-stepper orientation="vertical" #stepper>
             <mat-step state completed="false">
               <ng-template matStepLabel>Name your game</ng-template>
-              Set a name for your new game
+              Choose a name for your new game pool
+                <div class="pool-name-container">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Pool Name</mat-label>
+                        <input matInput [(ngModel)]="poolName">
+                    </mat-form-field>
+                </div>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Chip Values</ng-template>
@@ -13,10 +19,40 @@
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy-In Limits</ng-template>
                 Choose the minimum and maximum buy-in values for the game
+                <div class="buy-in-input-container">
+                    <mat-form-field>
+                        <mat-label>Min Buy-In</mat-label>
+                        <input
+                            matInput
+                            [(ngModel)]="poolSettings.min_buy_in"
+                            type="number"
+                            placeholder="Min Buy-In"
+                            onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
+                            min="0"
+                        >
+                    </mat-form-field>
+                    <mat-form-field>
+                        <mat-label>Max Buy-In</mat-label>
+                        <input
+                            matInput
+                            [(ngModel)]="poolSettings.max_buy_in"
+                            type="number"
+                            placeholder="Max Buy-In"
+                            onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
+                            min="0"
+                        >
+                    </mat-form-field>
+                </div>
             </mat-step>
             <mat-step state completed="false">
               <ng-template matStepLabel>Entry Password</ng-template>
-              Set an optional password for this game
+              Set an optional password for other players that want to join
+              <div class="password-container">
+                <mat-form-field appearance="fill">
+                    <mat-label>Password</mat-label>
+                    <input matInput [(ngModel)]="poolSettings.password">
+                </mat-form-field>
+              </div>
             </mat-step>
           </mat-stepper>
     </div>

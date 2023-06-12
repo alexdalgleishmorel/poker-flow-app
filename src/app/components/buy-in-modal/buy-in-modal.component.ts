@@ -1,7 +1,9 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { PoolService, PoolTransaction, TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -18,9 +20,11 @@ export class BuyInModalComponent {
   
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
+    private authService: AuthService,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
     private deviceService: DeviceService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private poolService: PoolService
   ) {
     this.deviceConnection = data;
     this.form = this.formBuilder.group({
@@ -43,11 +47,11 @@ export class BuyInModalComponent {
   }
 
   confirmBuyIn() {
-    const withdrawalRequest: DeviceWithdrawalRequest = {
+    const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
       amount: this.buyInValue,
       denominations: []
     };
-    this.dialogRef.close(withdrawalRequest);
+    this.dialogRef.close(deviceWithdrawalRequest);
   }
 
   cancelBuyIn() {

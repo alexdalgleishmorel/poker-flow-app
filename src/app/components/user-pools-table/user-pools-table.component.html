@@ -27,7 +27,7 @@
     
         <ng-container matColumnDef="pot">
             <th mat-header-cell *matHeaderCellDef> POT </th>
-            <td mat-cell *matCellDef="let element">{{element.total}}</td>
+            <td mat-cell *matCellDef="let element">${{element.available_pot}}</td>
         </ng-container>
     
         <ng-container matColumnDef="contributors">

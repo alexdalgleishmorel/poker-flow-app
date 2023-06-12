@@ -7,7 +7,7 @@ import { SearchDeviceModalComponent } from 'src/app/components/search-device-mod
 import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
-import { Subscription, interval, startWith, switchMap } from 'rxjs';
+import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-hub',
@@ -39,14 +39,8 @@ export class HubComponent implements OnDestroy {
     this.poller = interval(POLLING_INTERVAL)
     .pipe(
       startWith(0),
-      switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id))
-    ).subscribe((poolData: PoolData[]) => {
-      this.poolData = [...poolData];
-    });
-
-    this.poolService.getPoolsByUserID(this.profile?.id).subscribe((data: PoolData[]) => {
-      this.poolData = data;
-    });
+      switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id).pipe(catchError(() => of(null))))
+    ).subscribe((poolData: PoolData[]) => { if (poolData) this.poolData = [...poolData]; });
   }
 
   ngOnDestroy(): void {

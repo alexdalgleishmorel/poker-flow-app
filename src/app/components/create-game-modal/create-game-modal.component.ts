@@ -11,10 +11,11 @@ import { PoolData, PoolService, PoolSettings } from 'src/app/services/pool/pool.
 export class CreateGameModalComponent {
   public poolName: string = '';
   public poolSettings: PoolSettings = {
-    hasPassword: false,
-    minBuyIn: 0,
-    maxBuyIn: 0,
-    denominations: []
+    has_password: false,
+    min_buy_in: 5,
+    max_buy_in: 100,
+    denominations: '',
+    password: ''
   };
   
   private device: PokerFlowDevice;
@@ -28,6 +29,7 @@ export class CreateGameModalComponent {
   }
 
   createGame() {
+    this.poolSettings.has_password = this.poolSettings.password ? true : false; 
     this.poolService.createPool(
       this.poolName,
       this.device.id,

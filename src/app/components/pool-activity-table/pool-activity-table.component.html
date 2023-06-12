@@ -11,9 +11,9 @@
         <th mat-header-cell *matHeaderCellDef>ACTION</th>
         <td mat-cell *matCellDef="let element">
             <b
-                [ngClass]="{'buy-in': element.type === 'BUY-IN', 'cash-out': element.type === 'CASH-OUT'}"
+                [ngClass]="{'buy-in': isBuyIn(element.type), 'cash-out': isCashOut(element.type)}"
             >
-                {{element.type}}
+                {{isBuyIn(element.type) ? 'BUY-IN' : 'CASH-OUT'}}
             </b>
         </td>
     </ng-container>
