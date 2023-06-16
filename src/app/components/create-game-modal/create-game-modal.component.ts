@@ -9,6 +9,7 @@ import { PoolData, PoolService, PoolSettings } from 'src/app/services/pool/pool.
   styleUrls: ['./create-game-modal.component.scss']
 })
 export class CreateGameModalComponent {
+  public hasError = true;
   public poolName: string = '';
   public poolSettings: PoolSettings = {
     has_password: false,
@@ -41,5 +42,9 @@ export class CreateGameModalComponent {
 
   cancel() {
     this.dialogRef.close(null);
+  }
+
+  onPoolNameInput(event: any) {
+    this.hasError = event.data ? false : true;
   }
 }

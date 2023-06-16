@@ -1,5 +1,6 @@
 <mat-tab-group animationDuration="0ms">
     <mat-tab label="LOGIN">
+        <!--
         <div class="google-container">
             <button mat-raised-button>
                 <mat-icon svgIcon="google"></mat-icon>
@@ -9,27 +10,48 @@
         <div class="divider-container">
             <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
         </div>
-        <div class="form-container">
+        -->
+        <form class="form-container" [formGroup]="loginFormGroup">
+            <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>Email</mat-label>
-                <input matInput [(ngModel)]="emailInput">
+                <input matInput [formControl]="emailFormControl">
+                <mat-error *ngIf="emailFormControl.errors?.['required']">
+                    Email is required
+                </mat-error>
+                <mat-error *ngIf="emailFormControl.errors?.['email']">
+                    Invalid email
+                </mat-error>
             </mat-form-field>
+            <div class="spacer"></div>
             <mat-form-field>
                 <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="passwordInput">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="passwordFormControl">
+                <mat-error *ngIf="passwordFormControl.errors?.['required']">
+                    Password is required
+                </mat-error>
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
+            <div *ngIf="emailNotFoundError || invalidCredentialError">
+                <div class="spacer"></div>
+                <mat-error>
+                    {{emailNotFoundError ? 'The email you provided is not connected to an account.' : 'The username and password you provided are invalid. Please try again.'}}
+                </mat-error>
+            </div>
+            <div class="spacer"></div>
             <button 
             mat-raised-button color="primary"
             (click)="login()"
+            [disabled]="loginFormGroup.invalid"
             >
                 LOGIN
             </button>
-        </div>
+        </form>
     </mat-tab>
     <mat-tab label="CREATE ACCOUNT">
+        <!--
         <div class="google-container">
             <button mat-raised-button>
                 <mat-icon svgIcon="google"></mat-icon>
@@ -39,34 +61,59 @@
         <div class="divider-container">
             <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
         </div>
-        <div class="form-container">
+        -->
+        <div class="form-container" [formGroup]="signUpFormGroup">
+            <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>First Name</mat-label>
-                <input matInput [(ngModel)]="firstNameRegistrationInput">
+                <input matInput [formControl]="firstNameFormControl" [required]="true">
+                <mat-error *ngIf="firstNameFormControl.errors?.['required']">
+                    First name is required
+                </mat-error>
             </mat-form-field>
+            <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>Last Name</mat-label>
-                <input matInput [(ngModel)]="lastNameRegistrationInput">
+                <input matInput [formControl]="lastNameFormControl" [required]="true">
+                <mat-error *ngIf="lastNameFormControl.errors?.['required']">
+                    Last name is required
+                </mat-error>
             </mat-form-field>
+            <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>Email</mat-label>
-                <input matInput [(ngModel)]="emailRegistrationInput">
+                <input matInput [formControl]="emailRegistrationFormControl" [required]="true">
+                <mat-error *ngIf="emailRegistrationFormControl.errors?.['required']">
+                    Email is required
+                </mat-error>
+                <mat-error *ngIf="emailRegistrationFormControl.errors?.['email']">
+                    Invalid email
+                </mat-error>
             </mat-form-field>
+            <div class="spacer"></div>
             <mat-form-field>
                 <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="passwordRegistrationInput1">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="firstPasswordFormControl" [required]="true">
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
+                <mat-error *ngIf="firstPasswordFormControl.errors?.['required']">
+                    Password is required
+                </mat-error>
             </mat-form-field>
+            <div class="spacer"></div>
             <mat-form-field>
                 <mat-label>Confirm Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="passwordRegistrationInput2">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="secondPasswordFormControl" [required]="true">
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
+                <mat-error *ngIf="secondPasswordFormControl.errors?.['required']">
+                    Please confirm your password
+                </mat-error>
             </mat-form-field>
-            <button mat-raised-button color="primary" (click)="signUp()">
+            <div class="spacer"></div>
+            <button mat-raised-button color="primary" (click)="signUp()" [disabled]="signUpFormGroup.invalid">
                 JOIN NOW
             </button>
         </div>

@@ -1,9 +1,11 @@
 <div mat-dialog-content>
-    <h1 mat-dialog-title class="title">Choose buy-in</h1>
+    <h1 mat-dialog-title class="title">Choose your buy-in amount</h1>
     <div class="spacer"></div>
     <div class="input-container">
         <form [formGroup]="form">
             <mat-form-field>
+                <mat-label>Buy-In</mat-label>
+                <div class="money-prefix" matPrefix>&nbsp; $</div>
                 <input
                     matInput
                     formControlName="formField"

@@ -2,26 +2,28 @@
     <h1 mat-dialog-title class="title">Create a new game</h1>
     <div mat-dialog-content>
         <mat-stepper orientation="vertical" #stepper>
-            <mat-step state completed="false">
+            <mat-step state completed="false" [hasError]="hasError" errorMessage="Pool name is required.">
               <ng-template matStepLabel>Name your game</ng-template>
-              Choose a name for your new game pool
-                <div class="pool-name-container">
-                    <mat-form-field appearance="fill">
-                        <mat-label>Pool Name</mat-label>
-                        <input matInput [(ngModel)]="poolName">
-                    </mat-form-field>
-                </div>
+              <div class="vertical-spacer"></div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Pool Name</mat-label>
+                    <input matInput (input)="onPoolNameInput($event)" [(ngModel)]="poolName">
+                </mat-form-field>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Chip Values</ng-template>
+                <div class="vertical-spacer"></div>
                 Choose the values for each chip
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy-In Limits</ng-template>
+                <div class="vertical-spacer"></div>
                 Choose the minimum and maximum buy-in values for the game
-                <div class="buy-in-input-container">
+                <div class="vertical-spacer"></div>
+                <div class="limits-input-container">
                     <mat-form-field>
                         <mat-label>Min Buy-In</mat-label>
+                        <div class="money-prefix" matPrefix>&nbsp; $</div>
                         <input
                             matInput
                             [(ngModel)]="poolSettings.min_buy_in"
@@ -31,8 +33,11 @@
                             min="0"
                         >
                     </mat-form-field>
+                </div>
+                <div class="limits-input-container">
                     <mat-form-field>
                         <mat-label>Max Buy-In</mat-label>
+                        <div class="money-prefix" matPrefix>&nbsp; $</div>
                         <input
                             matInput
                             [(ngModel)]="poolSettings.max_buy_in"
@@ -46,13 +51,13 @@
             </mat-step>
             <mat-step state completed="false">
               <ng-template matStepLabel>Entry Password</ng-template>
-              Set an optional password for other players that want to join
-              <div class="password-container">
+              <div class="vertical-spacer"></div>
+              Set an optional password for joining the game
+              <div class="vertical-spacer"></div>
                 <mat-form-field appearance="fill">
                     <mat-label>Password</mat-label>
                     <input matInput [(ngModel)]="poolSettings.password">
                 </mat-form-field>
-              </div>
             </mat-step>
           </mat-stepper>
     </div>
@@ -64,12 +69,13 @@
         >
             CANCEL
         </button>
-        <div class="spacer"></div>
+        <div class="horizontal-spacer"></div>
         <button
             class="create-button"
             mat-raised-button
             color="primary"
             (click)="createGame()"
+            [disabled]="hasError"
         >
             CREATE GAME
         </button>

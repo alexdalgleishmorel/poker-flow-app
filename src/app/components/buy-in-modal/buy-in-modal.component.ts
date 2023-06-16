@@ -28,7 +28,7 @@ export class BuyInModalComponent {
   ) {
     this.deviceConnection = data;
     this.form = this.formBuilder.group({
-      formField: ['', this.buyInValidator.bind(this)]
+      formField: ['0', this.buyInValidator.bind(this)]
   });
   }
 
