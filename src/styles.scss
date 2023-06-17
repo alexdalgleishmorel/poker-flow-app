@@ -1,8 +1,12 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "mixins.scss";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .money-prefix {
     padding-top: 16px;
+    @include mobile {
+        padding-left: 5px;
+    }
 }

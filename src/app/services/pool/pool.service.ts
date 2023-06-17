@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, lastValueFrom } from 'rxjs';
+import { Observable, lastValueFrom, map, of } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
 
@@ -44,8 +44,8 @@ export interface PoolSettings {
   has_password: boolean;
   min_buy_in: number;
   max_buy_in: number;
-  denominations: string;
-  password: string;
+  denominations: number[];
+  password?: string;
 }
 
 export interface PoolCreationRequest {
@@ -77,14 +77,17 @@ export class PoolService {
     return this.apiService.get(`/pool/${poolID}`);
   }
 
-  createPool(name: string, deviceID: number, settings: PoolSettings): Observable<any> {
+  createPool(name: string, deviceID: number, settings: PoolSettings) {
+    if (!settings.has_password) settings.password = '';
+
     const poolCreationRequest: PoolCreationRequest = {
       pool_name: name,
       device_id: deviceID,
       settings: settings,
       admin_id: this.authService.getCurrentUser()?.id
     };
-    return this.apiService.post(`/pool/create`, poolCreationRequest);
+
+    return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {

@@ -10,7 +10,7 @@ export class DeviceService {
   findDevices(filter?: string[]) {
     return new Promise<any[]>(resolve => {
       setTimeout(() => resolve([
-        {id: 1}
+        {id: 1, slots: 5}
       ]), 3000);
     });
   }
@@ -30,6 +30,7 @@ export class DeviceService {
 
 export interface PokerFlowDevice {
   id: number;
+  slots: number;
 }
 
 export interface DeviceWithdrawalRequest {
