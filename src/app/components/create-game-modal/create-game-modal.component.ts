@@ -45,8 +45,8 @@ export class CreateGameModalComponent {
     this.dialogRef.close(null);
   }
 
-  onPoolNameInput(event: any) {
-    this.hasError = event.data ? false : true;
+  onPoolNameInput() {
+    this.hasError = this.poolName ? false : true;
   }
 
   trackByFn(index: any, item: any) {

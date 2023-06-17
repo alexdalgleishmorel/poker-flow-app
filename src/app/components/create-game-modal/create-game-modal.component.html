@@ -7,7 +7,7 @@
               <div class="vertical-spacer"></div>
                 <mat-form-field appearance="fill">
                     <mat-label>Pool Name</mat-label>
-                    <input matInput (input)="onPoolNameInput($event)" [(ngModel)]="poolName">
+                    <input matInput (input)="onPoolNameInput()" [(ngModel)]="poolName">
                 </mat-form-field>
             </mat-step>
             <mat-step state completed="false">
