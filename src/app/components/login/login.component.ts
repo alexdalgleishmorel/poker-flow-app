@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Form, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer } from "@angular/platform-browser";
 import { MatIconRegistry } from "@angular/material/icon";
 import { Router } from '@angular/router';
@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
     secondPassword: this.secondPasswordFormControl
   });
 
-  public emailNotFoundError: boolean = false;
-  public invalidCredentialError: boolean = false;
+  public loginErrorMessages: ErrorMessages = new ErrorMessages();
+  public signUpErrorMessages: ErrorMessages = new ErrorMessages();
   public hidePassword: boolean = true;
 
   constructor (
@@ -54,51 +54,100 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.signUpFormGroup.invalid) {
-      return;
-    }
+    this.loginErrorMessages.reset();
 
     const loginRequest: LoginRequest = {
-      email: 'something',
-      password: 'something'
+      email: this.emailFormControl.value!,
+      password: this.passwordFormControl.value!
     };
 
-    this.authService.login(loginRequest)
+    this.requestLogin(loginRequest);
+  }
+
+  signUp() {
+    this.signUpErrorMessages.reset();
+
+    const signUpRequest: SignUpRequest = {
+      email: this.emailRegistrationFormControl.value!,
+      firstName: this.firstNameFormControl.value!,
+      lastName: this.lastNameFormControl.value!,
+      password: this.firstPasswordFormControl.value!
+    };
+
+    this.authService.signup(signUpRequest)
       .pipe(
         catchError((error) => {
-          if (error.status === 404) {
-            this.emailNotFoundError = true;
-          }
           if (error.status === 401) {
-            this.invalidCredentialError = true;
+            this.signUpErrorMessages.setMessage(LoginErrorType.emailAlreadyExistsError);
+            this.emailRegistrationFormControl.setErrors({'email': true});
+          } else {
+            this.signUpErrorMessages.setMessage(LoginErrorType.genericError);
           }
           return throwError(() => new Error(error));
         })
       )
       .subscribe(() => {
-        this.emailNotFoundError, this.invalidCredentialError = false, false;
-        this.router.navigate(['/', 'hub'])
+        this.requestLogin(
+          {
+            email: signUpRequest.email,
+            password: signUpRequest.password
+          }
+        );
       });
   }
 
-  signUp() {
-    /*
-    if (!this.emailRegistrationInput) return;
-    if (!this.firstNameRegistrationInput) return;
-    if (!this.lastNameRegistrationInput) return;
-    if (!this.passwordRegistrationInput1) return;
-
-    if (this.passwordRegistrationInput1 !== this.passwordRegistrationInput2) return;
-
-    const signUpRequest: SignUpRequest = {
-      email: this.emailRegistrationInput,
-      firstName: this.firstNameRegistrationInput,
-      lastName: this.lastNameRegistrationInput,
-      password: this.passwordRegistrationInput1
-    };
-
-    this.authService.signup(signUpRequest)
-      .subscribe(() => this.router.navigate(['/', 'hub']));
-      */
+  requestLogin(loginRequest: LoginRequest) {
+    this.authService.login(loginRequest)
+      .pipe(
+        catchError((error) => {
+          if (error.status === 404) {
+            this.loginErrorMessages.setMessage(LoginErrorType.emailNotFoundError);
+          }
+          else if (error.status === 401) {
+            this.loginErrorMessages.setMessage(LoginErrorType.invalidCredentialError);
+          } else {
+            this.loginErrorMessages.setMessage(LoginErrorType.genericError);
+          }
+          return throwError(() => new Error(error));
+        })
+      )
+      .subscribe(() => {
+        this.router.navigate(['/', 'hub']);
+      });
   }
+
+  comparePasswords() {
+    (this.firstPasswordFormControl.value !== this.secondPasswordFormControl.value) ? this.secondPasswordFormControl.setErrors({'mismatch': true}) : this.secondPasswordFormControl.setErrors(null);
+  }
+}
+
+class ErrorMessages {
+  private currentMessage: string = '';
+
+  private emailAlreadyExistsError: string = 'The email you provided is already connected to an account.';
+  private emailNotFoundError: string = 'The email you provided is not connected to an account. Sign-up with this email first to continue.';
+  private genericError: string = 'Something went wrong when trying to complete your request. Please try again.';
+  private invalidCredentialError: string = 'The email/password you provided are invalid. Please try again.';
+
+  setMessage(errorType: LoginErrorType) {
+    if (errorType === LoginErrorType.emailAlreadyExistsError) this.currentMessage = this.emailAlreadyExistsError;
+    if (errorType === LoginErrorType.emailNotFoundError) this.currentMessage = this.emailNotFoundError;
+    if (errorType === LoginErrorType.genericError) this.currentMessage = this.genericError;
+    if (errorType === LoginErrorType.invalidCredentialError) this.currentMessage = this.invalidCredentialError;
+  }
+
+  getMessage() {
+    return this.currentMessage;
+  }
+
+  reset() {
+    this.currentMessage = '';
+  }
+}
+
+enum LoginErrorType {
+  emailAlreadyExistsError = 'emailAlreadyExistsError',
+  emailNotFoundError = 'emailNotFoundError',
+  genericError = 'genericError',
+  invalidCredentialError = 'invalidCredentialError'
 }

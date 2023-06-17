@@ -34,10 +34,10 @@
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
-            <div *ngIf="emailNotFoundError || invalidCredentialError">
+            <div *ngIf="loginErrorMessages.getMessage()">
                 <div class="spacer"></div>
                 <mat-error>
-                    {{emailNotFoundError ? 'The email you provided is not connected to an account.' : 'The username and password you provided are invalid. Please try again.'}}
+                    {{loginErrorMessages.getMessage()}}
                 </mat-error>
             </div>
             <div class="spacer"></div>
@@ -93,7 +93,7 @@
             <div class="spacer"></div>
             <mat-form-field>
                 <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="firstPasswordFormControl" [required]="true">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="firstPasswordFormControl" [required]="true" (input)="comparePasswords()">
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
@@ -104,14 +104,23 @@
             <div class="spacer"></div>
             <mat-form-field>
                 <mat-label>Confirm Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="secondPasswordFormControl" [required]="true">
+                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="secondPasswordFormControl" [required]="true" (input)="comparePasswords()">
                 <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error *ngIf="secondPasswordFormControl.errors?.['required']">
                     Please confirm your password
                 </mat-error>
+                <mat-error *ngIf="secondPasswordFormControl.errors?.['mismatch']">
+                    Passwords do not match
+                </mat-error>
             </mat-form-field>
+            <div *ngIf="signUpErrorMessages.getMessage()">
+                <div class="spacer"></div>
+                <mat-error>
+                    {{signUpErrorMessages.getMessage()}}
+                </mat-error>
+            </div>
             <div class="spacer"></div>
             <button mat-raised-button color="primary" (click)="signUp()" [disabled]="signUpFormGroup.invalid">
                 JOIN NOW
