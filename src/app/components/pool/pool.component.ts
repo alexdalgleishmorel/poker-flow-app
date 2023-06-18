@@ -76,15 +76,15 @@ export class PoolComponent implements OnDestroy {
               profile_id: this.authService.getCurrentUser()?.id,
               type: TransactionType.BUY_IN,
               amount: deviceWithdrawalRequest.amount
-            });
-
-            this.dialog.open(ChipWithdrawalModalComponent, {
-              hasBackdrop: false,
-              autoFocus: false,
-              data: {
-                device_connection: deviceConnection,
-                withdrawal_request: deviceWithdrawalRequest
-              }
+            }).subscribe(() => {
+              this.dialog.open(ChipWithdrawalModalComponent, {
+                hasBackdrop: false,
+                autoFocus: false,
+                data: {
+                  device_connection: deviceConnection,
+                  withdrawal_request: deviceWithdrawalRequest
+                }
+              });
             });
           }
         });
@@ -116,7 +116,7 @@ export class PoolComponent implements OnDestroy {
             profile_id: this.authService.getCurrentUser()?.id,
             type: TransactionType.CASH_OUT,
             amount: cashOutValue
-          });
+          }).subscribe(() => {});
         });
       }
     });

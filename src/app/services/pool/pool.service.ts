@@ -8,7 +8,7 @@ export interface PoolData {
   date_created: string;
   id: number;
   device_id: number;
-  total: number;
+  available_pot: number;
   contributors: PoolMember[];
   transactions: PoolTransaction[];
   admin: Profile;
