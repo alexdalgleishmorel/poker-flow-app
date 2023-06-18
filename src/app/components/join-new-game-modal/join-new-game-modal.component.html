@@ -9,6 +9,7 @@
         class="connect-button"
         mat-raised-button
         color="accent"
+        [disabled]="disabled"
         (click)="joinGame(game)"
         >
             JOIN
@@ -19,6 +20,7 @@
         <button
         mat-raised-button
         (click)="cancel()"
+        [disabled]="disabled"
         >
             CANCEL
         </button>
@@ -26,7 +28,7 @@
 </div>
 <ng-template mat-dialog-content #noGamesFound>
     <h1 mat-dialog-title>No PokerFlow devices found</h1>
-    <mat-dialog-actions align="center">
+    <mat-dialog-actions>
         <button
         mat-raised-button
         (click)="cancel()"

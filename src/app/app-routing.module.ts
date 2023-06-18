@@ -30,7 +30,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'welcome', pathMatch: 'full' },
   { path: 'hub', component: HubComponent, canActivate: [AppGuard] },
   { path: 'login', component: LoginComponent },
-  { path: 'pool/:id', component: PoolComponent },
+  { path: 'pool/:id', component: PoolComponent, canActivate: [AppGuard] },
   { path: 'welcome', component: WelcomeComponent },
 ];
 

@@ -8,6 +8,7 @@ import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-moda
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
+import { PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-hub',
@@ -55,7 +56,7 @@ export class HubComponent implements OnDestroy {
     this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false
-    }).afterClosed().subscribe((device: any) => {
+    }).afterClosed().subscribe((device: PokerFlowDevice) => {
       if (device) {
         this.dialog.open(CreateGameModalComponent, {
           hasBackdrop: false,
@@ -80,7 +81,7 @@ export class HubComponent implements OnDestroy {
     this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false
-    }).afterClosed().subscribe((device) => {
+    }).afterClosed().subscribe((device: PokerFlowDevice) => {
       if (device) {
         this.dialog.open(JoinNewGameModalComponent, {
           hasBackdrop: false,
@@ -88,10 +89,8 @@ export class HubComponent implements OnDestroy {
           data: {
             device: device
           }
-        }).afterClosed().subscribe((pool: PoolData) => {
-          if (pool) {
-            this.router.navigate(['/', `pool`, pool.id]);
-          }
+        }).afterClosed().subscribe((poolID: number) => {
+          if (poolID) this.router.navigate(['/', `pool`, poolID]);
         });
       }
     });

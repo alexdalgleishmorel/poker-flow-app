@@ -38,6 +38,7 @@ import { UserPoolsTableComponent } from './components/user-pools-table/user-pool
 import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
 import { JoinNewGameModalComponent } from './components/join-new-game-modal/join-new-game-modal.component';
 import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
+import { PasswordModalComponent } from './components/password-modal/password-modal.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal
     UserPoolsTableComponent,
     PoolActivityTableComponent,
     JoinNewGameModalComponent,
-    ChipWithdrawalModalComponent
+    ChipWithdrawalModalComponent,
+    PasswordModalComponent
   ],
   imports: [
     BrowserModule,

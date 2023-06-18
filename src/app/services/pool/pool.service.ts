@@ -55,6 +55,12 @@ export interface PoolCreationRequest {
   admin_id?: number;
 }
 
+export interface PoolJoinRequest {
+  pool_id: number;
+  profile_id: number;
+  password: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -90,7 +96,20 @@ export class PoolService {
     return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
   }
 
+  joinPool(pool: PoolData, password?: string) {
+
+    const poolJoinRequest: PoolJoinRequest = {
+      pool_id: pool.id,
+      profile_id: this.authService.getCurrentUser()?.id!,
+      password: password ? password : ''
+    };
+
+    return this.apiService.post('/pool/join', poolJoinRequest).pipe(
+      map(() => pool.id)
+    );
+  }
+
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {
-    return lastValueFrom(this.apiService.post(`/pool/transaction/create`, poolTransactionRequest));
+    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
   }
 }

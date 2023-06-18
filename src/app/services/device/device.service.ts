@@ -8,7 +8,7 @@ export class DeviceService {
   constructor() {}
 
   findDevices(filter?: string[]) {
-    return new Promise<any[]>(resolve => {
+    return new Promise<PokerFlowDevice[]>(resolve => {
       setTimeout(() => resolve([
         {id: 1, slots: 5}
       ]), 3000);
@@ -17,7 +17,7 @@ export class DeviceService {
 
   connectToDevice(deviceID: string) {
     return new Promise<any>(resolve => {
-      setTimeout(() => resolve({}), 3000);
+      setTimeout(() => resolve({}), 1000);
     });
   }
 
