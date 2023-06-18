@@ -1,0 +1,11 @@
+<div class="chip-container">
+    <ng-container *ngFor="let denomination of denominations; let i = index; last as isLast">
+        <div class="chip-content">
+            <button mat-mini-fab [disabled]="!assignments[i]" color="primary">
+                ${{denomination}}
+            </button>
+            {{assignments[i]}}
+        </div>
+        <div *ngIf="!isLast" class="spacer"></div>
+    </ng-container>
+</div>

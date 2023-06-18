@@ -7,7 +7,7 @@ import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-moda
 import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
-import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
+import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -62,29 +62,31 @@ export class PoolComponent implements OnDestroy {
         searchMessage: 'Connecting to PokerFlow device',
         cancelEnabled: true
       }
-    }).afterClosed().subscribe((deviceConnection) => {
-      if (deviceConnection) {
+    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+      if (device) {
         this.dialog.open(BuyInModalComponent, {
           hasBackdrop: false,
           autoFocus: true,
-          data: deviceConnection
+          data: {
+            device: device,
+            poolSettings: this.poolData?.settings
+          }
         }).afterClosed().subscribe((deviceWithdrawalRequest: DeviceWithdrawalRequest) => {
           if (deviceWithdrawalRequest) {
-
-            this.poolService.postTransaction({
-              pool_id: this.id,
-              profile_id: this.authService.getCurrentUser()?.id,
-              type: TransactionType.BUY_IN,
-              amount: deviceWithdrawalRequest.amount
-            }).subscribe(() => {
-              this.dialog.open(ChipWithdrawalModalComponent, {
-                hasBackdrop: false,
-                autoFocus: false,
-                data: {
-                  device_connection: deviceConnection,
-                  withdrawal_request: deviceWithdrawalRequest
-                }
-              });
+            this.dialog.open(ChipWithdrawalModalComponent, {
+              hasBackdrop: false,
+              autoFocus: false,
+              data: {
+                device: device,
+                withdrawal_request: deviceWithdrawalRequest
+              }
+            }).afterClosed().subscribe(() => {
+              this.poolService.postTransaction({
+                pool_id: this.id,
+                profile_id: this.authService.getCurrentUser()?.id,
+                type: TransactionType.BUY_IN,
+                amount: deviceWithdrawalRequest.amount
+              })
             });
           }
         });

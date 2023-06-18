@@ -74,7 +74,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
         datasets: [
           {
             label: 'Buy In',
-            data: [0].concat(contributions),
+            data: contributions.length > 0 ? [0].concat(contributions) : [],
             backgroundColor: Object.values(this.colors),
           },
           {
@@ -203,7 +203,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
       });
       let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
       this.chart.data.labels = ['Available Pot'].concat(names);
-      this.chart.data.datasets[0].data = [0].concat(contributions);
+      this.chart.data.datasets[0].data = contributions.length > 0 ? [0].concat(contributions) : [];
       this.chart.data.datasets[1].data = contributions.length > 0 ? [this.poolData?.available_pot] : [];
       this.chart.data.datasets[1].circumference = 360*availableRatio;
 

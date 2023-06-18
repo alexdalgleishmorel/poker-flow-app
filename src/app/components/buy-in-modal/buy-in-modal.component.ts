@@ -1,9 +1,8 @@
-import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, Inject, Input } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AuthService } from 'src/app/services/auth/auth.service';
-import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
-import { PoolService, PoolTransaction, TransactionType } from 'src/app/services/pool/pool.service';
+import { DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
+import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -11,39 +10,37 @@ import { PoolService, PoolTransaction, TransactionType } from 'src/app/services/
   styleUrls: ['./buy-in-modal.component.scss']
 })
 export class BuyInModalComponent {
+  private minBuyIn: number = DEFAULT_MIN_BUY_IN;
+  private maxBuyIn: number = DEFAULT_MAX_BUY_IN;
+  public denominations: number[];
+  public assignments: number[] = [];
+
   public form: FormGroup;
-  public validBuyIn: boolean = false;
-  public customError: boolean = false;
+  public buyInFormControl = new FormControl(
+    '', [
+      Validators.required, 
+      Validators.min(this.minBuyIn), 
+      Validators.max(this.maxBuyIn),
+      this.buyInValidator()
+    ]
+  );
 
   private buyInValue: number = 0;
-  private deviceConnection: any;
+  private device: PokerFlowDevice;
+  private deviceInventory?: number[];
   
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
-    private authService: AuthService,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
-    private deviceService: DeviceService,
-    private formBuilder: FormBuilder,
-    private poolService: PoolService
+    private _formBuilder: FormBuilder
   ) {
-    this.deviceConnection = data;
-    this.form = this.formBuilder.group({
-      formField: ['0', this.buyInValidator.bind(this)]
-  });
-  }
-
-  private buyInValidator(control: FormControl): void {
-    if (control.value === 69) {
-      this.validBuyIn = true;
-      this.customError = false;
-    } else {
-      this.validBuyIn = false;
-      this.customError = true;
-    }
-
-    if (this.validBuyIn) {
-      this.buyInValue = control.value;
-    }
+    this.denominations = this.data.poolSettings.denominations;
+    this.minBuyIn, this.maxBuyIn = this.data.poolSettings.min_buy_in, this.data.poolSettings.max_buy_in;
+    this.device = this.data.device;
+    this.deviceInventory = this.device.connection?.getInventory();
+    this.form = this._formBuilder.group({
+      buyIn: this.buyInFormControl
+    });
   }
 
   confirmBuyIn() {
@@ -56,5 +53,55 @@ export class BuyInModalComponent {
 
   cancelBuyIn() {
     this.dialogRef.close(null);
+  }
+
+  resetAssignments() {
+    this.assignments = [];
+    this.denominations.forEach(() => this.assignments.push(0));
+  }
+
+  totalChipsInInventory(deviceInventory: number[]) {
+    let totalChips: number = 0;
+    deviceInventory.forEach((inventory) => {
+      totalChips += inventory;
+    });
+    return totalChips;
+  }
+
+  inventoryCanSupply(buyIn: number): boolean {
+    let buyInToSettle: number = buyIn;
+    let inventoryCopy = [...this.deviceInventory!];
+    this.resetAssignments();
+
+    while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
+      let slot = 0;
+      this.denominations.forEach((denomination: number) => {
+
+        let availableChips = Math.floor(buyInToSettle/denomination);
+
+        if (inventoryCopy[slot] && availableChips > 0) {
+          this.assignments[slot] += 1;
+          inventoryCopy[slot] -= 1;
+          buyInToSettle = +(buyInToSettle - denomination).toFixed(2);
+        }
+        
+        slot += 1;
+      });
+    }
+
+    return buyInToSettle ? false : true;
+  }
+
+  buyInValidator(): ValidatorFn {
+    return (control:AbstractControl) : ValidationErrors | null => {
+      
+      const value = control.value;
+
+      if (!value || !this.deviceInventory) return null;
+
+      if (!this.inventoryCanSupply(value)) return { 'InsufficientInventory': true };
+      
+      return null;
+    }
   }
 }

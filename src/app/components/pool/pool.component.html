@@ -9,7 +9,7 @@
         </button>
     </div>
     <div class="information-container">
-        <mat-tab-group id="information-tab-group">
+        <mat-tab-group id="information-tab-group" [animationDuration]="0">
             <mat-tab label="POOL" [disabled]="disabled">
                 <ng-template matTabContent>
                     <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
