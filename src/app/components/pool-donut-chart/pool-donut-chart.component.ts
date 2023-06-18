@@ -38,6 +38,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
   @Input() poolData?: PoolData;
   public chart: any;
   private colors: string[] = [
+    '#388E3C',
     '#4dc9f6',
     '#f67019',
     '#f53794',
@@ -69,15 +70,14 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     this.chart = new Chart('pool-donut-chart', {
       type: 'doughnut',
       data: {
-        labels: names,
+        labels: ['Available Pot'].concat(names),
         datasets: [
           {
             label: 'Buy In',
-            data: contributions,
+            data: [0].concat(contributions),
             backgroundColor: Object.values(this.colors),
           },
           {
-            label: 'Available Pot',
             data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
             backgroundColor: '#388E3C',
             circumference: 360*availableRatio,
@@ -165,6 +165,11 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
           },
           legend: {
             position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: (data) => ' $'.concat(data.parsed.toFixed(2))
+            }
           }
         },
         animation: {
@@ -197,8 +202,8 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
         total += member.contribution;
       });
       let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
-      this.chart.data.labels = names;
-      this.chart.data.datasets[0].data = contributions;
+      this.chart.data.labels = ['Available Pot'].concat(names);
+      this.chart.data.datasets[0].data = [0].concat(contributions);
       this.chart.data.datasets[1].data = contributions.length > 0 ? [this.poolData?.available_pot] : [];
       this.chart.data.datasets[1].circumference = 360*availableRatio;
 
