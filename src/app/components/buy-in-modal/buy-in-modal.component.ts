@@ -10,8 +10,8 @@ import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/devic
   styleUrls: ['./buy-in-modal.component.scss']
 })
 export class BuyInModalComponent {
-  private minBuyIn: number = DEFAULT_MIN_BUY_IN;
-  private maxBuyIn: number = DEFAULT_MAX_BUY_IN;
+  private minBuyIn: number = this.data.poolSettings.min_buy_in;
+  private maxBuyIn: number = this.data.poolSettings.max_buy_in;
   public denominations: number[];
   public assignments: number[] = [];
 
@@ -25,7 +25,6 @@ export class BuyInModalComponent {
     ]
   );
 
-  private buyInValue: number = 0;
   private device: PokerFlowDevice;
   private deviceInventory?: number[];
   
@@ -35,7 +34,6 @@ export class BuyInModalComponent {
     private _formBuilder: FormBuilder
   ) {
     this.denominations = this.data.poolSettings.denominations;
-    this.minBuyIn, this.maxBuyIn = this.data.poolSettings.min_buy_in, this.data.poolSettings.max_buy_in;
     this.device = this.data.device;
     this.deviceInventory = this.device.connection?.getInventory();
     this.form = this._formBuilder.group({
@@ -45,8 +43,8 @@ export class BuyInModalComponent {
 
   confirmBuyIn() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
-      amount: this.buyInValue,
-      denominations: []
+      amount: +this.buyInFormControl.value!,
+      denominations: this.assignments
     };
     this.dialogRef.close(deviceWithdrawalRequest);
   }

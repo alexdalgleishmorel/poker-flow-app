@@ -86,7 +86,7 @@ export class PoolComponent implements OnDestroy {
                 profile_id: this.authService.getCurrentUser()?.id,
                 type: TransactionType.BUY_IN,
                 amount: deviceWithdrawalRequest.amount
-              })
+              }).subscribe(() => {});
             });
           }
         });
