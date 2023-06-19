@@ -32,6 +32,7 @@ export class CreateGameModalComponent {
 
   createGame() {
     this.poolSettings.has_password = this.poolSettings.password ? true : false; 
+    this.poolSettings.denominations.sort((a,b)=>a-b);
     this.poolService.createPool(
       this.poolName,
       this.device.id,

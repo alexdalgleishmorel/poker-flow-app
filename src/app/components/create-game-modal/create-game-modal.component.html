@@ -15,20 +15,7 @@
                 <div class="vertical-spacer"></div>
                 Choose the values for each chip
                 <div class="vertical-spacer"></div>
-                <div class="limits-input-container" *ngFor="let slot of poolSettings.denominations; let i = index; trackBy: trackByFn">
-                    <mat-form-field>
-                        <mat-label>Slot {{i+1}}</mat-label>
-                        <div class="money-prefix" matPrefix>&nbsp; $</div>
-                        <input
-                            matInput
-                            [(ngModel)]="poolSettings.denominations[i]"
-                            type="number"
-                            placeholder="Denomination"
-                            onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
-                            min="0"
-                        >
-                    </mat-form-field>
-                </div>
+                <app-chip-select [denominations]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy-In Limits</ng-template>

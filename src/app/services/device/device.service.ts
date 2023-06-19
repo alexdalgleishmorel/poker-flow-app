@@ -11,7 +11,7 @@ export class DeviceService {
     return new Promise<PokerFlowDevice[]>(resolve => {
       setTimeout(() => resolve([
         {id: 1, slots: 5}
-      ]), 3000);
+      ]), 500);
     });
   }
 

@@ -1,0 +1,14 @@
+.chip-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.input-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.spacer {
+    padding: 5px;
+}

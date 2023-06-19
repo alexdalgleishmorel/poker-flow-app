@@ -40,6 +40,7 @@ import { JoinNewGameModalComponent } from './components/join-new-game-modal/join
 import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { PasswordModalComponent } from './components/password-modal/password-modal.component';
 import { ChipViewComponent } from './components/chip-view/chip-view.component';
+import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-select/chip-select.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +61,9 @@ import { ChipViewComponent } from './components/chip-view/chip-view.component';
     JoinNewGameModalComponent,
     ChipWithdrawalModalComponent,
     PasswordModalComponent,
-    ChipViewComponent
+    ChipViewComponent,
+    ChipSelectComponent,
+    ThousandSuffixesPipe
   ],
   imports: [
     BrowserModule,

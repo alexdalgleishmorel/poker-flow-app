@@ -11,13 +11,30 @@
                     [formControl]="buyInFormControl"
                     type="number"
                     placeholder="Buy In"
+                    (blur)="onBlur()"
+                    (keypress)="decimalFilter($event)"
                     (keydown)="resetAssignments()"
                     onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
                     min="0"
                 >
             </mat-form-field>
+            <mat-error *ngIf="buyInFormControl.errors?.['min'] else maxBuyInError">
+                Minimum buy-in: <b>${{data.poolSettings.min_buy_in.toFixed(2)}}</b>
+            </mat-error>
+            <ng-template #maxBuyInError>
+                <mat-error *ngIf="buyInFormControl.errors?.['max'] else insufficientInventoryError">
+                    Maximum buy-in: <b>${{data.poolSettings.max_buy_in.toFixed(2)}}</b>
+                </mat-error>
+            </ng-template>
+            <ng-template #insufficientInventoryError>
+                <mat-error *ngIf="buyInFormControl.errors?.['insufficientInventory']">
+                    Incompatible with inventory.
+                </mat-error>
+            </ng-template>
         </form>
     </div>
+    <div class="spacer"></div>
+    <div class="chip-view-title">Chips</div>
     <div class="spacer"></div>
     <app-chip-view
         [denominations]="denominations"

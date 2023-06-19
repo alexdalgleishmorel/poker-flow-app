@@ -1,7 +1,7 @@
 import { Component, Inject, Input } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
+import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
 import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class BuyInModalComponent {
 
   public form: FormGroup;
   public buyInFormControl = new FormControl(
-    '', [
+    `${this.minBuyIn}`, [
       Validators.required, 
       Validators.min(this.minBuyIn), 
       Validators.max(this.maxBuyIn),
@@ -30,7 +30,7 @@ export class BuyInModalComponent {
   private deviceInventory?: number[];
   
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
     private _formBuilder: FormBuilder
   ) {
@@ -74,12 +74,15 @@ export class BuyInModalComponent {
     this.resetAssignments();
 
     while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
-      let slot = 0;
+      let slot: number = 0;
+      let chipMatch: boolean = false;
+      
       this.denominations.forEach((denomination: number) => {
 
         let availableChips = Math.floor(buyInToSettle/denomination);
 
         if (inventoryCopy[slot] && availableChips > 0) {
+          chipMatch = true;
           this.assignments[slot] += 1;
           inventoryCopy[slot] -= 1;
           buyInToSettle = +(buyInToSettle - denomination).toFixed(2);
@@ -87,6 +90,8 @@ export class BuyInModalComponent {
         
         slot += 1;
       });
+      
+      if (!chipMatch) break;
     }
 
     return buyInToSettle ? false : true;
@@ -99,9 +104,25 @@ export class BuyInModalComponent {
 
       if (!value || !this.deviceInventory) return null;
 
-      if (!this.inventoryCanSupply(value)) return { 'InsufficientInventory': true };
+      if (!this.inventoryCanSupply(value)) {
+        this.resetAssignments();
+        return { 'insufficientInventory': true };
+      }
       
       return null;
     }
+  }
+
+  decimalFilter(event: any) {
+    const reg = /^-?\d*(\.\d{0,1})?$/;
+    let input = event.target.value + String.fromCharCode(event.charCode);
+ 
+    if (!reg.test(input)) {
+        event.preventDefault();
+    }
+  }
+
+  onBlur() {
+    if (!this.buyInFormControl.value) this.buyInFormControl.setValue(this.minBuyIn.toString());
   }
 }
