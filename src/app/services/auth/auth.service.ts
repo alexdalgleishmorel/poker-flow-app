@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
 
 import { BASE_URL } from '../api/api.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ import { BASE_URL } from '../api/api.service';
 export class AuthService {
 
   constructor(
+    private dialog: MatDialog,
     private http: HttpClient,
     private router: Router
   ) {}
@@ -27,6 +29,7 @@ export class AuthService {
   }
 
   doLogoutUser(): void {
+    this.dialog.closeAll();
     this.loggedIn$.next(false);
     localStorage.removeItem(this.JWT_TOKEN);
   }

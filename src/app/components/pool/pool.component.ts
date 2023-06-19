@@ -6,7 +6,7 @@ import { ConnectDeviceModalComponent } from 'src/app/components/connect-device-m
 import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
 import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
+import { catchError, Subscription, interval, of, startWith, switchMap, throwError } from 'rxjs';
 import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -80,14 +80,20 @@ export class PoolComponent implements OnDestroy {
                 device: device,
                 withdrawal_request: deviceWithdrawalRequest
               }
-            }).afterClosed().subscribe(() => {
-              this.poolService.postTransaction({
-                pool_id: this.id,
-                profile_id: this.authService.getCurrentUser()?.id,
-                type: TransactionType.BUY_IN,
-                amount: deviceWithdrawalRequest.amount
-              }).subscribe(() => {});
-            });
+            }).afterClosed()
+              .pipe(
+                catchError((error) => {
+                  return throwError(() => new Error(error))
+                })
+              )
+              .subscribe(() => {
+                this.poolService.postTransaction({
+                  pool_id: this.id,
+                  profile_id: this.authService.getCurrentUser()?.id,
+                  type: TransactionType.BUY_IN,
+                  amount: deviceWithdrawalRequest.amount
+                }).subscribe(() => {});
+              });
           }
         });
       }
@@ -106,20 +112,28 @@ export class PoolComponent implements OnDestroy {
         searchMessage: 'Connecting to PokerFlow device',
         cancelEnabled: true
       }
-    }).afterClosed().subscribe((deviceConnection) => {
-      if (deviceConnection) {
+    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+      if (device) {
         this.dialog.open(ChipDepositModalComponent, {
           hasBackdrop: false,
           autoFocus: false,
-          data: deviceConnection
-        }).afterClosed().subscribe((cashOutValue: number) => {
-          this.poolService.postTransaction({
-            pool_id: this.id,
-            profile_id: this.authService.getCurrentUser()?.id,
-            type: TransactionType.CASH_OUT,
-            amount: cashOutValue
-          }).subscribe(() => {});
-        });
+          data: {
+            device: device
+          }
+        }).afterClosed()
+          .pipe(
+            catchError((error) => {
+              return throwError(() => new Error(error))
+            })
+          )
+          .subscribe((cashOutValue: number) => {
+            this.poolService.postTransaction({
+              pool_id: this.id,
+              profile_id: this.authService.getCurrentUser()?.id,
+              type: TransactionType.CASH_OUT,
+              amount: cashOutValue
+            }).subscribe(() => {});
+          });
       }
     });
   }
