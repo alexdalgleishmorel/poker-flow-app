@@ -10,20 +10,23 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
 })
 export class ChipDepositModalComponent {
   public depositInProgress: boolean;
-  public receipt: number = 0;
   public spinnerColor: ThemePalette = 'accent';
   private device: PokerFlowDevice = this.data.device;
+  
+  public receipt: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<ChipDepositModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.depositInProgress = true;
+    this.device.connection?.startChipDeposit();
   }
 
   completeDeposit() {
     this.depositInProgress = false;
-    this.receipt = 150;
+    this.device.connection?.completeChipDeposit();
+    this.receipt = 20;
   }
 
   receiptConfirmed() {
