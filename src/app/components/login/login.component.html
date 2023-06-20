@@ -15,7 +15,7 @@
             <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>Email</mat-label>
-                <input matInput [formControl]="emailFormControl">
+                <input matInput type="email" [formControl]="emailFormControl">
                 <mat-error *ngIf="emailFormControl.errors?.['required']">
                     Email is required
                 </mat-error>
@@ -82,7 +82,7 @@
             <div class="spacer"></div>
             <mat-form-field appearance="fill">
                 <mat-label>Email</mat-label>
-                <input matInput [formControl]="emailRegistrationFormControl" [required]="true">
+                <input matInput type="email" [formControl]="emailRegistrationFormControl" [required]="true">
                 <mat-error *ngIf="emailRegistrationFormControl.errors?.['required']">
                     Email is required
                 </mat-error>
