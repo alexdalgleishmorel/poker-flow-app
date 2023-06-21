@@ -26,7 +26,7 @@ export class ChipDepositModalComponent {
   completeDeposit() {
     this.depositInProgress = false;
     this.device.connection?.completeChipDeposit();
-    this.receipt = 20;
+    this.receipt = 50;
   }
 
   receiptConfirmed() {

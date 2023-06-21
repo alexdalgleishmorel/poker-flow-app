@@ -2,19 +2,22 @@
     <h1 mat-dialog-title class="title">
         Join game
     </h1>
+    <dl>
     <div class="pool-row" *ngFor="let game of games">
-        {{game.name}}
-        <span class="spacer"></span>
-        <button
-        class="connect-button"
-        mat-raised-button
-        color="accent"
-        [disabled]="disabled"
-        (click)="joinGame(game)"
-        >
-            JOIN
-        </button>
+        <dt>{{game.name}}</dt>
+        <dd>
+            <button
+            class="connect-button"
+            mat-raised-button
+            color="accent"
+            [disabled]="disabled"
+            (click)="joinGame(game)"
+            >
+                JOIN
+            </button>
+        </dd>
     </div>
+    </dl>
     <span class="spacer"></span>
     <div class="cancel-button-container">
         <button

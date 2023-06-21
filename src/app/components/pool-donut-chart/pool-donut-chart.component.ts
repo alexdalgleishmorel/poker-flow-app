@@ -109,7 +109,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
       
             var totalContributionText = '$' + total.toString(),
               totalContributionTextX = Math.round((width - ctx.measureText(totalContributionText).width) / 2),
-              totalContributionTextY = 0.40*height;
+              totalContributionTextY = height > 500 ? 0.40*height : 0.35*height;
       
             ctx.fillText(totalContributionText, totalContributionTextX, totalContributionTextY);
 
@@ -120,7 +120,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
 
             var totalContributionTitle = 'contributed',
               totalContributionTitleX = Math.round((width - ctx.measureText(totalContributionTitle).width) / 2),
-              totalContributionTitleY = 0.45*height;
+              totalContributionTitleY = height > 500 ? 0.45*height : 0.40*height;
       
             ctx.fillText(totalContributionTitle, totalContributionTitleX, totalContributionTitleY);
 
@@ -137,7 +137,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
       
             var totalAvailableText = '$' + totalAvailable!.toString(),
             totalAvailableTextX = Math.round((width - ctx.measureText(totalAvailableText).width) / 2),
-              totalAvailableTextY = 0.55*height;
+              totalAvailableTextY = height > 500 ? 0.55*height : 0.50*height;
       
             ctx.fillText(totalAvailableText, totalAvailableTextX, totalAvailableTextY);
 
@@ -146,7 +146,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
 
             var totalAvailableTitle = 'available',
               totalAvailableTitleX = Math.round((width - ctx.measureText(totalAvailableTitle).width) / 2),
-              totalAvailableTitleY = 0.60*height;
+              totalAvailableTitleY = height > 500 ? 0.60*height : 0.55*height;
 
             ctx.fillText(totalAvailableTitle, totalAvailableTitleX, totalAvailableTitleY);
 

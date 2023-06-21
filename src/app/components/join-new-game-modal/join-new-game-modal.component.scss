@@ -1,3 +1,5 @@
+@import '../../../mixins.scss';
+
 .cancel-button-container {
     display: flex;
     flex-direction: column;
@@ -22,4 +24,22 @@ button {
 
 .title {
     text-align: center;
+}
+
+dt,dd {
+    display: inline-block;
+}
+
+dt {
+    width: 65%;
+    @include mobile {
+        width: 55%
+    }
+}
+
+dd {
+    width: 30%;
+    @include mobile {
+        width: 42%
+    }
 }

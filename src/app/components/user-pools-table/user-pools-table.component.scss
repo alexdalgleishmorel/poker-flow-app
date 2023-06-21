@@ -10,14 +10,10 @@ button {
 
 .pool-name-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-}
-
-.mat-column-join {
-    font-size: large;
-    text-align: center;
+    padding: 10px;
 }
 
 .mat-column-pool-name {
