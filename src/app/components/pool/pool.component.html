@@ -16,7 +16,8 @@
                 </ng-template>
             </mat-tab>
             <mat-tab label="ACTIVITY" [disabled]="disabled">
-                <app-pool-activity-table [poolData]="poolData"></app-pool-activity-table>
+                <app-pool-activity-table [dataSource]="poolData ? poolData.transactions : []" (onBuyIn)="buyIn()">
+                </app-pool-activity-table>
             </mat-tab>
         </mat-tab-group>
     </div>

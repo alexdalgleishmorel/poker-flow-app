@@ -1,19 +1,19 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { PoolData, TransactionType } from 'src/app/services/pool/pool.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-activity-table',
   templateUrl: './pool-activity-table.component.html',
   styleUrls: ['./pool-activity-table.component.scss']
 })
-export class PoolActivityTableComponent implements OnChanges {
-  public dataSource: any;
+export class PoolActivityTableComponent {
   public displayedColumns: string[] = ['name', 'type', 'amount'];
 
-  @Input() poolData?: PoolData;
+  @Input() dataSource: any[] = [];
+  @Output() onBuyIn = new EventEmitter<boolean>;
 
-  ngOnChanges(): void {
-    this.dataSource = this.poolData?.transactions;
+  buyIn() {
+    this.onBuyIn.emit();
   }
 
   isBuyIn(transactionType: TransactionType) {
