@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
@@ -11,6 +11,8 @@ export class UserPoolsTableComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
+  @Output() onCreateGame: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() onJoinGame: EventEmitter<boolean> = new EventEmitter<boolean>();
   public displayedColumns: string[] = [];
 
   constructor(
@@ -23,5 +25,13 @@ export class UserPoolsTableComponent implements OnInit {
 
   openGame(poolID: string) {
     this.router.navigate(['/', `pool`, poolID]);
+  }
+
+  createGame() {
+    this.onCreateGame.emit();
+  }
+
+  joinGame() {
+    this.onJoinGame.emit();
   }
 }

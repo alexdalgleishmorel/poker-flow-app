@@ -14,12 +14,18 @@
         (click)="joinNewGame()"
         [disabled]="disabled"
     >
-        JOIN NEW GAME
+        JOIN GAME
     </button>
 </div>
 <mat-tab-group>
     <mat-tab label="ACTIVE GAMES" [disabled]="disabled">
-        <app-user-pools-table [dataSource]="poolData ? poolData : []" [disabled]="disabled"></app-user-pools-table>
+        <app-user-pools-table 
+            [dataSource]="poolData ? poolData : []" 
+            [disabled]="disabled"
+            (onCreateGame)="createGame()"
+            (onJoinGame)="joinNewGame()"
+        >
+        </app-user-pools-table>
     </mat-tab>
     <mat-tab label="PAST GAMES" [disabled]="disabled">
         <app-user-pools-table [dataSource]="poolData ? poolData : []" [disabled]="disabled" [history]="true"></app-user-pools-table>

@@ -1,9 +1,11 @@
+@import '../../../variables.scss';
+
 .buy-in {
-    color: #E91E63;
+    color: $secondaryColor;
 }
 
 .cash-out {
-    color: #3F51B5;
+    color: $primaryColor;
 }
 
 .mat-column-name {

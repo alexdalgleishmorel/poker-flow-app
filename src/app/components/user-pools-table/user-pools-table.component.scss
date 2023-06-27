@@ -1,4 +1,5 @@
 @import '../../../mixins.scss';
+@import '../../../variables.scss';
 
 button {
     border-radius: 90px;
@@ -46,4 +47,20 @@ mat-paginator {
     @include mobile {
         height: 75vh;
     }
+}
+
+.empty-table {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-game-text {
+    cursor: pointer;
+    color: $primaryColor;
+}
+
+.join-game-text {
+    cursor: pointer;
+    color: $secondaryColor;
 }

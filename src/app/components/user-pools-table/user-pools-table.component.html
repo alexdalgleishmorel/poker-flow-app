@@ -1,5 +1,5 @@
 <div class="table-container">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table *ngIf="dataSource.length > 0 else emptyTable" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="pool-name">
             <th mat-header-cell *matHeaderCellDef> NAME </th>
@@ -40,3 +40,18 @@
     
     </table>    
 </div>
+
+<ng-template #emptyTable class="empty-table">
+    <div class="empty-table-text">
+        No games found. 
+        <br/><br/>
+        <span class="create-game-text" (click)="createGame()">
+            <b>Create</b>
+        </span> or 
+        <span class="join-game-text" (click)="joinGame()">
+            <b>join</b>
+        </span> 
+        <br/>
+        a game to get started. 
+    </div>
+</ng-template>
