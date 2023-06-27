@@ -2,20 +2,22 @@
     <h1 mat-dialog-title class="title">Create a new game</h1>
     <div mat-dialog-content>
         <mat-stepper orientation="vertical" #stepper>
-            <mat-step state completed="false" [hasError]="hasError" errorMessage="Pool name is required.">
-              <ng-template matStepLabel>Name your game</ng-template>
-              <div class="vertical-spacer"></div>
+            <mat-step state completed="false" [hasError]="!poolNameFormControl.valid" errorMessage="Pool name is required.">
+              <form [formGroup]="poolNameFormGroup">
+                <ng-template matStepLabel>Name your game</ng-template>
+                <div class="vertical-spacer"></div>
                 <mat-form-field appearance="fill">
                     <mat-label>Pool Name</mat-label>
-                    <input matInput (input)="onPoolNameInput()" [(ngModel)]="poolName">
+                    <input matInput [formControl]="poolNameFormControl">
                 </mat-form-field>
+              </form>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Chip Values</ng-template>
                 <div class="vertical-spacer"></div>
                 Choose the values for each chip
                 <div class="vertical-spacer"></div>
-                <app-chip-select [denominations]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
+                <app-chip-select [(denominations)]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
             </mat-step>
             <mat-step state completed="false">
                 <ng-template matStepLabel>Buy-In Limits</ng-template>
@@ -24,13 +26,14 @@
                 <div class="vertical-spacer"></div>
                 <div class="limits-input-container">
                     <mat-form-field>
-                        <mat-label>Min Buy-In</mat-label>
+                        <mat-label>Minimum Buy-In</mat-label>
                         <div class="money-prefix" matPrefix>&nbsp; $</div>
                         <input
                             matInput
-                            [(ngModel)]="poolSettings.min_buy_in"
                             type="number"
-                            placeholder="Min Buy-In"
+                            [formControl]="minBuyInFormControl"
+                            (blur)="onMinBuyInBlur()"
+                            placeholder="Minimum Buy-In"
                             onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
                             min="0"
                         >
@@ -38,13 +41,14 @@
                 </div>
                 <div class="limits-input-container">
                     <mat-form-field>
-                        <mat-label>Max Buy-In</mat-label>
+                        <mat-label>Maximum Buy-In</mat-label>
                         <div class="money-prefix" matPrefix>&nbsp; $</div>
                         <input
                             matInput
-                            [(ngModel)]="poolSettings.max_buy_in"
                             type="number"
-                            placeholder="Max Buy-In"
+                            [formControl]="maxBuyInFormControl"
+                            (blur)="onMaxBuyInBlur()"
+                            placeholder="Maximum Buy-In"
                             onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
                             min="0"
                         >
@@ -58,7 +62,7 @@
               <div class="vertical-spacer"></div>
                 <mat-form-field appearance="fill">
                     <mat-label>Password</mat-label>
-                    <input matInput [(ngModel)]="poolSettings.password">
+                    <input matInput [formControl]="passwordFormControl">
                 </mat-form-field>
             </mat-step>
           </mat-stepper>
@@ -77,7 +81,7 @@
             mat-raised-button
             color="primary"
             (click)="createGame()"
-            [disabled]="hasError"
+            [disabled]="!mainFormGroup.valid"
         >
             CREATE GAME
         </button>

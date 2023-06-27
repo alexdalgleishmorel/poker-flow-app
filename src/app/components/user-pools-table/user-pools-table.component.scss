@@ -49,7 +49,19 @@ mat-paginator {
     }
 }
 
+.empty-table-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    @include mobile {
+        height: 75vh;
+    }
+}
+
 .empty-table {
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;

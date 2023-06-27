@@ -41,6 +41,7 @@ import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal
 import { PasswordModalComponent } from './components/password-modal/password-modal.component';
 import { ChipViewComponent } from './components/chip-view/chip-view.component';
 import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-select/chip-select.component';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @NgModule({
   declarations: [
@@ -100,6 +101,12 @@ import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-sel
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: {
         subscriptSizing: 'dynamic'
+      }
+    },
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: {
+        showErrors: true
       }
     }
   ],

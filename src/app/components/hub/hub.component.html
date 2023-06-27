@@ -17,7 +17,7 @@
         JOIN GAME
     </button>
 </div>
-<mat-tab-group>
+<mat-tab-group animationDuration="0ms">
     <mat-tab label="ACTIVE GAMES" [disabled]="disabled">
         <app-user-pools-table 
             [dataSource]="poolData ? poolData : []" 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN } from '@constants';
 import { debounceTime } from 'rxjs';
@@ -11,6 +11,7 @@ import { debounceTime } from 'rxjs';
 export class ChipSelectComponent implements OnChanges {
   @ViewChild("denominationInput") denominationInput!: ElementRef;
   @Input() denominations: number[] = DEFAULT_DENOMINATIONS;
+  @Output() denominationsChange = new EventEmitter<number[]>;
   @Input() maxBuyIn: number = DEFAULT_MAX_BUY_IN;
   public selectedSlot: number = 0;
 
@@ -31,6 +32,7 @@ export class ChipSelectComponent implements OnChanges {
       } else {
         this.denominations[this.selectedSlot] = value;
       }
+      this.denominationsChange.emit(this.denominations);
     });
   }
 
