@@ -34,7 +34,7 @@
                 <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
-            <div *ngIf="loginErrorMessages.getMessage()">
+            <div class="loginFailureMessage" *ngIf="loginErrorMessages.getMessage()">
                 <div class="spacer"></div>
                 <mat-error>
                     {{loginErrorMessages.getMessage()}}

@@ -127,7 +127,7 @@ class ErrorMessages {
   private emailAlreadyExistsError: string = 'The email you provided is already connected to an account.';
   private emailNotFoundError: string = 'The email you provided is not connected to an account. Sign-up with this email first to continue.';
   private genericError: string = 'Something went wrong when trying to complete your request. Please try again.';
-  private invalidCredentialError: string = 'The email/password you provided are invalid. Please try again.';
+  private invalidCredentialError: string = 'The credentials you provided are invalid. Please try again.';
 
   setMessage(errorType: LoginErrorType) {
     if (errorType === LoginErrorType.emailAlreadyExistsError) this.currentMessage = this.emailAlreadyExistsError;
