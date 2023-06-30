@@ -46,6 +46,9 @@ export interface PoolSettings {
   max_buy_in: number;
   denominations: number[];
   password?: string;
+  buy_in_enabled?: boolean;
+  buy_in_expiry_time?: string;
+  expired?: boolean;
 }
 
 export interface PoolCreationRequest {
@@ -53,6 +56,11 @@ export interface PoolCreationRequest {
   device_id: number;
   settings: PoolSettings;
   admin_id?: number;
+}
+
+export interface PoolUpdateRequest {
+  attribute: string;
+  value: any;
 }
 
 export interface PoolJoinRequest {
@@ -94,6 +102,13 @@ export class PoolService {
     };
 
     return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
+  }
+
+  updatePoolSettings(poolID: number, updateRequests: PoolUpdateRequest[]) {
+    return lastValueFrom(this.apiService.post('/pool/settings/update', {
+      pool_id: poolID,
+      update_requests: updateRequests
+    }));
   }
 
   joinPool(pool: PoolData, password?: string) {
