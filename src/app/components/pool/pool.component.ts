@@ -167,4 +167,8 @@ export class PoolComponent implements OnDestroy {
   goToHub() {
     this.router.navigate(['/', 'hub']);
   }
+
+  onSettingsChange(settingUpdateInProgress: boolean) {
+    this.disabled = settingUpdateInProgress;
+  }
 }

@@ -20,7 +20,7 @@
                 </app-pool-activity-table>
             </mat-tab>
             <mat-tab label="SETTINGS" [disabled]="disabled">
-                <app-pool-settings-view [poolData]="poolData"></app-pool-settings-view>
+                <app-pool-settings-view [(poolData)]="poolData"></app-pool-settings-view>
             </mat-tab>
         </mat-tab-group>
     </div>
@@ -34,7 +34,7 @@
                         <br><br>
                         <button 
                             mat-raised-button color="accent"
-                            [disabled]="disabled"
+                            [disabled]="disabled || !poolData?.settings?.buy_in_enabled"
                             (click)="buyIn()"
                         >
                         BUY IN

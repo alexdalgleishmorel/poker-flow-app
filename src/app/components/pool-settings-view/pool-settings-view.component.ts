@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { PoolData } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-settings-view',
@@ -10,10 +10,17 @@ import { PoolData } from 'src/app/services/pool/pool.service';
 })
 export class PoolSettingsViewComponent implements OnChanges {
   @Input() poolData?: PoolData;
+  @Output() poolDataChange = new EventEmitter<PoolData>();
   private setup: boolean = false;
 
-  public minBuyInFormControl = new FormControl('');
-  public maxBuyInFormControl = new FormControl('');
+  private formControlNameMappings: any = {
+    minBuyInFormControl: 'min_buy_in',
+    maxBuyInFormControl: 'max_buy_in',
+    buyInEnabledFormControl: 'buy_in_enabled',
+  }
+
+  public minBuyInFormControl = new FormControl();
+  public maxBuyInFormControl = new FormControl();
   public buyInEnabledFormControl = new FormControl();
 
   public settingsFormGroup: FormGroup = this._formBuilder.group({
@@ -24,6 +31,7 @@ export class PoolSettingsViewComponent implements OnChanges {
 
   constructor(
     private authService: AuthService,
+    private poolService: PoolService,
     private _formBuilder: FormBuilder
   ) {}
 
@@ -33,22 +41,35 @@ export class PoolSettingsViewComponent implements OnChanges {
 
       if (!this.setup) {
         this.setup = true;
-        this.buyInEnabledFormControl.setValue(true);
-        this.minBuyInFormControl.setValue(this.poolData.settings.min_buy_in.toString());
-        this.maxBuyInFormControl.setValue(this.poolData.settings.max_buy_in.toString());
+        this.buyInEnabledFormControl.setValue(this.poolData.settings.buy_in_enabled);
+        this.minBuyInFormControl.setValue(this.poolData.settings.min_buy_in);
+        this.maxBuyInFormControl.setValue(this.poolData.settings.max_buy_in);
       }
     }
   }
 
   onMinBuyInBlur() {
-    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(this.poolData?.settings.min_buy_in.toString()!);
+    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(this.poolData?.settings.min_buy_in);
   }
 
   onMaxBuyInBlur() {
-    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(this.poolData?.settings.max_buy_in.toString()!);
+    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(this.poolData?.settings.max_buy_in);
   }
 
   saveSettings() {
-    this.settingsFormGroup.markAsPristine();
+    if (this.poolData) {
+      let updateRequests: PoolUpdateRequest[] = [];
+      Object.keys(this.settingsFormGroup.controls).forEach(controlName => {
+        updateRequests.push({
+          attribute: this.formControlNameMappings[controlName],
+          value: this.settingsFormGroup.controls[controlName].value,
+        });
+      });
+      this.poolService.updatePoolSettings(this.poolData.id, updateRequests)
+        .then((poolData: any) => {
+          this.poolDataChange.emit(poolData);
+          this.settingsFormGroup.markAsPristine();
+        });
+    }
   }
 }
