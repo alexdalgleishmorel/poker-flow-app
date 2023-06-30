@@ -93,7 +93,7 @@ export class PoolComponent implements OnDestroy {
                   profile_id: this.authService.getCurrentUser()?.id,
                   type: TransactionType.BUY_IN,
                   amount: deviceWithdrawalRequest.amount
-                }).subscribe(() => {
+                }).subscribe((transactionResponse: any) => {
                   this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
                     .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
                   this.dialog.open(TransactionConfirmationModalComponent, {
@@ -101,7 +101,7 @@ export class PoolComponent implements OnDestroy {
                     autoFocus: false,
                     data: {
                       type: TransactionType.BUY_IN,
-                      amount: 123
+                      amount: transactionResponse.amount
                     }
                   });
                 });
@@ -144,7 +144,7 @@ export class PoolComponent implements OnDestroy {
               profile_id: this.authService.getCurrentUser()?.id,
               type: TransactionType.CASH_OUT,
               amount: cashOutValue
-            }).subscribe(() => {
+            }).subscribe((transactionResponse: any) => {
               this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
                 .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
               this.dialog.open(TransactionConfirmationModalComponent, {
@@ -152,7 +152,7 @@ export class PoolComponent implements OnDestroy {
                 autoFocus: false,
                 data: {
                   type: TransactionType.CASH_OUT,
-                  amount: 123
+                  amount: transactionResponse.amount
                 }
               });
             });
