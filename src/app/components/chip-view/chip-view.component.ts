@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 export class ChipViewComponent {
   @Input() denominations: number[] = [];
   @Input() assignments: number[] = [];
+  @Input() viewOnly: boolean = false;
 }

@@ -18,6 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -43,6 +44,7 @@ import { ChipViewComponent } from './components/chip-view/chip-view.component';
 import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-select/chip-select.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { TransactionConfirmationModalComponent } from './components/transaction-confirmation-modal/transaction-confirmation-modal.component';
+import { PoolSettingsViewComponent } from './components/pool-settings-view/pool-settings-view.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import { TransactionConfirmationModalComponent } from './components/transaction-
     ChipViewComponent,
     ChipSelectComponent,
     ThousandSuffixesPipe,
-    TransactionConfirmationModalComponent
+    TransactionConfirmationModalComponent,
+    PoolSettingsViewComponent
   ],
   imports: [
     BrowserModule,
@@ -83,6 +86,7 @@ import { TransactionConfirmationModalComponent } from './components/transaction-
     MatMenuModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSlideToggleModule,
     MatStepperModule,
     MatTableModule,
     MatTabsModule,

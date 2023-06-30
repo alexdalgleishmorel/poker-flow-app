@@ -1,0 +1,22 @@
+@import '../../../mixins.scss';
+
+.spacer {
+    padding: 10px;
+}
+
+.section {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.section-title {
+    text-align: center;
+    font-size: large;
+}
+
+button {
+    border-radius: 90px;
+}
