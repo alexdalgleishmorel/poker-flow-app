@@ -10,6 +10,7 @@ import { catchError, Subscription, interval, of, startWith, switchMap, throwErro
 import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { TransactionConfirmationModalComponent } from '../transaction-confirmation-modal/transaction-confirmation-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -92,7 +93,18 @@ export class PoolComponent implements OnDestroy {
                   profile_id: this.authService.getCurrentUser()?.id,
                   type: TransactionType.BUY_IN,
                   amount: deviceWithdrawalRequest.amount
-                }).subscribe(() => {});
+                }).subscribe(() => {
+                  this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+                    .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
+                  this.dialog.open(TransactionConfirmationModalComponent, {
+                    hasBackdrop: false,
+                    autoFocus: false,
+                    data: {
+                      type: TransactionType.BUY_IN,
+                      amount: 123
+                    }
+                  });
+                });
               });
           }
         });
@@ -132,7 +144,18 @@ export class PoolComponent implements OnDestroy {
               profile_id: this.authService.getCurrentUser()?.id,
               type: TransactionType.CASH_OUT,
               amount: cashOutValue
-            }).subscribe(() => {});
+            }).subscribe(() => {
+              this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+                .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
+              this.dialog.open(TransactionConfirmationModalComponent, {
+                hasBackdrop: false,
+                autoFocus: false,
+                data: {
+                  type: TransactionType.CASH_OUT,
+                  amount: 123
+                }
+              });
+            });
           });
       }
     });

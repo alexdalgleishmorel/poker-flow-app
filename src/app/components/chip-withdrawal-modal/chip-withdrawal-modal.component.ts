@@ -28,11 +28,8 @@ export class ChipWithdrawalModalComponent implements OnInit {
     this.deviceService.withdrawChips(this.deviceConnection, this.withdrawalRequest).then((response: any) => {
       if (response) {
         this.withdrawalInProgress = false;
+        this.dialogRef.close();
       }
     });
-  }
-
-  withdrawalConfirmed() {
-    this.dialogRef.close(null);
   }
 }

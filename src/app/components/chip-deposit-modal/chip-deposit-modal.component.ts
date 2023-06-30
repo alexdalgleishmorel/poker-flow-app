@@ -26,11 +26,7 @@ export class ChipDepositModalComponent {
   completeDeposit() {
     this.depositInProgress = false;
     this.device.connection?.completeChipDeposit();
-    this.receipt = 50;
-  }
-
-  receiptConfirmed() {
-    this.dialogRef.close(this.receipt);
+    this.dialogRef.close(50);
   }
 
   cancelDeposit() {

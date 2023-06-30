@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { POKERFLOW_GREEN } from '@constants';
 import Chart from 'chart.js/auto';
 import { PoolData, PoolMember } from 'src/app/services/pool/pool.service';
 
@@ -79,7 +80,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
           },
           {
             data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
-            backgroundColor: '#388E3C',
+            backgroundColor: POKERFLOW_GREEN,
             circumference: 360*availableRatio,
             weight: 0.2
           }

@@ -42,6 +42,7 @@ import { PasswordModalComponent } from './components/password-modal/password-mod
 import { ChipViewComponent } from './components/chip-view/chip-view.component';
 import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-select/chip-select.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { TransactionConfirmationModalComponent } from './components/transaction-confirmation-modal/transaction-confirmation-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     PasswordModalComponent,
     ChipViewComponent,
     ChipSelectComponent,
-    ThousandSuffixesPipe
+    ThousandSuffixesPipe,
+    TransactionConfirmationModalComponent
   ],
   imports: [
     BrowserModule,

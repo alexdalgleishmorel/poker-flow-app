@@ -1,0 +1,35 @@
+@import '../../../variables.scss';
+
+.cashOut {
+    color: $primaryColor;
+}
+
+.buyIn {
+    color: $secondaryColor;
+}
+
+.amount-container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.amount-value {
+    color: $pokerFlowGreen;
+    font-size: xx-large;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+button {
+    border-radius: 90px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,19 @@
+<div mat-dialog-title>
+    <b [ngClass]="{'buyIn': isBuyIn(data.type), 'cashOut': isCashOut(data.type)}">
+        {{isBuyIn(data.type) ? 'BUY-IN' : 'CASH-OUT'}}
+    </b>
+    CONFIRMED
+</div>
+<div mat-dialog-content>
+    <div class="amount-container"><b class="amount-value">${{data.amount}}</b></div>
+    <div class="spacer"></div>
+    <div class="buttons-container">
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="dismiss()"
+        >
+            DISMISS
+        </button>
+    </div>
+</div>

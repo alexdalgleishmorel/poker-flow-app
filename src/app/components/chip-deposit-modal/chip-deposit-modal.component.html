@@ -1,53 +1,33 @@
-<div *ngIf="!depositInProgress else depositing">
-    <div mat-dialog-content>
-        <h1 mat-dialog-title class="title">Cash out complete</h1>
+<div mat-dialog-content>
+    <h1 mat-dialog-title class="title">Deposit your chips now</h1>
+    <div class="spacer"></div>
+    <div class="loading-container">
+        <mat-spinner
+        [color]="spinnerColor"
+        >
+        </mat-spinner>
+    </div>
+    <div class="spacer"></div>
+    <div class="message">
+        <p>Press <b class="done-text">DONE</b> when all chips are deposited.</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="buttons-container">
+        <button
+        class="cancel-button"
+        mat-raised-button
+        (click)="cancelDeposit()"
+        >
+            CANCEL
+        </button>
         <div class="spacer"></div>
-        <div class="message">You cashed out for <b>&nbsp;${{receipt}}&nbsp;</b></div>
-        <div class="spacer"></div>
-        <div class="buttons-container">
-            <button
-            mat-raised-button
-            color="primary"
-            (click)="receiptConfirmed()"
-            >
-                DISMISS
-            </button>
-        </div>
+        <button
+        class="cancel-button"
+        mat-raised-button
+        color="accent"
+        (click)="completeDeposit()"
+        >
+            DONE
+        </button>
     </div>
 </div>
-
-<ng-template #depositing>
-    <div mat-dialog-content>
-        <h1 mat-dialog-title class="title">Deposit your chips now</h1>
-        <div class="spacer"></div>
-        <div class="loading-container">
-            <mat-spinner
-            [color]="spinnerColor"
-            >
-            </mat-spinner>
-        </div>
-        <div class="spacer"></div>
-        <div class="message">
-            <p>Press <b class="done-text">DONE</b> when all chips are deposited.</p>
-        </div>
-        <div class="spacer"></div>
-        <div class="buttons-container">
-            <button
-            class="cancel-button"
-            mat-raised-button
-            (click)="cancelDeposit()"
-            >
-                CANCEL
-            </button>
-            <div class="spacer"></div>
-            <button
-            class="cancel-button"
-            mat-raised-button
-            color="accent"
-            (click)="completeDeposit()"
-            >
-                DONE
-            </button>
-        </div>
-    </div>
-</ng-template>
