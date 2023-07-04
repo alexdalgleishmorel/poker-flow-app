@@ -23,6 +23,9 @@
       "ES2022",
       "dom"
     ],
+    "types": [
+      "web-bluetooth"
+    ],
     "paths": {
       "@mixins": ["src/mixins"],
       "@constants": ["src/constants"],

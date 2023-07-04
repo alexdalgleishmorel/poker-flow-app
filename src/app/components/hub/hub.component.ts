@@ -1,3 +1,5 @@
+/// <reference types="web-bluetooth" />
+
 import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -78,6 +80,7 @@ export class HubComponent implements OnDestroy {
    * with that device, and allows the user to join a game
    */
   joinNewGame() {
+    window.navigator.bluetooth.requestDevice({acceptAllDevices: true}).then((result) => console.log(result));
     this.dialog.open(SearchDeviceModalComponent, {
       hasBackdrop: false,
       autoFocus: false
