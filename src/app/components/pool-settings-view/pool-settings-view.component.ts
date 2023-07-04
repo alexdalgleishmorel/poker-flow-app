@@ -72,4 +72,8 @@ export class PoolSettingsViewComponent implements OnChanges {
         });
     }
   }
+
+  isPoolAdmin() {
+    return this.authService.getCurrentUser()?.id === this.poolData?.admin.id;
+  }
 }

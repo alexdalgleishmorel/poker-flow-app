@@ -17,6 +17,12 @@
     font-size: large;
 }
 
+.settings-title-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 button {
     border-radius: 90px;
 }

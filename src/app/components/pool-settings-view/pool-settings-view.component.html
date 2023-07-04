@@ -52,6 +52,7 @@
     <div class="spacer"></div>
     <div class="section">
         <button
+            *ngIf="isPoolAdmin()"
             class="save-button"
             mat-raised-button
             color="primary"
