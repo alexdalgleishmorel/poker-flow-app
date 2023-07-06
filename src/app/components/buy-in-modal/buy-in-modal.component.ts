@@ -28,13 +28,15 @@ export class BuyInModalComponent {
   });
 
   private device: PokerFlowDevice = this.data.device;
-  private deviceInventory?: number[] = this.device.connection?.getInventory();
+  private deviceInventory?: number[];
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
     private _formBuilder: FormBuilder
-  ) {}
+  ) {
+    //this.device.connection?.getInventory().then((inventory) => this.deviceInventory = inventory);
+  }
 
   confirmBuyIn() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {

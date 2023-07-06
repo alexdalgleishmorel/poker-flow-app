@@ -2,12 +2,11 @@ import { Component, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
-import { ConnectDeviceModalComponent } from 'src/app/components/connect-device-modal/connect-device-modal.component';
 import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
 import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { catchError, Subscription, interval, of, startWith, switchMap, throwError } from 'rxjs';
-import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TransactionConfirmationModalComponent } from '../transaction-confirmation-modal/transaction-confirmation-modal.component';
@@ -27,6 +26,7 @@ export class PoolComponent implements OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
+    private deviceService: DeviceService,
     private dialog: MatDialog,
     private poolService: PoolService,
     private router: Router
@@ -55,15 +55,7 @@ export class PoolComponent implements OnDestroy {
    * Connects to a PokerFlow device, validates user buy-in, and commands device to dispense chips
    */
   buyIn() {
-    this.dialog.open(ConnectDeviceModalComponent, {
-      hasBackdrop: false,
-      autoFocus: false,
-      data: {
-        device_id: this.poolData?.device_id,
-        searchMessage: 'Connecting to PokerFlow device',
-        cancelEnabled: true
-      }
-    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
       if (device) {
         this.dialog.open(BuyInModalComponent, {
           hasBackdrop: false,
@@ -116,15 +108,7 @@ export class PoolComponent implements OnDestroy {
    * Connects to a PokerFlow device, and handles chip deposit
    */
   cashOut() {
-    this.dialog.open(ConnectDeviceModalComponent, {
-      hasBackdrop: false,
-      autoFocus: false,
-      data: {
-        device_id: this.poolData?.device_id,
-        searchMessage: 'Connecting to PokerFlow device',
-        cancelEnabled: true
-      }
-    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
       if (device) {
         this.dialog.open(ChipDepositModalComponent, {
           hasBackdrop: false,

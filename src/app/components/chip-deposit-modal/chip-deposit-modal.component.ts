@@ -20,12 +20,12 @@ export class ChipDepositModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.depositInProgress = true;
-    this.device.connection?.startChipDeposit();
+    this.device.startChipDeposit();
   }
 
   completeDeposit() {
     this.depositInProgress = false;
-    this.device.connection?.completeChipDeposit();
+    this.device.completeChipDeposit();
     this.dialogRef.close(50);
   }
 

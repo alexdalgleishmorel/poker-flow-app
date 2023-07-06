@@ -30,9 +30,7 @@ import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HubComponent } from './components/hub/hub.component';
 import { PoolComponent } from './components/pool/pool.component';
 import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
-import { SearchDeviceModalComponent } from './components/search-device-modal/search-device-modal.component';
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
-import { ConnectDeviceModalComponent } from './components/connect-device-modal/connect-device-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
@@ -55,9 +53,7 @@ import { PoolSettingsViewComponent } from './components/pool-settings-view/pool-
     HubComponent,
     PoolComponent,
     PoolDonutChartComponent,
-    SearchDeviceModalComponent,
     CreateGameModalComponent,
-    ConnectDeviceModalComponent,
     BuyInModalComponent,
     ChipDepositModalComponent,
     UserPoolsTableComponent,

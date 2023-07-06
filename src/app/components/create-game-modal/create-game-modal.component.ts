@@ -75,7 +75,7 @@ export class CreateGameModalComponent {
     this.poolSettings.denominations.sort((a,b)=>a-b);
     this.poolService.createPool(
       this.poolNameFormControl.value!,
-      this.device.id,
+      this.device.id!,
       this.poolSettings
     ).then((poolCreationResponse) => {
       this.dialogRef.close(poolCreationResponse);

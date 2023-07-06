@@ -5,12 +5,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
 import { CreateGameModalComponent } from 'src/app/components/create-game-modal/create-game-modal.component';
-import { SearchDeviceModalComponent } from 'src/app/components/search-device-modal/search-device-modal.component';
 import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
-import { PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-hub',
@@ -26,6 +25,7 @@ export class HubComponent implements OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private deviceService: DeviceService,
     private dialog: MatDialog,
     private poolService: PoolService,
     private router: Router
@@ -55,10 +55,7 @@ export class HubComponent implements OnDestroy {
    * with that device and navigates to its pool view
    */
   createGame() {
-    this.dialog.open(SearchDeviceModalComponent, {
-      hasBackdrop: false,
-      autoFocus: false
-    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
       if (device) {
         this.dialog.open(CreateGameModalComponent, {
           hasBackdrop: false,
@@ -80,11 +77,7 @@ export class HubComponent implements OnDestroy {
    * with that device, and allows the user to join a game
    */
   joinNewGame() {
-    window.navigator.bluetooth.requestDevice({acceptAllDevices: true}).then((result) => console.log(result));
-    this.dialog.open(SearchDeviceModalComponent, {
-      hasBackdrop: false,
-      autoFocus: false
-    }).afterClosed().subscribe((device: PokerFlowDevice) => {
+    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
       if (device) {
         this.dialog.open(JoinNewGameModalComponent, {
           hasBackdrop: false,
