@@ -5,7 +5,6 @@ import {
   DEPOSIT_SERVICE_SUBSCRIBE_ID, 
   DEVICE_STATUS_SERVICE_ID, 
   DEVICE_STATUS_SERVICE_SUBSCRIBE_ID, 
-  POKERFLOW_SERVICE_IDS, 
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
@@ -43,7 +42,7 @@ export class PokerFlowDevice {
   public depositRequestStatus?: Subject<number[]>;
 
   async findDevice(): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ filters: [{ services: POKERFLOW_SERVICE_IDS }] })
+    return window.navigator.bluetooth.requestDevice({ filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] })
       .catch(() => null)
       .then((selectedDevice: BluetoothDevice | null) => {
         if (!selectedDevice) return null;
@@ -54,7 +53,7 @@ export class PokerFlowDevice {
   }
 
   async findDeviceByID(deviceID: number): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ filters: [{ services: POKERFLOW_SERVICE_IDS }] })
+    return window.navigator.bluetooth.requestDevice({ filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] })
       .catch(() => null)
       .then((selectedDevice: BluetoothDevice | null) => {
         if (!selectedDevice) return null;
