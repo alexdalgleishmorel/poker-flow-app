@@ -28,15 +28,12 @@ export class BuyInModalComponent {
   });
 
   private device: PokerFlowDevice = this.data.device;
-  private deviceInventory?: number[];
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
     private _formBuilder: FormBuilder
-  ) {
-    //this.device.connection?.getInventory().then((inventory) => this.deviceInventory = inventory);
-  }
+  ) {}
 
   confirmBuyIn() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
@@ -65,7 +62,7 @@ export class BuyInModalComponent {
 
   inventoryCanSupply(value: number): boolean {
     let buyInToSettle: number = value;
-    let inventoryCopy = [...this.deviceInventory!];
+    let inventoryCopy = [...this.device.inventory!];
     this.resetAssignments();
 
     while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
@@ -97,7 +94,7 @@ export class BuyInModalComponent {
       
       const value = control.value;
 
-      if (!value || !this.deviceInventory) return null;
+      if (!value || !this.device.inventory) return null;
 
       if (!this.inventoryCanSupply(value)) {
         this.resetAssignments();
