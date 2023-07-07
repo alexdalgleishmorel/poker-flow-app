@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-chip-deposit-modal',
@@ -9,9 +8,8 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
   styleUrls: ['./chip-deposit-modal.component.scss']
 })
 export class ChipDepositModalComponent {
-  public denonminations = this.data.denominations;
+  public denominations = this.data.denominations;
   public depositInProgress: boolean;
-  public spinnerColor: ThemePalette = 'accent';
   private device: PokerFlowDevice = this.data.device;
   
   public receipt: number = 0;

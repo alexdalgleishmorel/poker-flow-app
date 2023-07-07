@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { ThemePalette } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 
@@ -9,18 +8,20 @@ import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app
   styleUrls: ['./chip-withdrawal-modal.component.scss']
 })
 export class ChipWithdrawalModalComponent implements OnInit {
+  public denominations: number[] = this.data.denominations;
   public withdrawalInProgress: boolean;
   public withdrawalRequest: DeviceWithdrawalRequest;
-  public spinnerColor: ThemePalette = 'accent';
   private device: PokerFlowDevice;
+  private totalChipsRequested: number = 0;
 
   constructor(
     public dialogRef: MatDialogRef<ChipWithdrawalModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private deviceService: DeviceService
   ) {
-    this.device = data.device_connection;
+    this.device = data.device;
     this.withdrawalRequest = data.withdrawal_request;
+    this.withdrawalRequest.denominations.forEach((requestedChips: number) => this.totalChipsRequested += requestedChips);
     this.withdrawalInProgress = true;
   }
 
@@ -33,5 +34,16 @@ export class ChipWithdrawalModalComponent implements OnInit {
         this.dialogRef.close();
       }
     });
+  }
+
+  getChipWithdrawalProgress() {
+    let totalChipsWithdrawn: number = 0;
+    /*
+    this.device.withdrawalRequestStatus?.getValue().forEach(
+      (chipsWithdrawnFromSlot: number) => totalChipsWithdrawn += chipsWithdrawnFromSlot
+    );
+    return (totalChipsWithdrawn/this.totalChipsRequested)*100;
+    */
+   return 50;
   }
 }

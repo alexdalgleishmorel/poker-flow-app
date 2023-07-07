@@ -71,6 +71,7 @@ export class PoolComponent implements OnDestroy {
               autoFocus: false,
               data: {
                 device: device,
+                denominations: this.poolData?.settings.denominations,
                 withdrawal_request: deviceWithdrawalRequest
               }
             }).afterClosed()

@@ -8,7 +8,7 @@ import {
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +38,8 @@ export class PokerFlowDevice {
   public id?: number;
   public slots?: number;
   public inventory?: number[];
-  public withdrawalRequestStatus?: Subject<number[]>;
-  public depositRequestStatus?: Subject<number[]>;
+  public withdrawalRequestStatus?: BehaviorSubject<number[]>;
+  public depositRequestStatus?: BehaviorSubject<number[]>;
 
   async findDevice(): Promise<PokerFlowDevice|null> {
     return window.navigator.bluetooth.requestDevice({ filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] })
