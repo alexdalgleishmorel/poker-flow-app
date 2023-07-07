@@ -114,7 +114,8 @@ export class PoolComponent implements OnDestroy {
           hasBackdrop: false,
           autoFocus: false,
           data: {
-            device: device
+            device: device,
+            denominations: this.poolData?.settings.denominations
           }
         }).afterClosed()
           .pipe(

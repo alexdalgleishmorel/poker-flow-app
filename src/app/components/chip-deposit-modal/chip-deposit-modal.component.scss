@@ -1,3 +1,5 @@
+@import '../../../variables.scss';
+
 .buttons-container {
     display: flex;
     justify-content: center;
@@ -35,4 +37,16 @@ button {
 
 .done-text {
     color: #E91E63;
+}
+
+.amount-container {
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.amount-value {
+    color: $pokerFlowGreen;
+    font-size: xx-large;
 }

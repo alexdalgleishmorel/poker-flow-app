@@ -37,7 +37,7 @@ export class PokerFlowDevice {
   private bluetooth?: BluetoothDevice;
   public id?: number;
   public slots?: number;
-  public inventory?: Subject<number[]>;
+  public inventory?: number[];
   public withdrawalRequestStatus?: Subject<number[]>;
   public depositRequestStatus?: Subject<number[]>;
 
@@ -132,7 +132,7 @@ export class PokerFlowDevice {
 
   private handleWithdrawalUpdate(event: any) {
     const data: DataView = event.target.value;
-    this.inventory?.next(this.parseInventory(data));
+    this.withdrawalRequestStatus?.next(this.parseInventory(data));
   }
 
   private handleDepositUpdate(event: any) {

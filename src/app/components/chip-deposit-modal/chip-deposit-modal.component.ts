@@ -9,6 +9,7 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
   styleUrls: ['./chip-deposit-modal.component.scss']
 })
 export class ChipDepositModalComponent {
+  public denonminations = this.data.denominations;
   public depositInProgress: boolean;
   public spinnerColor: ThemePalette = 'accent';
   private device: PokerFlowDevice = this.data.device;

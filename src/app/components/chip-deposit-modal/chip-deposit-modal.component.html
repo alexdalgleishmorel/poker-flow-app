@@ -1,11 +1,10 @@
 <div mat-dialog-content>
     <h1 mat-dialog-title class="title">Deposit your chips now</h1>
-    <div class="spacer"></div>
     <div class="loading-container">
-        <mat-spinner
-        [color]="spinnerColor"
-        >
-        </mat-spinner>
+        <div class="spacer"></div>
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <div class="spacer"></div>
+        <app-chip-view [denominations]="denonminations" [assignments]="data.device ? data.device.depositRequestStatus : []"></app-chip-view>
     </div>
     <div class="spacer"></div>
     <div class="message">
