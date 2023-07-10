@@ -24,18 +24,20 @@ steps:
           restore-keys: |
             ${{ runner.os }}-node-
 
-- name: NPM Install
-  run: npm install
-- name: NPM Install Angular
-  run: npm install -g @angular/cli > /dev/null
-- name: NPM build Angular Production
-  run: npm run build
+      - name: NPM Install
+        run: npm install
 
-- name: Deploy to my EC2 instance
-  uses: easingthemes/ssh-deploy@v2.1.5
-  with:
-    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
-    SOURCE: "dist/angular-demo/"
-    REMOTE_HOST: "ec2-3-144-212-95.us-east-2.compute.amazonaws.com"
-    REMOTE_USER: "ec2-user"
-    TARGET: "/var/www/html/poker-flow/"
+      - name: NPM Install Angular
+        run: npm install -g @angular/cli > /dev/null
+
+      - name: NPM build Angular Production
+        run: npm run build
+        
+      - name: Deploy to my EC2 instance
+        uses: easingthemes/ssh-deploy@v2.1.5
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY}}
+          SOURCE: "dist/angular-demo/"
+          REMOTE_HOST: "ec2-3-144-212-95.us-east-2.compute.amazonaws.com"
+          REMOTE_USER: "ec2-user"
+          TARGET: "/var/www/html/poker-flow/"
