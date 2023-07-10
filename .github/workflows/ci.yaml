@@ -34,8 +34,8 @@ jobs:
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: {%- raw -%} ${{ secrets.SSH_PRIVATE_KEY }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Adding Known Hosts
-          run: ssh-keyscan -H ${{ secrets.SSH_HOST }}{% endraw%} >> ~/.ssh/known_hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
       - name: Deploy with rsync
-          run: rsync -avz ./dist/poker-flow ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/poker-flow/
+        run: rsync -avz ./dist/poker-flow ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/poker-flow/
