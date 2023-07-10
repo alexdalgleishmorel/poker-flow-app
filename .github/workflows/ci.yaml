@@ -30,11 +30,12 @@ jobs:
         run: npm install -g @angular/cli > /dev/null
       - name: NPM build Angular Production
         run: npm run build
-      - name: Deploy to my EC2 instance
-        uses: easingthemes/ssh-deploy@main
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SOURCE: "dist/poker-flow/"
-          REMOTE_HOST: "ec2-3-144-212-95.us-east-2.compute.amazonaws.com"
-          REMOTE_USER: "ec2-user"
-          TARGET: "/var/www/html/poker-flow/"
+          key: {%- raw -%} ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{ secrets.SSH_HOST }}{% endraw%} >> ~/.ssh/known_hosts
+      - name: Deploy with rsync
+          run: rsync -avz ./dist/poker-flow ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/poker-flow/
