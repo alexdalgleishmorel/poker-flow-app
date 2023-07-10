@@ -36,6 +36,6 @@ jobs:
         with:
           key: {%- raw -%} ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }}{% endraw%} >> ~/.ssh/known_hosts
+          run: ssh-keyscan -H ${{ secrets.SSH_HOST }}{% endraw%} >> ~/.ssh/known_hosts
       - name: Deploy with rsync
           run: rsync -avz ./dist/poker-flow ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/poker-flow/
