@@ -37,8 +37,13 @@ export class CreateGameModalComponent {
     passwordFormGroup: this.passwordFormGroup
   });
 
-  public poolSettings: PoolSettings;
-  private device: PokerFlowDevice;
+  public poolSettings: PoolSettings = {
+    has_password: false,
+    min_buy_in: DEFAULT_MIN_BUY_IN,
+    max_buy_in: DEFAULT_MAX_BUY_IN,
+    denominations: DEFAULT_DENOMINATIONS
+  };
+  public device: PokerFlowDevice;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: any,
@@ -47,26 +52,31 @@ export class CreateGameModalComponent {
     private _formBuilder: FormBuilder
   ) {
 
-    this.minBuyInFormControl.valueChanges.subscribe((value) => {
-      this.poolSettings.min_buy_in = value ? +value : DEFAULT_MIN_BUY_IN;
-    });
-
-    this.maxBuyInFormControl.valueChanges.subscribe((value) => {
-      this.poolSettings.max_buy_in = value ? +value : DEFAULT_MAX_BUY_IN;
-    });
-
-    this.passwordFormControl.valueChanges.subscribe((value) => {
-      this.poolSettings.has_password = value ? true : false;
-      this.poolSettings.password = value ? value : '';
-    }); 
-
     this.device = data.device;
-    this.poolSettings = {
-      has_password: false,
-      min_buy_in: DEFAULT_MIN_BUY_IN,
-      max_buy_in: DEFAULT_MAX_BUY_IN,
-      denominations: DEFAULT_DENOMINATIONS.slice(0, this.device.slots)
-    }
+    this.device.assignDeviceStatus();
+    this.device.status.subscribe(() => {
+      if (this.device.id) {
+        this.minBuyInFormControl.valueChanges.subscribe((value) => {
+          this.poolSettings.min_buy_in = value ? +value : DEFAULT_MIN_BUY_IN;
+        });
+    
+        this.maxBuyInFormControl.valueChanges.subscribe((value) => {
+          this.poolSettings.max_buy_in = value ? +value : DEFAULT_MAX_BUY_IN;
+        });
+    
+        this.passwordFormControl.valueChanges.subscribe((value) => {
+          this.poolSettings.has_password = value ? true : false;
+          this.poolSettings.password = value ? value : '';
+        });
+    
+        this.poolSettings = {
+          has_password: false,
+          min_buy_in: DEFAULT_MIN_BUY_IN,
+          max_buy_in: DEFAULT_MAX_BUY_IN,
+          denominations: DEFAULT_DENOMINATIONS.slice(0, this.device.slots)
+        }
+      }
+    });
   }
 
   createGame() {

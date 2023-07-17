@@ -27,13 +27,21 @@ export class BuyInModalComponent {
     buyIn: this.buyInFormControl
   });
 
-  private device: PokerFlowDevice = this.data.device;
+  public device: PokerFlowDevice = this.data.device;
   
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<BuyInModalComponent>,
     private _formBuilder: FormBuilder
-  ) {}
+  ) {
+    this.buyInFormControl.setErrors({'required': true});
+    this.device.assignDeviceStatus();
+    this.device.status.subscribe(() => {
+      if (this.device.inventory) {
+        this.buyInFormControl.updateValueAndValidity();
+      }
+    });
+  }
 
   confirmBuyIn() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
@@ -94,9 +102,9 @@ export class BuyInModalComponent {
       
       const value = control.value;
 
-      if (!value || !this.device.inventory) return null;
+      if (!value || !this.device) return null;
 
-      if (!this.inventoryCanSupply(value)) {
+      if (this.device.inventory &&!this.inventoryCanSupply(value)) {
         this.resetAssignments();
         return { 'insufficientInventory': true };
       }

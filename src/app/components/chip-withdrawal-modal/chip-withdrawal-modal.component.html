@@ -3,7 +3,7 @@
     <div class="loading-container">
         <mat-progress-bar mode="determinate" [value]="getChipWithdrawalProgress()"></mat-progress-bar>
         <div class="spacer"></div>
-        <app-chip-view [denominations]="denominations" [assignments]="data.device ? data.device.withdrawalRequestStatus : []"></app-chip-view>
+        <app-chip-view [denominations]="denominations" [assignments]="data.device ? withdrawalRequestStatus : []"></app-chip-view>
     </div>
     <div class="spacer"></div>
     <div class="message">

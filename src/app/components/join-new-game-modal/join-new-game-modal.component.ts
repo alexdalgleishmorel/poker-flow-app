@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { PasswordModalComponent } from '../password-modal/password-modal.component';
 import { catchError, of, throwError } from 'rxjs';
+import { PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-join-new-game-modal',
@@ -12,6 +13,7 @@ import { catchError, of, throwError } from 'rxjs';
 export class JoinNewGameModalComponent {
   public games: any[] = [];
   public disabled: boolean = false;
+  private device: PokerFlowDevice = this.data.device;
 
   constructor(
     private dialog: MatDialog,
@@ -19,8 +21,13 @@ export class JoinNewGameModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private poolService: PoolService,
   ) {
-    this.poolService.getPoolsByDeviceID(data.device.id).subscribe((pools: PoolData[]) => {
-      this.games = pools;
+    this.device.assignDeviceStatus();
+    this.device.status.subscribe(() => {
+      if (this.device.id) {
+        this.poolService.getPoolsByDeviceID(this.device.id).subscribe((pools: PoolData[]) => {
+          this.games = pools;
+        });
+      }
     });
   }
 

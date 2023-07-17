@@ -4,7 +4,9 @@ import {
   DEPOSIT_SERVICE_PUBLISH_ID, 
   DEPOSIT_SERVICE_SUBSCRIBE_ID, 
   DEVICE_STATUS_SERVICE_ID, 
+  DEVICE_STATUS_SERVICE_PUBLISH_ID, 
   DEVICE_STATUS_SERVICE_SUBSCRIBE_ID, 
+  OPTIONAL_DEVICE_SERVICES, 
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
@@ -38,48 +40,51 @@ export class PokerFlowDevice {
   public id?: number;
   public slots?: number;
   public inventory?: number[];
-  public withdrawalRequestStatus?: BehaviorSubject<number[]>;
-  public depositRequestStatus?: BehaviorSubject<number[]>;
+  public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
   async findDevice(): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] })
+    return window.navigator.bluetooth.requestDevice({ 
+      filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] ,
+      optionalServices: OPTIONAL_DEVICE_SERVICES
+    })
       .catch(() => null)
       .then((selectedDevice: BluetoothDevice | null) => {
         if (!selectedDevice) return null;
         this.bluetooth = selectedDevice;
-        this.assignDeviceStatus();
         return this;
       });
   }
 
   async findDeviceByID(deviceID: number): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] })
+    return window.navigator.bluetooth.requestDevice({ 
+      filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] ,
+      optionalServices: OPTIONAL_DEVICE_SERVICES
+    })
       .catch(() => null)
       .then((selectedDevice: BluetoothDevice | null) => {
         if (!selectedDevice) return null;
         this.bluetooth = selectedDevice;
-        this.assignDeviceStatus();
         return this;
       })
   }
 
   async assignDeviceStatus() {
-    this.bluetooth!.gatt!.connect()
-      .then((gattServer: BluetoothRemoteGATTServer) => {
-        return gattServer.getPrimaryService(DEVICE_STATUS_SERVICE_ID);
-      })
-      .then((deviceStatusService: BluetoothRemoteGATTService) => {
-        return deviceStatusService.getCharacteristic(DEVICE_STATUS_SERVICE_SUBSCRIBE_ID);
-      })
-      .then((deviceStatusServiceSubscription: BluetoothRemoteGATTCharacteristic) => {
-        return deviceStatusServiceSubscription.readValue();
-      })
-      .then((data: DataView) => {
-        const deviceStatus = bluetoothToJson(data);
-        this.id = deviceStatus.id;
-        this.inventory = deviceStatus.inventory;
-        this.slots = deviceStatus.inventory.length;
-      });
+    return this.bluetooth?.gatt?.connect().then((gattServer: BluetoothRemoteGATTServer) => {
+      return gattServer.getPrimaryService(DEVICE_STATUS_SERVICE_ID);
+    })
+    .then((deviceStatusService: BluetoothRemoteGATTService) => {
+      deviceStatusService.getCharacteristic(DEVICE_STATUS_SERVICE_SUBSCRIBE_ID)
+        .then((deviceStatusServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
+          deviceStatusServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleDeviceStatus);
+          return deviceStatusServiceSubscribeChannel.startNotifications();
+        })
+      return deviceStatusService.getCharacteristic(DEVICE_STATUS_SERVICE_PUBLISH_ID)
+    })
+    .then((deviceStatusServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
+      deviceStatusServicePublishChannel.writeValue(Uint8Array.of(1));
+    })
   }
 
   withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
@@ -91,6 +96,7 @@ export class PokerFlowDevice {
         withdrawalService.getCharacteristic(WITHDRAWAL_SERVICE_SUBSCRIBE_ID)
           .then((withdrawalServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
             withdrawalServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleWithdrawalUpdate);
+            withdrawalServiceSubscribeChannel.startNotifications();
           });
         return withdrawalService.getCharacteristic(WITHDRAWAL_SERVICE_PUBLISH_ID);
       })
@@ -108,6 +114,7 @@ export class PokerFlowDevice {
         depositService.getCharacteristic(DEPOSIT_SERVICE_SUBSCRIBE_ID)
           .then((depositServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
             depositServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleDepositUpdate);
+            depositServiceSubscribeChannel.startNotifications();
           });
         return depositService.getCharacteristic(DEPOSIT_SERVICE_PUBLISH_ID);
       })
@@ -126,23 +133,27 @@ export class PokerFlowDevice {
         return depositService.getCharacteristic(DEPOSIT_SERVICE_PUBLISH_ID);
       })
       .then((depositServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
-        return depositServicePublishChannel.writeValue(Uint8Array.of(2));
+        return depositServicePublishChannel.writeValue(Uint8Array.of(1));
       });
   }
 
-  private handleWithdrawalUpdate(event: any) {
-    const data: DataView = event.target.value;
-    this.withdrawalRequestStatus?.next(this.parseInventory(data));
+  private handleDeviceStatus = (event: any) => {
+    const data = event.target.value;
+    const deviceStatus = bluetoothToJson(data);
+    this.id = deviceStatus.id;
+    this.inventory = deviceStatus.inventory;
+    this.slots = deviceStatus.inventory.length;
+    this.status.next(true);
   }
 
-  private handleDepositUpdate(event: any) {
+  private handleWithdrawalUpdate = (event: any) => {
     const data: DataView = event.target.value;
-    this.depositRequestStatus?.next(this.parseInventory(data));
+    this.withdrawalRequestStatus?.next(bluetoothToJson(data));
   }
 
-  private parseInventory(data: DataView) {
-    const uint8Array = new Uint8Array(data.buffer);
-    return Array.from(uint8Array);
+  private handleDepositUpdate = (event: any) => {
+    const data: DataView = event.target.value;
+    this.depositRequestStatus?.next(bluetoothToJson(data));
   }
 }
 

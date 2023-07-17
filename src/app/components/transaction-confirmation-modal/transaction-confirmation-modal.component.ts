@@ -13,7 +13,9 @@ export class TransactionConfirmationModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.data);
+  }
 
   isBuyIn(type: string) {
     return type === TransactionType.BUY_IN;

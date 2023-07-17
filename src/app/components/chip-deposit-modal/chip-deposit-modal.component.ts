@@ -25,10 +25,20 @@ export class ChipDepositModalComponent {
   completeDeposit() {
     this.depositInProgress = false;
     this.device.completeChipDeposit();
-    this.dialogRef.close(50);
+    this.dialogRef.close(this.calculateDepositTotal());
   }
 
   cancelDeposit() {
     this.dialogRef.close(null);
+  }
+
+  calculateDepositTotal() {
+    let total: number = 0;
+    let slot: number = 0;
+    this.device.depositRequestStatus?.getValue().forEach((denominationCount: number) => {
+      total += (denominationCount * this.denominations[slot]);
+      slot += 1;
+    });
+    return total;
   }
 }

@@ -94,7 +94,9 @@ export class PoolComponent implements OnDestroy {
                     autoFocus: false,
                     data: {
                       type: TransactionType.BUY_IN,
-                      amount: transactionResponse.amount
+                      amount: transactionResponse.amount,
+                      denominations: this.poolData?.settings.denominations,
+                      assignments: deviceWithdrawalRequest.denominations
                     }
                   });
                 });
@@ -138,7 +140,9 @@ export class PoolComponent implements OnDestroy {
                 autoFocus: false,
                 data: {
                   type: TransactionType.CASH_OUT,
-                  amount: transactionResponse.amount
+                  amount: transactionResponse.amount,
+                  denominations: this.poolData?.settings.denominations,
+                  assignments: device.depositRequestStatus?.getValue()
                 }
               });
             });

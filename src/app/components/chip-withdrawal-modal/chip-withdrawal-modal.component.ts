@@ -10,9 +10,11 @@ import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app
 export class ChipWithdrawalModalComponent implements OnInit {
   public denominations: number[] = this.data.denominations;
   public withdrawalInProgress: boolean;
-  public withdrawalRequest: DeviceWithdrawalRequest;
+  public withdrawalRequestStatus: number[];
+
   private device: PokerFlowDevice;
   private totalChipsRequested: number = 0;
+  private originalRequestDenominations: number[] = [...this.data.withdrawal_request.denominations];
 
   constructor(
     public dialogRef: MatDialogRef<ChipWithdrawalModalComponent>,
@@ -20,16 +22,19 @@ export class ChipWithdrawalModalComponent implements OnInit {
     private deviceService: DeviceService
   ) {
     this.device = data.device;
-    this.withdrawalRequest = data.withdrawal_request;
-    this.withdrawalRequest.denominations.forEach((requestedChips: number) => this.totalChipsRequested += requestedChips);
+    this.withdrawalRequestStatus = data.withdrawal_request.denominations;
+    this.originalRequestDenominations.forEach((requestedChips: number) => this.totalChipsRequested += requestedChips);
     this.withdrawalInProgress = true;
   }
 
   ngOnInit(): void {
-    this.deviceService.withdrawChips(this.device, this.withdrawalRequest);
+    this.deviceService.withdrawChips(this.device, this.data.withdrawal_request);
     this.device.withdrawalRequestStatus?.subscribe((withdrawalRequestStatus: number[]) => {
-      console.log(withdrawalRequestStatus);
-      if (JSON.stringify(withdrawalRequestStatus) === JSON.stringify(this.withdrawalRequest.denominations)) {
+      if (!withdrawalRequestStatus.length) return;
+      for (let i = 0; i < this.originalRequestDenominations.length; i ++) {
+        this.withdrawalRequestStatus[i] = this.originalRequestDenominations[i] - withdrawalRequestStatus[i];
+      }
+      if (JSON.stringify(this.withdrawalRequestStatus) === JSON.stringify(this.originalRequestDenominations)) {
         this.withdrawalInProgress = false;
         this.dialogRef.close();
       }
@@ -37,13 +42,13 @@ export class ChipWithdrawalModalComponent implements OnInit {
   }
 
   getChipWithdrawalProgress() {
-    let totalChipsWithdrawn: number = 0;
-    /*
+    if (!this.withdrawalRequestStatus.length || !this.device.withdrawalRequestStatus?.getValue().length) return 0;
+
+    let totalChipsRemainingToWithdraw: number = 0;
     this.device.withdrawalRequestStatus?.getValue().forEach(
-      (chipsWithdrawnFromSlot: number) => totalChipsWithdrawn += chipsWithdrawnFromSlot
+      (chipsRemainingToWithdrawFromSlot: number) => totalChipsRemainingToWithdraw += chipsRemainingToWithdrawFromSlot
     );
+    const totalChipsWithdrawn = this.totalChipsRequested - totalChipsRemainingToWithdraw;
     return (totalChipsWithdrawn/this.totalChipsRequested)*100;
-    */
-   return 50;
   }
 }

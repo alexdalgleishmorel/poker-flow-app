@@ -1,7 +1,7 @@
 <div class="dialog-container">
     <h1 mat-dialog-title class="title">Create a new game</h1>
     <div mat-dialog-content>
-        <mat-stepper orientation="vertical" #stepper>
+        <mat-stepper [@.disabled]="true" orientation="vertical" #stepper>
             <mat-step state completed="false" [hasError]="!poolNameFormControl.valid" errorMessage="Pool name is required.">
               <form [formGroup]="poolNameFormGroup">
                 <ng-template matStepLabel>Name your game</ng-template>
@@ -67,7 +67,7 @@
             </mat-step>
           </mat-stepper>
     </div>
-    <div mat-dialog-actions>
+    <div mat-dialog-actions align="center">
         <button
             class="cancel-button"
             mat-raised-button
@@ -81,9 +81,10 @@
             mat-raised-button
             color="primary"
             (click)="createGame()"
-            [disabled]="!mainFormGroup.valid"
+            [disabled]="!mainFormGroup.valid || !device.id"
         >
             CREATE GAME
         </button>
     </div>
+    <div class="vertical-spacer"></div>
 </div>
