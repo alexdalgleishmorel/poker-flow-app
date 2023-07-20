@@ -6,9 +6,7 @@
     "start": "ng serve",
     "build": "ng build --configuration=production --aot --build-optimizer",
     "watch": "ng build --watch --configuration=development",
-    "test": "ng test",
-    "preinstall": "npm install -g npm@9.x",
-    "prestart": "npm install -g node@16.x"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
