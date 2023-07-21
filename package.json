@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "/opt/elasticbeanstalk/node-install/node-v18.16.1-linux-x64/lib/node_modules/http-server/bin/http-server ./dist",
+    "start": "http-server ./dist",
     "build": "ng build --configuration=production",
     "watch": "ng build --watch --configuration=development",
     "test": "ng test"
