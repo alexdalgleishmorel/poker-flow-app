@@ -44,6 +44,7 @@ import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-sel
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { TransactionConfirmationModalComponent } from './components/transaction-confirmation-modal/transaction-confirmation-modal.component';
 import { PoolSettingsViewComponent } from './components/pool-settings-view/pool-settings-view.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -112,6 +113,10 @@ import { PoolSettingsViewComponent } from './components/pool-settings-view/pool-
       useValue: {
         showErrors: true
       }
+    },
+    {
+      provide: LocationStrategy, 
+      useClass: HashLocationStrategy
     }
   ],
   bootstrap: [AppComponent]
