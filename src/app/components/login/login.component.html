@@ -36,7 +36,7 @@
             </mat-form-field>
             <div class="loginFailureMessage" *ngIf="loginErrorMessages.getMessage()">
                 <div class="spacer"></div>
-                <mat-error>
+                <mat-error class="error-message">
                     {{loginErrorMessages.getMessage()}}
                 </mat-error>
             </div>

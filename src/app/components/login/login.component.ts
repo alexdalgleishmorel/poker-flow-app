@@ -124,10 +124,10 @@ export class LoginComponent implements OnInit {
 class ErrorMessages {
   private currentMessage: string = '';
 
-  private emailAlreadyExistsError: string = 'The email you provided is already connected to an account.';
-  private emailNotFoundError: string = 'The email you provided is not connected to an account. Sign-up with this email first to continue.';
-  private genericError: string = 'Something went wrong when trying to complete your request. Please try again.';
-  private invalidCredentialError: string = 'The credentials you provided are invalid. Please try again.';
+  private emailAlreadyExistsError: string = 'Invalid email/password.';
+  private emailNotFoundError: string = 'Invalid email/password.';
+  private genericError: string = 'Something went wrong, please try again later.';
+  private invalidCredentialError: string = 'Invalid email/password.';
 
   setMessage(errorType: LoginErrorType) {
     if (errorType === LoginErrorType.emailAlreadyExistsError) this.currentMessage = this.emailAlreadyExistsError;
