@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { Injectable, isDevMode } from '@angular/core';
+import { environment } from 'src/environment/environment';
 
-export const BASE_URL: string = environment.apiBaseURL;
+export const BASE_URL: string = isDevMode() ? environment.localApiBaseURL : environment.prodApiBaseURL;
 
 @Injectable({
   providedIn: 'root'
