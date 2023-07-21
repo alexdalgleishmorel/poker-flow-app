@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
-export const BASE_URL: string = 'http://localhost:8000';
+export const BASE_URL: string = environment.apiBaseURL;
 
 @Injectable({
   providedIn: 'root'
