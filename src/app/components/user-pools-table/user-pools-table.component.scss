@@ -1,9 +1,4 @@
 @import '../../../mixins.scss';
-@import '../../../variables.scss';
-
-button {
-    border-radius: 90px;
-}
 
 .spacer {
     padding: 10px;
@@ -15,31 +10,6 @@ button {
     justify-content: center;
     align-items: center;
     padding: 10px;
-}
-
-.mat-column-pool-name {
-    font-size: large;
-    text-align: center;
-}
-
-.mat-column-created {
-    font-size: large;
-    text-align: center;
-}
-
-.mat-column-pot {
-    font-size: large;
-    text-align: center;
-}
-
-.mat-column-contributors {
-    font-size: large;
-    text-align: center;
-}
-
-mat-paginator {
-    display: flex;
-    justify-content: center;
 }
 
 .table-container {
@@ -67,12 +37,7 @@ mat-paginator {
     align-items: center;
 }
 
-.create-game-text {
-    cursor: pointer;
-    color: $primaryColor;
-}
-
-.join-game-text {
-    cursor: pointer;
-    color: $secondaryColor;
+.empty-table-text {
+    text-align: center;
+    font-size: xx-large;
 }

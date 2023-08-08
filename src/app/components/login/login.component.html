@@ -1,130 +1,15 @@
-<mat-tab-group animationDuration="0ms">
-    <mat-tab label="LOGIN">
-        <!--
-        <div class="google-container">
-            <button mat-raised-button>
-                <mat-icon svgIcon="google"></mat-icon>
-                Sign in with Google
-            </button>
-        </div>
-        <div class="divider-container">
-            <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
-        </div>
-        -->
-        <form class="form-container" [formGroup]="loginFormGroup">
-            <div class="spacer"></div>
-            <mat-form-field appearance="fill">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" [formControl]="emailFormControl">
-                <mat-error *ngIf="emailFormControl.errors?.['required']">
-                    Email is required
-                </mat-error>
-                <mat-error *ngIf="emailFormControl.errors?.['email']">
-                    Invalid email
-                </mat-error>
-            </mat-form-field>
-            <div class="spacer"></div>
-            <mat-form-field>
-                <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="passwordFormControl">
-                <mat-error *ngIf="passwordFormControl.errors?.['required']">
-                    Password is required
-                </mat-error>
-                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-            </mat-form-field>
-            <div class="loginFailureMessage" *ngIf="loginErrorMessages.getMessage()">
-                <div class="spacer"></div>
-                <mat-error class="error-message">
-                    {{loginErrorMessages.getMessage()}}
-                </mat-error>
-            </div>
-            <div class="spacer"></div>
-            <button 
-            mat-raised-button color="primary"
-            (click)="login()"
-            [disabled]="loginFormGroup.invalid"
-            >
-                LOGIN
-            </button>
-        </form>
-    </mat-tab>
-    <mat-tab label="CREATE ACCOUNT">
-        <!--
-        <div class="google-container">
-            <button mat-raised-button>
-                <mat-icon svgIcon="google"></mat-icon>
-                Create account with Google
-            </button>
-        </div>
-        <div class="divider-container">
-            <mat-divider></mat-divider><a>or</a><mat-divider></mat-divider>
-        </div>
-        -->
-        <div class="form-container" [formGroup]="signUpFormGroup">
-            <div class="spacer"></div>
-            <mat-form-field appearance="fill">
-                <mat-label>First Name</mat-label>
-                <input matInput [formControl]="firstNameFormControl" [required]="true">
-                <mat-error *ngIf="firstNameFormControl.errors?.['required']">
-                    First name is required
-                </mat-error>
-            </mat-form-field>
-            <div class="spacer"></div>
-            <mat-form-field appearance="fill">
-                <mat-label>Last Name</mat-label>
-                <input matInput [formControl]="lastNameFormControl" [required]="true">
-                <mat-error *ngIf="lastNameFormControl.errors?.['required']">
-                    Last name is required
-                </mat-error>
-            </mat-form-field>
-            <div class="spacer"></div>
-            <mat-form-field appearance="fill">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" [formControl]="emailRegistrationFormControl" [required]="true">
-                <mat-error *ngIf="emailRegistrationFormControl.errors?.['required']">
-                    Email is required
-                </mat-error>
-                <mat-error *ngIf="emailRegistrationFormControl.errors?.['email']">
-                    Invalid email
-                </mat-error>
-            </mat-form-field>
-            <div class="spacer"></div>
-            <mat-form-field>
-                <mat-label>Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="firstPasswordFormControl" [required]="true" (input)="comparePasswords()">
-                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-                <mat-error *ngIf="firstPasswordFormControl.errors?.['required']">
-                    Password is required
-                </mat-error>
-            </mat-form-field>
-            <div class="spacer"></div>
-            <mat-form-field>
-                <mat-label>Confirm Password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="secondPasswordFormControl" [required]="true" (input)="comparePasswords()">
-                <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'hidePassword password'" [attr.aria-pressed]="hidePassword">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </button>
-                <mat-error *ngIf="secondPasswordFormControl.errors?.['required']">
-                    Please confirm your password
-                </mat-error>
-                <mat-error *ngIf="secondPasswordFormControl.errors?.['mismatch']">
-                    Passwords do not match
-                </mat-error>
-            </mat-form-field>
-            <div *ngIf="signUpErrorMessages.getMessage()">
-                <div class="spacer"></div>
-                <mat-error>
-                    {{signUpErrorMessages.getMessage()}}
-                </mat-error>
-            </div>
-            <div class="spacer"></div>
-            <button mat-raised-button color="primary" (click)="signUp()" [disabled]="signUpFormGroup.invalid">
-                JOIN NOW
-            </button>
-        </div>
-    </mat-tab>
-</mat-tab-group>
+<ion-content [scrollY]="false">
+    <ion-tabs>
+
+        <ion-tab-bar slot="top">
+          <ion-tab-button tab="signin">
+            <ion-label>LOGIN</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="signup">
+            <ion-label>SIGNUP</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+      
+    </ion-tabs>
+</ion-content>

@@ -1,0 +1,54 @@
+<div class="form-container" [formGroup]="signUpFormGroup">
+  <div class="spacer"></div>
+  <ion-input 
+    label="First Name"
+    [formControl]="firstNameFormControl"
+    errorText="Required"
+  >
+  </ion-input>
+  <div class="spacer"></div>
+  <ion-input 
+    label="Last Name"
+    [formControl]="lastNameFormControl"
+    errorText="Required"
+  >
+  </ion-input>
+  <div class="spacer"></div>
+  <ion-input 
+    label="Email"
+    type="email" 
+    [formControl]="emailRegistrationFormControl"
+    errorText="Invalid email"
+  >
+  </ion-input>
+  <div class="spacer"></div>
+  <ion-input 
+    label="Password" 
+    type="password"
+    [formControl]="firstPasswordFormControl"
+    errorText="Required"
+  >
+  </ion-input>
+  <div class="spacer"></div>
+  <ion-input 
+    label="Confirm password" 
+    type="password"
+    [formControl]="secondPasswordFormControl"
+    errorText="Passwords do not match"
+  >
+  </ion-input>
+  <div *ngIf="signUpErrorMessages.getMessage()">
+    <div class="spacer"></div>
+    <ion-text color="danger" class="error-message">
+      {{signUpErrorMessages.getMessage()}}
+    </ion-text>
+  </div>
+  <div class="spacer"></div>
+  <ion-button
+      shape="round"
+      (click)="signUp()"
+      [disabled]="signUpFormGroup.invalid"
+  >
+      JOIN NOW
+  </ion-button>
+</div>

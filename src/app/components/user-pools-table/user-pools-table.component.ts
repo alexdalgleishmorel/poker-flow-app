@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
@@ -7,7 +7,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
   templateUrl: './user-pools-table.component.html',
   styleUrls: ['./user-pools-table.component.scss']
 })
-export class UserPoolsTableComponent implements OnInit {
+export class UserPoolsTableComponent {
   @Input() disabled: boolean = false;
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
@@ -18,10 +18,6 @@ export class UserPoolsTableComponent implements OnInit {
   constructor(
     private router: Router
   ) {}
-
-  ngOnInit(): void {
-    this.displayedColumns = !this.history ? ['pool-name', 'pot', 'contributors'] : ['pool-name', 'contributors', 'created'];
-  }
 
   openGame(poolID: string) {
     this.router.navigate(['/', `pool`, poolID]);

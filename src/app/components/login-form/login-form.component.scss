@@ -1,0 +1,23 @@
+@import '../../../mixins.scss';
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 10px;
+}
+
+.login-failure-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+.error-message {
+    text-align: center;
+}

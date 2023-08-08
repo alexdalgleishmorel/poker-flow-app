@@ -1,97 +1,57 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { LoginComponent } from './components/login/login.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDividerModule } from '@angular/material/divider';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatStepperModule } from '@angular/material/stepper';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouteReuseStrategy } from '@angular/router';
+
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor, AuthService } from './services/auth/auth.service';
-import { PoolService } from './services/pool/pool.service';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { WelcomeComponent } from './components/welcome/welcome.component';
 import { HubComponent } from './components/hub/hub.component';
-import { PoolComponent } from './components/pool/pool.component';
-import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
-import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
-import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
-import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
+import { LoginComponent } from './components/login/login.component';
+import { PoolService } from './services/pool/pool.service';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { ActiveGamesListComponent } from './components/active-games-list/active-games-list.component';
+import { PastGamesListComponent } from './components/past-games-list/past-games-list.component';
 import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
-import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
-import { JoinNewGameModalComponent } from './components/join-new-game-modal/join-new-game-modal.component';
-import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
-import { PasswordModalComponent } from './components/password-modal/password-modal.component';
-import { ChipViewComponent } from './components/chip-view/chip-view.component';
-import { ChipSelectComponent, ThousandSuffixesPipe } from './components/chip-select/chip-select.component';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { TransactionConfirmationModalComponent } from './components/transaction-confirmation-modal/transaction-confirmation-modal.component';
-import { PoolSettingsViewComponent } from './components/pool-settings-view/pool-settings-view.component';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    ToolbarComponent,
-    WelcomeComponent,
+    ActiveGamesListComponent,
     HubComponent,
-    PoolComponent,
-    PoolDonutChartComponent,
-    CreateGameModalComponent,
-    BuyInModalComponent,
-    ChipDepositModalComponent,
-    UserPoolsTableComponent,
-    PoolActivityTableComponent,
-    JoinNewGameModalComponent,
-    ChipWithdrawalModalComponent,
-    PasswordModalComponent,
-    ChipViewComponent,
-    ChipSelectComponent,
-    ThousandSuffixesPipe,
-    TransactionConfirmationModalComponent,
-    PoolSettingsViewComponent
+    LoginComponent,
+    LoginFormComponent,
+    PastGamesListComponent,
+    SignupFormComponent,
+    UserPoolsTableComponent
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
+    BrowserModule,
     BrowserAnimationsModule,
+    FormsModule,
     HttpClientModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDialogModule,
-    MatDividerModule,
     MatFormFieldModule,
-    MatInputModule,
     MatIconModule,
+    MatInputModule,
     MatMenuModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatSlideToggleModule,
-    MatStepperModule,
     MatTableModule,
     MatTabsModule,
-    MatToolbarModule,
+    IonicModule.forRoot(),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [
     AuthService,
@@ -114,11 +74,8 @@ import { LocationStrategy, HashLocationStrategy } from '@angular/common';
         showErrors: true
       }
     },
-    {
-      provide: LocationStrategy, 
-      useClass: HashLocationStrategy
-    }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

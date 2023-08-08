@@ -21,11 +21,12 @@ export class DeviceService {
 
   async connectToDevice(deviceID?: number): Promise<PokerFlowDevice|null> {
     const pokerFlowDevice = new PokerFlowDevice();
-    return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
+    return Promise.resolve(pokerFlowDevice);
+    //return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
   }
 
   withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
-    device.withdrawChips(withdrawalRequest);
+    // device.withdrawChips(withdrawalRequest);
   }
 }
 
@@ -33,6 +34,18 @@ export interface DeviceWithdrawalRequest {
   amount: number;
   denominations: number[];
 }
+
+export class PokerFlowDevice {
+  private bluetooth?: any;
+  public id?: number;
+  public slots?: number;
+  public inventory?: number[];
+  public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+}
+
+/*
 
 export class PokerFlowDevice {
 
@@ -167,3 +180,4 @@ function bluetoothToJson(data: DataView) {
   const jsonString = String.fromCharCode.apply(null, numberArray);
   return JSON.parse(jsonString);
 }
+*/
