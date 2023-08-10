@@ -101,7 +101,9 @@ export class PoolService {
     );
   }
 
-  getPoolByID(poolID: number): Observable<any> {
+  getPoolByID(poolID: number | undefined): Observable<any> {
+    if (!poolID) return of();
+    
     return this.apiService.get(`/pool/${poolID}`).pipe(
       map((response: any) => {
         this.poolByID.next(response);

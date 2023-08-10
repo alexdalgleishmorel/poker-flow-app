@@ -1,6 +1,6 @@
-import { Component, OnDestroy, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
 // import { CreateGameModalComponent } from 'src/app/components/create-game-modal/create-game-modal.component';
 // import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
@@ -15,14 +15,13 @@ import { PoolComponent } from '../pool/pool.component';
   templateUrl: './hub.component.html',
   styleUrls: ['./hub.component.scss']
 })
-export class HubComponent implements OnDestroy {
-  @ViewChildren(PoolComponent) poolComponents?: QueryList<PoolComponent>
-
+export class HubComponent implements OnInit, OnDestroy {
+  
   public disabled: boolean = false;
   public poolData?: PoolData[];
 
   private profile?: Profile;
-  private poller: Subscription;
+  private poller?: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -39,18 +38,30 @@ export class HubComponent implements OnDestroy {
       this.disabled = false;
     });
     */
+  }
 
+  ngOnInit(): void {
     this.profile = this.authService.getCurrentUser();
 
     this.poller = interval(POLLING_INTERVAL)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id).pipe(catchError(() => of(null))))
-    ).subscribe((poolData: PoolData[]) => { if (poolData) this.poolData = [...poolData]; });
+      .pipe(
+        startWith(0),
+        switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id).pipe(catchError(() => of(null))))
+      ).subscribe((poolData: PoolData[]) => { if (poolData) this.poolData = [...poolData]; });
   }
 
-  ngOnDestroy(): void {
-    this.poller.unsubscribe();
+  ngOnDestroy() {
+    this.poller?.unsubscribe();
+  }
+
+  ionViewWillEnter() {
+    if (this.poller?.closed) {
+      this.ngOnInit();
+    }
+  }
+
+  ionViewWillLeave() {
+    this.ngOnDestroy();
   }
 
   /**

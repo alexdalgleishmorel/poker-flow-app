@@ -1,6 +1,6 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
 // import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
 // import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
@@ -16,12 +16,13 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnDestroy {
+export class PoolComponent implements OnInit, OnDestroy {
   public poolData?: PoolData;
   public disabled: boolean = false;
-  public id: number;
+  public id?: number;
 
-  private poller: Subscription;
+  private poller?: Subscription;
+  private subscriptions = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,14 +32,6 @@ export class PoolComponent implements OnDestroy {
     private poolService: PoolService,
     private router: Router
   ) {
-    this.id = this.activatedRoute.snapshot.params['id'];
-
-    this.poller = interval(POLLING_INTERVAL)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
-    ).subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-
     /*
     this.dialog.afterOpened.subscribe(() => {
       this.disabled = true;
@@ -49,13 +42,28 @@ export class PoolComponent implements OnDestroy {
     */
   }
 
-  @HostListener('unloaded')
-  test() {
-    console.log('Items destroyed');
+  ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.params['id'];
+
+    this.poller = interval(POLLING_INTERVAL)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
+      ).subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
   }
 
   ngOnDestroy(): void {
-    this.poller.unsubscribe();
+    this.poller?.unsubscribe();
+  }
+
+  ionViewWillEnter() {
+    if (this.poller?.closed) {
+      this.ngOnInit();
+    }
+  }
+
+  ionViewWillLeave() {
+    this.ngOnDestroy();
   }
 
   /**

@@ -47,11 +47,6 @@ const routes: Routes = [
         component: PoolComponent,
         children: [
           {
-            path: '',
-            redirectTo: 'pot',
-            pathMatch: 'full'
-          },
-          {
             path: 'pot',
             component: PoolChartContainerComponent
           },
