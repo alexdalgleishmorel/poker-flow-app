@@ -2,12 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatTableModule } from '@angular/material/table';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -25,6 +20,11 @@ import { SignupFormComponent } from './components/signup-form/signup-form.compon
 import { ActiveGamesListComponent } from './components/active-games-list/active-games-list.component';
 import { PastGamesListComponent } from './components/past-games-list/past-games-list.component';
 import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
+import { PoolComponent } from './components/pool/pool.component';
+import { PoolChartContainerComponent } from './components/pool-chart-container/pool-chart-container.component';
+import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
+import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
+import { PoolActivityContainerComponent } from './components/pool-activity-container/pool-activity-container.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +34,11 @@ import { UserPoolsTableComponent } from './components/user-pools-table/user-pool
     LoginComponent,
     LoginFormComponent,
     PastGamesListComponent,
+    PoolActivityContainerComponent,
+    PoolActivityTableComponent,
+    PoolComponent,
+    PoolChartContainerComponent,
+    PoolDonutChartComponent,
     SignupFormComponent,
     UserPoolsTableComponent
   ],
@@ -43,12 +48,7 @@ import { UserPoolsTableComponent } from './components/user-pools-table/user-pool
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatMenuModule,
-    MatTableModule,
-    MatTabsModule,
+    MatStepperModule,
     IonicModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
@@ -61,12 +61,6 @@ import { UserPoolsTableComponent } from './components/user-pools-table/user-pool
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    },
-    {
-      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: {
-        subscriptSizing: 'dynamic'
-      }
     },
     {
       provide: STEPPER_GLOBAL_OPTIONS,

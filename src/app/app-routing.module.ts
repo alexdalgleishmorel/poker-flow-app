@@ -1,7 +1,6 @@
 import { Injectable, NgModule } from '@angular/core';
 import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
 
-import { HubComponent } from './components/hub/hub.component';
 import { LoginComponent } from './components/login/login.component';
 import { Observable, tap } from 'rxjs';
 import { AuthService } from './services/auth/auth.service';
