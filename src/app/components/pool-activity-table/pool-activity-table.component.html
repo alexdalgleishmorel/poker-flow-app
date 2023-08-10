@@ -1,0 +1,31 @@
+<div [ngClass]="{'table-container': dataSource.length > 0, 'empty-table-container' : dataSource.length === 0 }">
+    <ion-list *ngIf="dataSource.length > 0 else emptyTable" [inset]="true">
+        <ion-item *ngFor="let transaction of dataSource; let index">
+            <ion-icon name="person" color="primary"></ion-icon>
+            <div class="spacer"></div>
+            <ion-text>
+                <br/>
+                <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
+                <br/>
+                <sub>
+                    ${{ transaction.amount.toFixed(2) }} {{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}
+                </sub>
+                <br/>
+                <br/>
+
+            </ion-text>
+        </ion-item>
+    </ion-list>
+</div>
+
+<ng-template #emptyTable class="empty-table">
+    <div class="empty-table-text">
+        No pool transactions found.
+        <br/><br/>
+        <span class="buy-in-text" (click)="buyIn()">
+            <b>Buy-in</b>
+        </span>
+        <br/>
+        to get started. 
+    </div>
+</ng-template>

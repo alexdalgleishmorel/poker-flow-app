@@ -1,6 +1,6 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
 // import { CreateGameModalComponent } from 'src/app/components/create-game-modal/create-game-modal.component';
 // import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
@@ -8,6 +8,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
 import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { PoolComponent } from '../pool/pool.component';
 
 @Component({
   selector: 'app-hub',
@@ -15,6 +16,8 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
   styleUrls: ['./hub.component.scss']
 })
 export class HubComponent implements OnDestroy {
+  @ViewChildren(PoolComponent) poolComponents?: QueryList<PoolComponent>
+
   public disabled: boolean = false;
   public poolData?: PoolData[];
 

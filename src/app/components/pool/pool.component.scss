@@ -1,0 +1,18 @@
+@import '../../../mixins.scss';
+
+.information-container {
+    width: 100%;
+    height: 135vw;
+}
+
+.flow-container {
+    width: 100%;
+    height: calc(100vh - 150vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.disabled-step {
+    color: gray;
+}
