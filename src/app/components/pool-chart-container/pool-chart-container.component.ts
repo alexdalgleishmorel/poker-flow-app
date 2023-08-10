@@ -19,5 +19,4 @@ export class PoolChartContainerComponent implements OnInit {
       this.poolData = {...poolData};
     })
   }
-
 }

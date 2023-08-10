@@ -57,12 +57,14 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
+    this.poolService.poolViewActive.next(true);
     if (this.poller?.closed) {
       this.ngOnInit();
     }
   }
 
   ionViewWillLeave() {
+    this.poolService.poolViewActive.next(false);
     this.ngOnDestroy();
   }
 

@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 
 import { POKERFLOW_GREEN } from '@constants';
 import Chart from 'chart.js/auto';
-import { PoolData, PoolMember } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 const emptyDoughnutPlugin = {
   id: 'emptyDoughnut',
@@ -52,8 +52,17 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     '#8549ba'
   ];
 
+  constructor(
+    private poolService: PoolService
+  ) {}
+
   ngOnInit(): void {
     this.createChart();
+    this.poolService.poolViewActive.subscribe((active) => {
+      if (!active && this.chart) {
+        this.chart.destroy();
+      }
+    });
   }
 
   createChart(){
