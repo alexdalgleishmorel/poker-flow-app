@@ -77,7 +77,8 @@ export class PoolService {
   public poolsByUserID: Subject<PoolData[]> = new Subject<PoolData[]>();
   public poolsByDeviceID: Subject<PoolData[]> = new Subject<PoolData[]>();
   public poolByID: Subject<PoolData> = new Subject<PoolData>();
-  public poolViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(
     private apiService: ApiService,

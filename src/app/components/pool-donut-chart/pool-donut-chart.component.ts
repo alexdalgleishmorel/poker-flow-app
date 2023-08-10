@@ -38,7 +38,7 @@ const emptyDoughnutPlugin = {
 })
 export class PoolDonutChartComponent implements OnInit, OnChanges {
   @Input() poolData?: PoolData;
-  public chart: any;
+  public chart: any = null;
   private colors: string[] = [
     '#388E3C',
     '#4dc9f6',
@@ -57,12 +57,24 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.createChart();
     this.poolService.poolViewActive.subscribe((active) => {
-      if (!active && this.chart) {
-        this.chart.destroy();
-      }
+      this.initializeChart(active);
     });
+  }
+
+  initializeChart(activePoolView: number) {
+    if (!activePoolView && this.chart) {
+      this.chart.destroy();
+      this.chart = null;
+      this.poolService.poolChartViewActive.next(false);
+    } else if (activePoolView && this.canCreateChart()) {
+      this.createChart();
+      this.poolService.poolChartViewActive.next(true);
+    }
+  }
+
+  canCreateChart(): boolean {
+    return !this.chart && !this.poolService.poolChartViewActive.getValue() && this.poolData?.id === this.poolService.poolViewActive.getValue();
   }
 
   createChart(){
@@ -219,6 +231,8 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
       this.chart.data.datasets[1].circumference = 360*availableRatio;
 
       this.chart.update();
+    } else {
+      this.initializeChart(this.poolService.poolViewActive.getValue());
     }
   }
 }

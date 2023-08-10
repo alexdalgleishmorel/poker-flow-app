@@ -49,7 +49,14 @@ export class PoolComponent implements OnInit, OnDestroy {
       .pipe(
         startWith(0),
         switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
-      ).subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
+      ).subscribe((poolData: PoolData) => { 
+        if (poolData) {
+          this.poolData = {...poolData};
+          if (!this.poolService.poolViewActive.getValue()) {
+            this.poolService.poolViewActive.next(this.poolData.id);
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -57,14 +64,13 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    this.poolService.poolViewActive.next(true);
     if (this.poller?.closed) {
       this.ngOnInit();
     }
   }
 
   ionViewWillLeave() {
-    this.poolService.poolViewActive.next(false);
+    this.poolService.poolViewActive.next(0);
     this.ngOnDestroy();
   }
 
