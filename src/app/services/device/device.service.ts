@@ -21,6 +21,7 @@ export class DeviceService {
 
   async connectToDevice(deviceID?: number): Promise<PokerFlowDevice|null> {
     const pokerFlowDevice = new PokerFlowDevice();
+    pokerFlowDevice.status.next(true);
     return Promise.resolve(pokerFlowDevice);
     //return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
   }
@@ -37,9 +38,9 @@ export interface DeviceWithdrawalRequest {
 
 export class PokerFlowDevice {
   private bluetooth?: any;
-  public id?: number;
-  public slots?: number;
-  public inventory?: number[];
+  public id: number = 1;
+  public slots: number = 5;
+  public inventory: number[] = [10, 10, 10, 10, 10];
   public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);

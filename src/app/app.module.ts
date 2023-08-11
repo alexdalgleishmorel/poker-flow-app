@@ -2,6 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,6 +30,7 @@ import { PoolSettingsComponent } from './components/pool-settings/pool-settings.
 import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/chip-view.component';
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 import { ChipSelectComponent } from './components/chip-select/chip-select.component';
+import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import { ChipSelectComponent } from './components/chip-select/chip-select.compon
     ActiveGamesListComponent,
     ChipViewComponent,
     ChipSelectComponent,
+    CreateGameModalComponent,
     HubComponent,
     LoadingSpinnerComponent,
     LoginComponent,
@@ -57,6 +60,7 @@ import { ChipSelectComponent } from './components/chip-select/chip-select.compon
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
+    MatIconModule,
     MatStepperModule,
     IonicModule.forRoot(),
     FormsModule,

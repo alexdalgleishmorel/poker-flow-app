@@ -1,6 +1,7 @@
 <ion-content [scrollY]="false">
     <div class="main-button-container">
         <ion-button
+            id="open-modal"
             shape="round"
             (click)="createGame()"
             [disabled]="disabled"
@@ -8,6 +9,11 @@
         >
             CREATE GAME
         </ion-button>
+        <ion-modal trigger="open-modal">
+            <ng-template>
+                <app-create-game-modal></app-create-game-modal>
+            </ng-template>
+        </ion-modal>
         <div class="spacer">or</div>
         <ion-button
             shape="round"
