@@ -1,5 +1,24 @@
-<div></div>
-<app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
-<div></div>
-<div></div>
-<div></div>
+<div class="container" *ngIf="poolData else loading">
+    <div class="spacer"></div>
+    <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-text>
+                    <h1>Total Pot<br/><ion-text color="primary">${{poolTotal}}</ion-text></h1>
+                </ion-text>
+            </ion-col>
+            <ion-col>
+                <ion-text>
+                    <h1>Available<br/><ion-text class="availablePotText">${{poolData ? poolData.available_pot : 0}}</ion-text></h1>
+                </ion-text>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</div>
+
+<ng-template #loading>
+    <div class="container loading">
+        <ion-spinner color="primary" name="circular"></ion-spinner>
+    </div>
+</ng-template>

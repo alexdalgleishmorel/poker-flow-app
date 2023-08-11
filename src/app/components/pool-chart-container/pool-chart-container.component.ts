@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-chart-container',
@@ -9,6 +9,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 export class PoolChartContainerComponent implements OnInit {
 
   public poolData?: PoolData;
+  public poolTotal: number = 0;
 
   constructor(
     private poolService: PoolService
@@ -17,6 +18,10 @@ export class PoolChartContainerComponent implements OnInit {
   ngOnInit() {
     this.poolService.poolByID.subscribe((poolData) => {
       this.poolData = {...poolData};
+      this.poolTotal = 0;
+      this.poolData.contributors.forEach((contributor: PoolMember) => {
+        this.poolTotal += contributor.contribution;
+      });
     })
   }
 }
