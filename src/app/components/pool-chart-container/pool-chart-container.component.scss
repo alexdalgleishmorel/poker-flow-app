@@ -27,6 +27,10 @@ ion-spinner {
 }
 
 .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
 }
@@ -37,4 +41,17 @@ ion-spinner {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.empty-table {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-table-text {
+    text-align: center;
+    font-size: xx-large;
 }
