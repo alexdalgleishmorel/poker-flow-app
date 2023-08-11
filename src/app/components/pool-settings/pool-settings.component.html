@@ -48,5 +48,16 @@
         >
             SAVE
         </ion-button>
+        <ion-button
+            *ngIf="isPoolAdmin()"
+            shape="round"
+            expand="block"
+            color="light"
+            size="small"
+            (click)="cancelChanges()"
+            [disabled]="!settingsFormGroup.dirty"
+        >
+            CANCEL
+        </ion-button>
     </div>
 </ion-content>

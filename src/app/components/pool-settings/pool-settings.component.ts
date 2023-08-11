@@ -47,12 +47,16 @@ export class PoolSettingsComponent implements OnInit {
 
         if (!this.setup) {
           this.setup = true;
-          this.buyInEnabledFormControl.setValue(this.poolData.settings.buy_in_enabled);
-          this.minBuyInFormControl.setValue(this.poolData.settings.min_buy_in);
-          this.maxBuyInFormControl.setValue(this.poolData.settings.max_buy_in);
+          this.populateSettings(this.poolData);
         }
       }
     });
+  }
+
+  populateSettings(poolData: PoolData) {
+    this.buyInEnabledFormControl.setValue(poolData.settings.buy_in_enabled);
+    this.minBuyInFormControl.setValue(poolData.settings.min_buy_in);
+    this.maxBuyInFormControl.setValue(poolData.settings.max_buy_in);
   }
 
   onMinBuyInFocusOut() {
@@ -76,6 +80,13 @@ export class PoolSettingsComponent implements OnInit {
         .then(() => {
           this.settingsFormGroup.markAsPristine();
         });
+    }
+  }
+
+  cancelChanges() {
+    if (this.poolData) {
+      this.populateSettings(this.poolData);
+      this.settingsFormGroup.markAsPristine();
     }
   }
 
