@@ -1,6 +1,13 @@
 <ion-content>
-    <!--<app-chip-view [denominations]="poolData ? poolData.settings.denominations : []" [viewOnly]="true"></app-chip-view>-->
     <ion-accordion-group>
+        <ion-accordion>
+            <ion-item slot="header">
+              <ion-label><b>Denominations</b></ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+                <app-chip-view [denominations]="poolData ? poolData.settings.denominations : []" [viewOnly]="true"></app-chip-view>
+            </div>
+          </ion-accordion>
         <ion-accordion>
           <ion-item slot="header">
             <ion-label><b>Buy-Ins</b></ion-label>

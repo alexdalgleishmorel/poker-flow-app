@@ -10,7 +10,7 @@ import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/
 })
 export class PoolSettingsComponent implements OnInit {
   private setup: boolean = false;
-  private poolData?: PoolData;
+  public poolData?: PoolData;
 
   private formControlNameMappings: any = {
     minBuyInFormControl: 'min_buy_in',

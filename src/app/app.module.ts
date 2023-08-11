@@ -26,11 +26,13 @@ import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donu
 import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
 import { PoolActivityContainerComponent } from './components/pool-activity-container/pool-activity-container.component';
 import { PoolSettingsComponent } from './components/pool-settings/pool-settings.component';
+import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/chip-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActiveGamesListComponent,
+    ChipViewComponent,
     HubComponent,
     LoginComponent,
     LoginFormComponent,
@@ -42,6 +44,7 @@ import { PoolSettingsComponent } from './components/pool-settings/pool-settings.
     PoolDonutChartComponent,
     PoolSettingsComponent,
     SignupFormComponent,
+    ThousandSuffixesPipe,
     UserPoolsTableComponent
   ],
   imports: [
