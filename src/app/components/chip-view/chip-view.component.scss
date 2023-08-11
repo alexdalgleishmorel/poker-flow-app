@@ -1,4 +1,5 @@
 .chip-content {
+    padding: 5px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -9,8 +10,5 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-}
-
-.spacer {
-    padding: 5px;
+    flex-wrap: wrap;
 }
