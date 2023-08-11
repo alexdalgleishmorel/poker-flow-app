@@ -1,4 +1,4 @@
-<ion-content>
+<ion-content *ngIf="poolData else loading">
     <ion-accordion-group>
         <ion-accordion>
             <ion-item slot="header">
@@ -68,3 +68,9 @@
         </ion-button>
     </div>
 </ion-content>
+
+<ng-template #loading>
+    <div class="content loading">
+        <ion-spinner color="primary" name="circular"></ion-spinner>
+    </div>
+</ng-template>
