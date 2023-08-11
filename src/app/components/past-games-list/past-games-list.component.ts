@@ -8,7 +8,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 })
 export class PastGamesListComponent  implements OnInit {
 
-  public pools: PoolData[] = [];
+  public pools?: PoolData[];
 
   constructor(
     private poolService: PoolService

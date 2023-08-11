@@ -1,0 +1,15 @@
+ion-spinner {
+    width: calc(min(25vw, 25vh));
+    height: calc(min(25vw, 25vh));
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
