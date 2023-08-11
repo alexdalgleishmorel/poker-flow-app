@@ -27,6 +27,7 @@ import { PoolActivityTableComponent } from './components/pool-activity-table/poo
 import { PoolActivityContainerComponent } from './components/pool-activity-container/pool-activity-container.component';
 import { PoolSettingsComponent } from './components/pool-settings/pool-settings.component';
 import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/chip-view.component';
+import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/
     ActiveGamesListComponent,
     ChipViewComponent,
     HubComponent,
+    LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,
     PastGamesListComponent,

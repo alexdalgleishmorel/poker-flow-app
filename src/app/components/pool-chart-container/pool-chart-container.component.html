@@ -20,8 +20,10 @@
 </div>
 
 <ng-template #loading>
-    <div *ngIf="!poolData else emptyTable" class="container loading">
-        <ion-spinner color="primary" name="circular"></ion-spinner>
+    <div *ngIf="!poolData else emptyTable">
+        <div class="content">
+            <app-loading-spinner></app-loading-spinner>
+        </div>
     </div>
 </ng-template>
 
