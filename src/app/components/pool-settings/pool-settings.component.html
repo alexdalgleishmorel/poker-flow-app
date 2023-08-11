@@ -1,0 +1,52 @@
+<ion-content>
+    <!--<app-chip-view [denominations]="poolData ? poolData.settings.denominations : []" [viewOnly]="true"></app-chip-view>-->
+    <ion-accordion-group>
+        <ion-accordion>
+          <ion-item slot="header">
+            <ion-label><b>Buy-Ins</b></ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-list>
+                <ion-item>
+                    <ion-toggle [formControl]="buyInEnabledFormControl">Enabled</ion-toggle>
+                </ion-item>
+                <ion-item>
+                    <ion-input
+                        label="Minimum"
+                        labelPlacement="stacked"
+                        type="number"
+                        [min]="0"
+                        [formControl]="minBuyInFormControl"
+                        (focusout)="onMinBuyInFocusOut()"
+                    >
+                    </ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-input
+                        label="Maximum"
+                        labelPlacement="stacked"
+                        type="number"
+                        [min]="0" 
+                        [formControl]="maxBuyInFormControl"
+                        (focusout)="onMaxBuyInFocusOut()"
+                    >
+                    </ion-input>
+                </ion-item>
+            </ion-list>
+          </div>
+        </ion-accordion>
+    </ion-accordion-group>
+    <div class="saveButtonContainer">
+        <ion-button
+            *ngIf="isPoolAdmin()"
+            shape="round"
+            expand="block"
+            color="primary"
+            size="small"
+            (click)="saveSettings()"
+            [disabled]="!settingsFormGroup.dirty"
+        >
+            SAVE
+        </ion-button>
+    </div>
+</ion-content>

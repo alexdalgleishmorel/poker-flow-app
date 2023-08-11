@@ -8,6 +8,7 @@ import { PastGamesListComponent } from '../components/past-games-list/past-games
 import { PoolComponent } from '../components/pool/pool.component';
 import { PoolChartContainerComponent } from '../components/pool-chart-container/pool-chart-container.component';
 import { PoolActivityContainerComponent } from '../components/pool-activity-container/pool-activity-container.component';
+import { PoolSettingsComponent } from '../components/pool-settings/pool-settings.component';
 
 const routes: Routes = [
   {
@@ -61,7 +62,7 @@ const routes: Routes = [
           },
           {
             path: 'settings',
-            component: ActiveGamesListComponent
+            component: PoolSettingsComponent
           },
         ]
       }

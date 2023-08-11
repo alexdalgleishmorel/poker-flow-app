@@ -25,6 +25,7 @@ import { PoolChartContainerComponent } from './components/pool-chart-container/p
 import { PoolDonutChartComponent } from './components/pool-donut-chart/pool-donut-chart.component';
 import { PoolActivityTableComponent } from './components/pool-activity-table/pool-activity-table.component';
 import { PoolActivityContainerComponent } from './components/pool-activity-container/pool-activity-container.component';
+import { PoolSettingsComponent } from './components/pool-settings/pool-settings.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { PoolActivityContainerComponent } from './components/pool-activity-conta
     PoolComponent,
     PoolChartContainerComponent,
     PoolDonutChartComponent,
+    PoolSettingsComponent,
     SignupFormComponent,
     UserPoolsTableComponent
   ],
