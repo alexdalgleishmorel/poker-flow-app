@@ -35,6 +35,7 @@
             [min]="0"
             [formControl]="minBuyInFormControl"
             (focusout)="onMinBuyInFocusOut()"
+            errorText="Minimum and maximum values conflict"
         >
         </ion-input>
         <ion-input
@@ -44,6 +45,7 @@
             [min]="0"
             [formControl]="maxBuyInFormControl"
             (focusout)="onMaxBuyInFocusOut()"
+            errorText="Minimum and maximum values conflict"
         >
         </ion-input>
     </mat-step>

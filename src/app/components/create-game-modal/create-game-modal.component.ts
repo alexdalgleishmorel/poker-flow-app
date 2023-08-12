@@ -18,8 +18,8 @@ export class CreateGameModalComponent {
     poolName: this.poolNameFormControl,
   });
 
-  public minBuyInFormControl = new FormControl(`${DEFAULT_MIN_BUY_IN}`, [Validators.required]);
-  public maxBuyInFormControl = new FormControl(`${DEFAULT_MAX_BUY_IN}`, [Validators.required]);
+  public minBuyInFormControl = new FormControl(DEFAULT_MIN_BUY_IN, [Validators.required]);
+  public maxBuyInFormControl = new FormControl(DEFAULT_MAX_BUY_IN, [Validators.required]);
 
   public buyInFormGroup: FormGroup = this._formBuilder.group({
     minBuyInFormControl: this.minBuyInFormControl,
@@ -59,11 +59,15 @@ export class CreateGameModalComponent {
         this.device.status.subscribe(() => {
           if (device.id) {
             this.minBuyInFormControl.valueChanges.subscribe((value) => {
-              this.poolSettings.min_buy_in = value ? +value : DEFAULT_MIN_BUY_IN;
+              this.validateMinBuyIn(value);
+              this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+              this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
             });
         
             this.maxBuyInFormControl.valueChanges.subscribe((value) => {
-              this.poolSettings.max_buy_in = value ? +value : DEFAULT_MAX_BUY_IN;
+              this.validateMaxBuyIn(value);
+              this.validateMinBuyIn(this.minBuyInFormControl.value);
+              this.poolSettings.max_buy_in = value ? value : DEFAULT_MAX_BUY_IN;
             });
         
             this.passwordFormControl.valueChanges.subscribe((value) => {
@@ -81,6 +85,30 @@ export class CreateGameModalComponent {
         });
       }
     });
+  }
+
+  validateMinBuyIn(value: number|null) {
+    console.log('min validate');
+    if (!value) {
+      return;
+    }
+    if (this.maxBuyInFormControl.value && value > this.maxBuyInFormControl.value) {
+      this.minBuyInFormControl.setErrors({'error': true});
+    } else {
+      this.minBuyInFormControl.setErrors(null);
+    }
+  }
+
+  validateMaxBuyIn(value: number|null) {
+    console.log('max validate');
+    if (!value) {
+      return;
+    }
+    if (this.minBuyInFormControl.value && value < this.minBuyInFormControl.value) {
+      this.maxBuyInFormControl.setErrors({'error': true});
+    } else {
+      this.maxBuyInFormControl.setErrors(null);
+    }
   }
 
   createGame() {
@@ -107,10 +135,10 @@ export class CreateGameModalComponent {
   }
 
   onMinBuyInFocusOut() {
-    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(`${DEFAULT_MIN_BUY_IN}`);
+    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(DEFAULT_MIN_BUY_IN);
   }
 
   onMaxBuyInFocusOut() {
-    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(`${DEFAULT_MAX_BUY_IN}`);
+    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(DEFAULT_MAX_BUY_IN);
   }
 }

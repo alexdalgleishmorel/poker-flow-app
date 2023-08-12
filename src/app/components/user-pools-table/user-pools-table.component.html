@@ -1,6 +1,6 @@
-<div [ngClass]="{'table-container': dataSource.length > 0, 'empty-table-container' : dataSource.length === 0 }">
-    <ion-content>
-        <ion-list *ngIf="dataSource.length > 0 else emptyTable" [inset]="true">
+<div class="table-container">
+    <ion-content *ngIf="dataSource.length > 0 else emptyTable">
+        <ion-list>
             <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool.id.toString())">
                 <ion-icon name="people-outline" color="primary"></ion-icon>
                 <div class="spacer"></div>
@@ -13,30 +13,33 @@
                     </sub>
                     <br/>
                     <br/>
-    
                 </ion-text>
             </ion-item>
         </ion-list>
     </ion-content>
 </div>
 
-<ng-template #emptyTable class="empty-table">
-    <div *ngIf="!history else emptyHistoryTableMessage" class="empty-table-text">
-        No games found. 
-        <br/><br/>
-        <ion-text color="primary" (click)="createGame()">
-            <b>Create</b>
-        </ion-text> or 
-        <ion-text color="tertiary" (click)="joinGame()">
-            <b>join</b>
-        </ion-text> 
-        <br/>
-        a game to get started. 
+<ng-template #emptyTable>
+    <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
+        <div class="empty-message">
+            No games found. 
+            <br/><br/>
+            <ion-text color="primary" (click)="createGame()">
+                <b>Create</b>
+            </ion-text> or 
+            <ion-text color="tertiary" (click)="joinGame()">
+                <b>join</b>
+            </ion-text> 
+            <br/>
+            a game to get started.
+        </div>
     </div>
 </ng-template>
 
-<ng-template #emptyHistoryTableMessage class="empty-table">
-    <div class="empty-table-text">
-        No past games found.
+<ng-template #emptyHistoryTableMessage>
+    <div class="empty-message-container">
+        <div class="empty-message">
+            No past games found.
+        </div>
     </div>
 </ng-template>
