@@ -8,7 +8,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 })
 export class ActiveGamesListComponent implements OnInit {
   @Input() registerUser: boolean = false;
-  @Output() onPoolSelect: EventEmitter<number> = new EventEmitter<number>();
+  @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   public pools?: PoolData[];
 
   constructor(
@@ -21,7 +21,7 @@ export class ActiveGamesListComponent implements OnInit {
     })
   }
 
-  poolSelect(poolID: number) {
-    this.onPoolSelect.emit(poolID);
+  poolSelect(poolData: PoolData) {
+    this.onPoolSelect.emit(poolData);
   }
 }

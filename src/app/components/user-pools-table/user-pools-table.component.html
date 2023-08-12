@@ -1,7 +1,7 @@
 <div class="table-container">
     <ion-content *ngIf="dataSource.length > 0 else emptyTable">
         <ion-list>
-            <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool.id.toString())">
+            <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool)">
                 <ion-icon name="people-outline" color="primary"></ion-icon>
                 <div class="spacer"></div>
                 <ion-text>

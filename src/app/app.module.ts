@@ -32,6 +32,7 @@ import { LoadingSpinnerComponent } from './components/common/loading-spinner/loa
 import { ChipSelectComponent } from './components/chip-select/chip-select.component';
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
+import { PasswordModalComponent } from './components/common/password-modal/password-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { JoinGameModalComponent } from './components/join-game-modal/join-game-m
     LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,
+    PasswordModalComponent,
     PastGamesListComponent,
     PoolActivityContainerComponent,
     PoolActivityTableComponent,

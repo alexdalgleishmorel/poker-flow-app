@@ -12,7 +12,7 @@ export class UserPoolsTableComponent {
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
   @Input() registerUser: boolean = false;
-  @Output() onPoolSelect: EventEmitter<number> = new EventEmitter<number>();
+  @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   @Output() onCreateGame: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onJoinGame: EventEmitter<boolean> = new EventEmitter<boolean>();
   public displayedColumns: string[] = [];
@@ -21,9 +21,11 @@ export class UserPoolsTableComponent {
     private router: Router
   ) {}
 
-  openGame(poolID: string) {
-    this.onPoolSelect.emit(Number(poolID));
-    this.router.navigate(['/', `pool`, poolID]);
+  openGame(poolData: PoolData) {
+    this.onPoolSelect.emit(poolData);
+    if (!this.registerUser) {
+      this.router.navigate(['/', `pool`, poolData.id]);
+    }
   }
 
   createGame() {
