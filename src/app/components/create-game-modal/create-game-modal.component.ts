@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
+import { ModalController } from '@ionic/angular';
 import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
 
@@ -10,8 +12,6 @@ import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
   styleUrls: ['./create-game-modal.component.scss']
 })
 export class CreateGameModalComponent {
-  @Output() modalResult = new EventEmitter<number|null>;
-
   public poolNameFormControl = new FormControl('', [Validators.required]);
 
   public poolNameFormGroup: FormGroup = this._formBuilder.group({
@@ -48,7 +48,9 @@ export class CreateGameModalComponent {
 
   constructor(
     private deviceService: DeviceService,
+    private modalCtrl: ModalController,
     private poolService: PoolService,
+    private router: Router,
     private _formBuilder: FormBuilder
   ) {
 
@@ -88,7 +90,6 @@ export class CreateGameModalComponent {
   }
 
   validateMinBuyIn(value: number|null) {
-    console.log('min validate');
     if (!value) {
       return;
     }
@@ -100,7 +101,6 @@ export class CreateGameModalComponent {
   }
 
   validateMaxBuyIn(value: number|null) {
-    console.log('max validate');
     if (!value) {
       return;
     }
@@ -121,13 +121,14 @@ export class CreateGameModalComponent {
       this.poolNameFormControl.value!,
       this.device.id!,
       this.poolSettings
-    ).then((poolCreationResponse: any) => {
-      this.modalResult.emit(poolCreationResponse.id);
+    ).then((poolData: any) => {
+      this.router.navigate(['/', `pool`, poolData.id]);
+      this.modalCtrl.dismiss(poolData);
     });
   }
 
   cancel() {
-    this.modalResult.emit(null);
+    this.modalCtrl.dismiss(null);
   }
 
   trackByFn(index: any, item: any) {

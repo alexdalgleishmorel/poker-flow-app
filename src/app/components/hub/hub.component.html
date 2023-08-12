@@ -1,36 +1,22 @@
 <ion-content [scrollY]="false">
     <div class="main-button-container">
         <ion-button
-            id="open-create-game-modal"
             shape="round"
             [disabled]="disabled"
             color="primary"
+            (click)="createGame()"
         >
             CREATE GAME
         </ion-button>
-        <ion-modal #createGameModal trigger="open-create-game-modal">
-            <ng-template>
-                <ion-content>
-                    <app-create-game-modal (modalResult)="onCreateGameModalResult($event)"></app-create-game-modal>
-                </ion-content>
-            </ng-template>
-        </ion-modal>
         <div class="spacer">or</div>
         <ion-button
-            id="open-join-game-modal"
             shape="round"
             [disabled]="disabled"
             color="tertiary"
+            (click)="joinNewGame()"
         >
             JOIN GAME
         </ion-button>
-        <ion-modal #joinGameModal trigger="open-join-game-modal">
-            <ng-template>
-                <ion-content [scrollY]="false">
-                    <app-join-game-modal (modalResult)="onJoinGameModalResult($event)"></app-join-game-modal>
-                </ion-content>
-            </ng-template>
-        </ion-modal>
     </div>
 
     <ion-content class="hub-table-container" [scrollY]="false">

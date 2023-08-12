@@ -1,15 +1,13 @@
-import { Component, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
-// import { CreateGameModalComponent } from 'src/app/components/create-game-modal/create-game-modal.component';
-// import { JoinNewGameModalComponent } from 'src/app/components/join-new-game-modal/join-new-game-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
-import { PoolComponent } from '../pool/pool.component';
-import { IonModal } from '@ionic/angular';
+import { DeviceService } from 'src/app/services/device/device.service';
+import { IonModal, ModalController } from '@ionic/angular';
+import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
+import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
 
 @Component({
   selector: 'app-hub',
@@ -28,20 +26,9 @@ export class HubComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private deviceService: DeviceService,
-    // private dialog: MatDialog,
+    private modalCtrl: ModalController,
     private poolService: PoolService,
-    private router: Router
-  ) {
-    /*
-    this.dialog.afterOpened.subscribe(() => {
-      this.disabled = true;
-    });
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.disabled = false;
-    });
-    */
-  }
+  ) {}
 
   ngOnInit(): void {
     this.profile = this.authService.getCurrentUser();
@@ -67,39 +54,25 @@ export class HubComponent implements OnInit, OnDestroy {
     this.ngOnDestroy();
   }
 
-  onCreateGameModalResult(poolID: number | null) {
-    this.createGameModal.dismiss(null, '');
-    if (poolID) {
-      this.router.navigate(['/', `pool`, poolID]);
-    }
+  /**
+   * Finds a PokerFlow device, creates a new game associated
+   * with that device and navigates to its pool view
+   */
+  async createGame() {
+    const modal = await this.modalCtrl.create({
+      component: CreateGameModalComponent
+    });
+    modal.present();
   }
 
   /**
    * Finds a PokerFlow device, displays available games associated 
    * with that device, and allows the user to join a game
    */
-  joinNewGame() {
-    /*
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        this.dialog.open(JoinNewGameModalComponent, {
-          hasBackdrop: false,
-          autoFocus: false,
-          data: {
-            device: device
-          }
-        }).afterClosed().subscribe((poolID: number) => {
-          if (poolID) this.router.navigate(['/', `pool`, poolID]);
-        });
-      }
+  async joinNewGame() {
+    const modal = await this.modalCtrl.create({
+      component: JoinGameModalComponent
     });
-    */
-  }
-
-  onJoinGameModalResult(poolID: number | null) {
-    this.joinGameModal.dismiss(null, '');
-    if (poolID) {
-      this.router.navigate(['/', `pool`, poolID]);
-    }
+    modal.present();
   }
 }
