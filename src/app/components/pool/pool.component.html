@@ -1,42 +1,41 @@
+<ion-footer>
+  <div class="main-buttons-container">
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="buyIn()"
+        [disabled]="disabled || !poolData?.settings?.buy_in_enabled"
+        color="primary"
+    >
+        BUY-IN
+    </ion-button>
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="cashOut()"
+        [disabled]="disabled || !poolData?.available_pot"
+        color="tertiary"
+    >
+        CASH-OUT
+    </ion-button>
+  </div>
+</ion-footer>
 <ion-content [scrollY]="false">
-        <div class="information-container">
-            <ion-content [scrollY]="false">
-                <ion-tabs>
-                    
-                    <ion-tab-bar slot="top">
-                      <ion-tab-button tab="pot">
-                        <ion-label>POOL</ion-label>
-                      </ion-tab-button>
-                  
-                      <ion-tab-button tab="activity">
-                        <ion-label>ACTIVITY</ion-label>
-                      </ion-tab-button>
-    
-                      <ion-tab-button tab="settings">
-                        <ion-label>SETTINGS</ion-label>
-                      </ion-tab-button>
-                    </ion-tab-bar>
-    
-                </ion-tabs>
-            </ion-content>
-        </div>
-        <div class="flow-container">
-            <ion-button
-                shape="round"
-                (click)="buyIn()"
-                [disabled]="disabled || !poolData?.settings?.buy_in_enabled"
-                color="primary"
-            >
-                BUY-IN
-            </ion-button>
-            <div class="spacer">or</div>
-            <ion-button
-                shape="round"
-                (click)="cashOut()"
-                [disabled]="disabled || !poolData?.available_pot"
-                color="tertiary"
-            >
-                CASH-OUT
-            </ion-button>
-        </div>
+    <ion-tabs>
+        
+        <ion-tab-bar slot="top">
+          <ion-tab-button tab="pot">
+            <ion-label>POOL</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="activity">
+            <ion-label>ACTIVITY</ion-label>
+          </ion-tab-button>
+
+          <ion-tab-button tab="settings">
+            <ion-label>SETTINGS</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+
+    </ion-tabs>
 </ion-content>

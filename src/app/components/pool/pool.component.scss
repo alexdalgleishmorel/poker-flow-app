@@ -1,25 +1,3 @@
-@import '../../../mixins.scss';
-
-.information-container {
-    width: calc(min(100vh, 100vw));
-    height: calc(175px + min(100vh, 100vw));
-}
-
-.flow-container {
-    width: 100%;
-    height: calc(100vh - (225px + min(100vh, 100vw)));;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.main-button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.spacer {
+.main-buttons-container {
     padding: 10px;
-    color: grey;
 }

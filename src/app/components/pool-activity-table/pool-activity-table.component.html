@@ -1,4 +1,4 @@
-<div [ngClass]="{'table-container': dataSource.length > 0, 'empty-table-container' : dataSource.length === 0 }">
+<div class="content">
     <ion-content *ngIf="dataSource.length > 0 else emptyTable">
         <ion-list [inset]="true">
             <ion-item *ngFor="let transaction of dataSource; let index">
@@ -29,7 +29,7 @@
     </ion-content>
 </div>
 
-<ng-template #emptyTable class="empty-table">
+<ng-template #emptyTable>
     <div class="empty-table-text">
         No pool activity found.
         <br/><br/>

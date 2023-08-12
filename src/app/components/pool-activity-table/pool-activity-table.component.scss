@@ -1,12 +1,4 @@
-.empty-table-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.empty-table {
+.content {
     width: 100%;
     height: 100%;
     display: flex;
@@ -21,12 +13,4 @@
 
 .spacer {
     padding: 10px;
-}
-
-.table-container {
-    height: 140vw;
-}
-
-ion-list {
-    overflow-y: scroll;
 }
