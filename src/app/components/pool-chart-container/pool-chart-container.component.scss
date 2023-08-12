@@ -1,8 +1,15 @@
 @import '../../../variables.scss';
+@import '../../../mixins.scss';
 
 .content {
     width: 100%;
     height: 100%;
+}
+
+.chart {
+    @include laptop {
+        width: 50vh;
+    }
 }
 
 ion-grid {
@@ -23,14 +30,10 @@ ion-col {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
 
-.empty-table {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include laptop {
+        align-items: center;
+    }
 }
 
 .empty-table-text {

@@ -1,6 +1,8 @@
 <div class="content">
     <div *ngIf="poolTotal else loading">
-        <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
+        <div class="chart">
+            <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
+        </div>
         <ion-grid>
             <ion-row>
                 <ion-col>
@@ -29,21 +31,19 @@
 </div>
 
 <ng-template #loading>
-    <div *ngIf="!poolData else emptyTable" class="empty-table">
+    <div *ngIf="!poolData else emptyTable">
         <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>
 
 <ng-template #emptyTable>
-    <div class="empty-table">
-        <div class="empty-table-text">
-            No pool activity found.
-            <br/><br/>
-            <span class="buy-in-text">
-                <ion-text color="primary"><b>BUY-IN</b></ion-text>
-            </span>
-            <br/>
-            to get started. 
-        </div>
+    <div class="empty-table-text">
+        No pool activity found.
+        <br/><br/>
+        <span class="buy-in-text">
+            <ion-text color="primary"><b>BUY-IN</b></ion-text>
+        </span>
+        <br/>
+        to get started. 
     </div>
 </ng-template>
