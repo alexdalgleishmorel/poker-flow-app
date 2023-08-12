@@ -3,65 +3,65 @@
       <ion-title>Create a new game</ion-title>
     </ion-toolbar>
 </ion-header>
-<div class="dialog-container">
-    <mat-stepper orientation="vertical" #stepper>
-        <mat-step state completed="false" [hasError]="!poolNameFormControl.valid" errorMessage="Pool name is required.">
-            <form [formGroup]="poolNameFormGroup">
-            <ng-template matStepLabel>Name your game</ng-template>
-            <ion-input 
-                label="Pool Name"
-                labelPlacement="stacked"
-                [formControl]="poolNameFormControl"
-                errorText="Required"
-            >
-            </ion-input>
-            </form>
-        </mat-step>
-        <mat-step state completed="false">
-            <ng-template matStepLabel>Chip Values</ng-template>
-            <div class="vertical-spacer"></div>
-            Choose the values for each chip
-            <div class="vertical-spacer"></div>
-            <app-chip-select [(denominations)]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
-        </mat-step>
-        <mat-step state completed="false">
-            <ng-template matStepLabel>Buy-In Limits</ng-template>
-            <div class="vertical-spacer"></div>
-            Choose the minimum and maximum buy-in values for the game
-            <div class="vertical-spacer"></div>
-            <ion-input
-                label="Minimum Buy-In"
-                labelPlacement="stacked"
-                type="number"
-                [min]="0"
-                [formControl]="minBuyInFormControl"
-                (focusout)="onMinBuyInFocusOut()"
-            >
-            </ion-input>
-            <ion-input
-                label="Maximum Buy-In"
-                labelPlacement="stacked"
-                type="number"
-                [min]="0"
-                [formControl]="maxBuyInFormControl"
-                (focusout)="onMaxBuyInFocusOut()"
-            >
-            </ion-input>
-        </mat-step>
-        <mat-step state completed="false">
-            <ng-template matStepLabel>Entry Password</ng-template>
-            <div class="vertical-spacer"></div>
-            Set an optional password for joining the game
-            <div class="vertical-spacer"></div>
-            <ion-input 
-                label="Password" 
-                type="password"
-                [formControl]="passwordFormControl"
-                errorText="Password is required"
-            >
-            </ion-input>
-        </mat-step>
-        </mat-stepper>
+<mat-stepper orientation="vertical" #stepper>
+    <mat-step state completed="false" [hasError]="!poolNameFormControl.valid" errorMessage="Pool name is required.">
+        <form [formGroup]="poolNameFormGroup">
+        <ng-template matStepLabel>Name your game</ng-template>
+        <ion-input 
+            label="Pool Name"
+            labelPlacement="stacked"
+            [formControl]="poolNameFormControl"
+            errorText="Required"
+        >
+        </ion-input>
+        </form>
+    </mat-step>
+    <mat-step state completed="false">
+        <ng-template matStepLabel>Chip Values</ng-template>
+        <div class="vertical-spacer"></div>
+        Choose the values for each chip
+        <div class="vertical-spacer"></div>
+        <app-chip-select [(denominations)]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
+    </mat-step>
+    <mat-step state completed="false">
+        <ng-template matStepLabel>Buy-In Limits</ng-template>
+        <div class="vertical-spacer"></div>
+        Choose the minimum and maximum buy-in values for the game
+        <div class="vertical-spacer"></div>
+        <ion-input
+            label="Minimum Buy-In"
+            labelPlacement="stacked"
+            type="number"
+            [min]="0"
+            [formControl]="minBuyInFormControl"
+            (focusout)="onMinBuyInFocusOut()"
+        >
+        </ion-input>
+        <ion-input
+            label="Maximum Buy-In"
+            labelPlacement="stacked"
+            type="number"
+            [min]="0"
+            [formControl]="maxBuyInFormControl"
+            (focusout)="onMaxBuyInFocusOut()"
+        >
+        </ion-input>
+    </mat-step>
+    <mat-step state completed="false">
+        <ng-template matStepLabel>Entry Password</ng-template>
+        <div class="vertical-spacer"></div>
+        Set an optional password for joining the game
+        <div class="vertical-spacer"></div>
+        <ion-input 
+            label="Password" 
+            type="password"
+            [formControl]="passwordFormControl"
+            errorText="Password is required"
+        >
+        </ion-input>
+    </mat-step>
+</mat-stepper>
+<div class="modal-buttons-container">
     <ion-button
         class="create-button"
         color="primary"

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
@@ -9,6 +9,7 @@ import { AuthService, Profile } from 'src/app/services/auth/auth.service';
 import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
 import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { PoolComponent } from '../pool/pool.component';
+import { IonModal } from '@ionic/angular';
 
 @Component({
   selector: 'app-hub',
@@ -16,6 +17,7 @@ import { PoolComponent } from '../pool/pool.component';
   styleUrls: ['./hub.component.scss']
 })
 export class HubComponent implements OnInit, OnDestroy {
+  @ViewChild('createGameModal') createGameModal!: IonModal;
   
   public disabled: boolean = false;
   public poolData?: PoolData[];
@@ -64,28 +66,11 @@ export class HubComponent implements OnInit, OnDestroy {
     this.ngOnDestroy();
   }
 
-  /**
-   * Finds a PokerFlow device, creates a new game associated
-   * with that device and navigates to its pool view
-   */
-  createGame() {
-    /*
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        this.dialog.open(CreateGameModalComponent, {
-          hasBackdrop: false,
-          autoFocus: false,
-          data: {
-            device: device
-          }
-        }).afterClosed().subscribe((poolCreationResponse: PoolData) => {
-          if (poolCreationResponse) {
-            this.router.navigate(['/', `pool`, poolCreationResponse.id]);
-          }
-        });
-      }
-    });
-    */
+  onCreateGameModalResult(createdPoolID: number | null) {
+    this.createGameModal.dismiss(null, '');
+    if (createdPoolID) {
+      this.router.navigate(['/', `pool`, createdPoolID]);
+    }
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
 import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
@@ -10,6 +10,8 @@ import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
   styleUrls: ['./create-game-modal.component.scss']
 })
 export class CreateGameModalComponent {
+  @Output() modalResult = new EventEmitter<number|null>;
+
   public poolNameFormControl = new FormControl('', [Validators.required]);
 
   public poolNameFormGroup: FormGroup = this._formBuilder.group({
@@ -81,22 +83,22 @@ export class CreateGameModalComponent {
   }
 
   createGame() {
-    console.log('trying to submit!');
-    // if (!this.mainFormGroup.valid) return;
+    if (!this.mainFormGroup.valid || !this.device) {
+      return;
+    }
 
-    // this.poolSettings.denominations.sort((a,b)=>a-b);
-    // this.poolService.createPool(
-    //   this.poolNameFormControl.value!,
-    //   this.device.id!,
-    //   this.poolSettings
-    // ).then((poolCreationResponse) => {
-    //   this.dialogRef.close(poolCreationResponse);
-    // });
+    this.poolSettings.denominations.sort((a,b)=>a-b);
+    this.poolService.createPool(
+      this.poolNameFormControl.value!,
+      this.device.id!,
+      this.poolSettings
+    ).then((poolCreationResponse: any) => {
+      this.modalResult.emit(poolCreationResponse.id);
+    });
   }
 
   cancel() {
-    console.log('trying to cancel!');
-    //this.dialogRef.close(null);
+    this.modalResult.emit(null);
   }
 
   trackByFn(index: any, item: any) {

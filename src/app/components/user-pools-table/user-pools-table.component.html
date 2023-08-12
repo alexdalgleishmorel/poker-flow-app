@@ -1,21 +1,23 @@
 <div [ngClass]="{'table-container': dataSource.length > 0, 'empty-table-container' : dataSource.length === 0 }">
-    <ion-list *ngIf="dataSource.length > 0 else emptyTable" [inset]="true">
-        <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool.id.toString())">
-            <ion-icon name="people-outline" color="primary"></ion-icon>
-            <div class="spacer"></div>
-            <ion-text>
-                <br/>
-                <b>{{ pool.name }}</b>
-                <br/>
-                <sub>
-                    {{pool.contributors.length}} contributors | ${{pool.available_pot.toFixed(2)}} pot
-                </sub>
-                <br/>
-                <br/>
-
-            </ion-text>
-        </ion-item>
-    </ion-list>
+    <ion-content>
+        <ion-list *ngIf="dataSource.length > 0 else emptyTable" [inset]="true">
+            <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool.id.toString())">
+                <ion-icon name="people-outline" color="primary"></ion-icon>
+                <div class="spacer"></div>
+                <ion-text>
+                    <br/>
+                    <b>{{ pool.name }}</b>
+                    <br/>
+                    <sub>
+                        {{pool.contributors.length}} contributors | ${{pool.available_pot.toFixed(2)}} pot
+                    </sub>
+                    <br/>
+                    <br/>
+    
+                </ion-text>
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </div>
 
 <ng-template #emptyTable class="empty-table">

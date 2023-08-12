@@ -1,23 +1,23 @@
 <ion-content [scrollY]="false">
     <div class="main-button-container">
         <ion-button
-            id="open-modal"
+            id="open-create-game-modal"
             shape="round"
-            (click)="createGame()"
             [disabled]="disabled"
             color="primary"
         >
             CREATE GAME
         </ion-button>
-        <ion-modal trigger="open-modal">
+        <ion-modal #createGameModal trigger="open-create-game-modal">
             <ng-template>
-                <app-create-game-modal></app-create-game-modal>
+                <ion-content>
+                    <app-create-game-modal (modalResult)="onCreateGameModalResult($event)"></app-create-game-modal>
+                </ion-content>
             </ng-template>
         </ion-modal>
         <div class="spacer">or</div>
         <ion-button
             shape="round"
-            (click)="joinNewGame()"
             [disabled]="disabled"
             color="tertiary"
         >
