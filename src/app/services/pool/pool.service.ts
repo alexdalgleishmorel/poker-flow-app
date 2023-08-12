@@ -134,16 +134,16 @@ export class PoolService {
     }));
   }
 
-  joinPool(pool: PoolData, password?: string) {
+  joinPool(poolID: number, password?: string) {
 
     const poolJoinRequest: PoolJoinRequest = {
-      pool_id: pool.id,
+      pool_id: poolID,
       profile_id: this.authService.getCurrentUser()?.id!,
       password: password ? password : ''
     };
 
     return this.apiService.post('/pool/join', poolJoinRequest).pipe(
-      map(() => pool.id)
+      map(() => poolID)
     );
   }
 

@@ -13,20 +13,14 @@
 }
 
 .table-container {
-    height: 60vh;
-    @include mobile {
-        height: 75vh;
-    }
+    height: 100%;
 }
 
 .empty-table-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh;
-    @include mobile {
-        height: 75vh;
-    }
+    height: 100%;
 }
 
 .empty-table {

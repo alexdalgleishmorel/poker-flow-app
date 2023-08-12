@@ -31,6 +31,7 @@ import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 import { ChipSelectComponent } from './components/chip-select/chip-select.component';
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
+import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { CreateGameModalComponent } from './components/create-game-modal/create-
     ChipSelectComponent,
     CreateGameModalComponent,
     HubComponent,
+    JoinGameModalComponent,
     LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,

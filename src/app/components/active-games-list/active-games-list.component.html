@@ -1,5 +1,5 @@
 <div class="content" *ngIf="pools else loading">
-    <app-user-pools-table [dataSource]="pools"></app-user-pools-table>
+    <app-user-pools-table [dataSource]="pools" [registerUser]="registerUser" (onPoolSelect)="poolSelect($event)"></app-user-pools-table>
 </div>
 
 <ng-template #loading>

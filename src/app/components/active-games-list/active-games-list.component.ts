@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -7,7 +7,8 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
   styleUrls: ['./active-games-list.component.scss'],
 })
 export class ActiveGamesListComponent implements OnInit {
-
+  @Input() registerUser: boolean = false;
+  @Output() onPoolSelect: EventEmitter<number> = new EventEmitter<number>();
   public pools?: PoolData[];
 
   constructor(
@@ -20,4 +21,7 @@ export class ActiveGamesListComponent implements OnInit {
     })
   }
 
+  poolSelect(poolID: number) {
+    this.onPoolSelect.emit(poolID);
+  }
 }

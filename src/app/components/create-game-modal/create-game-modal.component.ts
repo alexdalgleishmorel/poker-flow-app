@@ -55,6 +55,7 @@ export class CreateGameModalComponent {
     this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
       if (device) {
         this.device = device;
+        //this.device.assignDeviceStatus();
         this.device.status.subscribe(() => {
           if (device.id) {
             this.minBuyInFormControl.valueChanges.subscribe((value) => {

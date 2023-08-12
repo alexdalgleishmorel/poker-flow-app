@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>Join a game</ion-title>
+    </ion-toolbar>
+</ion-header>
+<div class="list">
+    <app-active-games-list [registerUser]="true" (onPoolSelect)="joinGame($event, false)"></app-active-games-list>
+</div>
+<div class="modal-buttons-container">
+    <ion-button
+        class="cancel-button"
+        color="light"
+        (click)="cancel()"
+        shape="round"
+        expand="block"
+    >
+        CANCEL
+    </ion-button>
+</div>

@@ -18,6 +18,7 @@ import { IonModal } from '@ionic/angular';
 })
 export class HubComponent implements OnInit, OnDestroy {
   @ViewChild('createGameModal') createGameModal!: IonModal;
+  @ViewChild('joinGameModal') joinGameModal!: IonModal;
   
   public disabled: boolean = false;
   public poolData?: PoolData[];
@@ -66,10 +67,10 @@ export class HubComponent implements OnInit, OnDestroy {
     this.ngOnDestroy();
   }
 
-  onCreateGameModalResult(createdPoolID: number | null) {
+  onCreateGameModalResult(poolID: number | null) {
     this.createGameModal.dismiss(null, '');
-    if (createdPoolID) {
-      this.router.navigate(['/', `pool`, createdPoolID]);
+    if (poolID) {
+      this.router.navigate(['/', `pool`, poolID]);
     }
   }
 
@@ -93,5 +94,12 @@ export class HubComponent implements OnInit, OnDestroy {
       }
     });
     */
+  }
+
+  onJoinGameModalResult(poolID: number | null) {
+    this.joinGameModal.dismiss(null, '');
+    if (poolID) {
+      this.router.navigate(['/', `pool`, poolID]);
+    }
   }
 }
