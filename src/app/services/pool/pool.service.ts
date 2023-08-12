@@ -142,9 +142,7 @@ export class PoolService {
       password: password ? password : ''
     };
 
-    return this.apiService.post('/pool/join', poolJoinRequest).pipe(
-      map(() => poolID)
-    );
+    return this.apiService.post('/pool/join', poolJoinRequest);
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {

@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-// import { PasswordModalComponent } from '../password-modal/password-modal.component';
-import { catchError, firstValueFrom, of, throwError } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { ModalController } from '@ionic/angular';
 import { PasswordModalComponent } from '../common/password-modal/password-modal.component';
@@ -13,7 +12,6 @@ import { PasswordModalComponent } from '../common/password-modal/password-modal.
 })
 export class JoinGameModalComponent {
   public games: any[] = [];
-  @Output() modalResult = new EventEmitter<number|null>;
 
   constructor(
     private deviceService: DeviceService,
@@ -35,7 +33,7 @@ export class JoinGameModalComponent {
   }
 
   cancel() {
-    this.modalResult.emit(null);
+    this.modalCtrl.dismiss(null);
   }
 
   async joinGame(poolData: PoolData, retry: boolean = false) {
@@ -61,7 +59,7 @@ export class JoinGameModalComponent {
           )
           .subscribe((response: any) => {
             if (!response.error) {
-              this.modalCtrl.dismiss(response);
+              this.modalCtrl.dismiss(poolData.id);
             }
             else {
               this.joinGame(poolData, true);
@@ -69,8 +67,9 @@ export class JoinGameModalComponent {
           });
       }
     } else {
-      const poolID = await firstValueFrom(this.poolService.joinPool(poolData.id));
-      this.modalResult.emit(poolID);
+      this.poolService.joinPool(poolData.id).subscribe(() => {
+        this.modalCtrl.dismiss(poolData.id);
+      });
     }
   }
 }
