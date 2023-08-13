@@ -3,7 +3,7 @@
         <div>
             <ion-text><h3>Your chips are being dispensed</h3></ion-text>
             <div class="spacer"></div>
-            <ion-progress-bar [buffer]="0.1" [value]="getChipWithdrawalProgress()"></ion-progress-bar>
+            <ion-progress-bar [buffer]="0.01" [value]="getChipWithdrawalProgress()"></ion-progress-bar>
             <div class="spacer"></div>
             <app-chip-view [denominations]="denominations" [assignments]="device ? withdrawalRequestStatus : []">
             </app-chip-view>

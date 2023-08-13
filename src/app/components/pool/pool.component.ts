@@ -1,11 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-pool',
@@ -22,9 +23,11 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController,
   ) {}
 
   ngOnInit(): void {
@@ -63,7 +66,12 @@ export class PoolComponent implements OnInit, OnDestroy {
    * Handles chip withdrawal
    */
   async buyIn() {
-    const modal = await this.modalCtrl.create({
+    if (!this.poolData) {
+      return;
+    }
+
+    // Presenting buy-in modal
+    let modal = await this.modalCtrl.create({
       component: BuyInModalComponent,
       componentProps: {
         minBuyIn: this.poolData?.settings.min_buy_in,
@@ -75,60 +83,35 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
 
-    if (deviceWithdrawalRequest) {
-      const modal = await this.modalCtrl.create({
-        component: ChipWithdrawalModalComponent,
-        componentProps: {
-          denominations: this.poolData?.settings.denominations,
-          withdrawalRequest: deviceWithdrawalRequest
-        }
-      });
-      modal.present();
+    if (!deviceWithdrawalRequest) {
+      return;
     }
 
-    /*
-        }).afterClosed().subscribe((deviceWithdrawalRequest: DeviceWithdrawalRequest) => {
-          if (deviceWithdrawalRequest) {
-            this.dialog.open(ChipWithdrawalModalComponent, {
-              hasBackdrop: false,
-              autoFocus: false,
-              data: {
-                device: device,
-                denominations: this.poolData?.settings.denominations,
-                withdrawal_request: deviceWithdrawalRequest
-              }
-            }).afterClosed()
-              .pipe(
-                catchError((error) => {
-                  return throwError(() => new Error(error))
-                })
-              )
-              .subscribe(() => {
-                this.poolService.postTransaction({
-                  pool_id: this.id,
-                  profile_id: this.authService.getCurrentUser()?.id,
-                  type: TransactionType.BUY_IN,
-                  amount: deviceWithdrawalRequest.amount
-                }).subscribe((transactionResponse: any) => {
-                  this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
-                    .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-                  this.dialog.open(TransactionConfirmationModalComponent, {
-                    hasBackdrop: false,
-                    autoFocus: false,
-                    data: {
-                      type: TransactionType.BUY_IN,
-                      amount: transactionResponse.amount,
-                      denominations: this.poolData?.settings.denominations,
-                      assignments: deviceWithdrawalRequest.denominations
-                    }
-                  });
-                });
-              });
-          }
-        });
+    // Displaying chip withdrawal modal if buy-in interaction was valid
+    modal = await this.modalCtrl.create({
+      component: ChipWithdrawalModalComponent,
+      componentProps: {
+        denominations: this.poolData?.settings.denominations,
+        withdrawalRequest: deviceWithdrawalRequest
       }
     });
-    */
+    modal.present();
+
+    const chipWithdrawalResponse = (await modal.onWillDismiss()).data;
+
+    // Updating database with new transaction
+    this.poolService.postTransaction({
+      pool_id: this.poolData?.id,
+      profile_id: this.authService.getCurrentUser()?.id,
+      type: TransactionType.BUY_IN,
+      amount: deviceWithdrawalRequest.amount
+    }).subscribe(() => {
+      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+        .subscribe((poolData: PoolData) => { 
+          this.poolData = {...poolData};
+          this.displayTransactionSuccess('BUY-IN');
+        });
+    });      
   }
 
   /**
@@ -175,6 +158,29 @@ export class PoolComponent implements OnInit, OnDestroy {
       }
     });
     */
+  }
+
+  async displayTransactionSuccess(transactionType: string) {
+    const toastButtons = [
+      {
+        text: 'VIEW',
+        handler: () => { this.router.navigate(['/', `pool`, this.poolData?.id, 'activity']); }
+      },
+      {
+        text: 'DISMISS',
+        role: 'cancel',
+      }
+    ];
+    const toast = await this.toastController.create({
+      cssClass: 'transaction-toast',
+      message: `${transactionType} CONFIRMED`,
+      duration: 3000,
+      position: 'top',
+      color: 'success',
+      buttons: toastButtons
+    });
+
+    await toast.present();
   }
 
   /**
