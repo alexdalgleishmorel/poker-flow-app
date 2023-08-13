@@ -33,11 +33,13 @@ import { ChipSelectComponent } from './components/chip-select/chip-select.compon
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
 import { PasswordModalComponent } from './components/common/password-modal/password-modal.component';
+import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActiveGamesListComponent,
+    BuyInModalComponent,
     ChipViewComponent,
     ChipSelectComponent,
     CreateGameModalComponent,

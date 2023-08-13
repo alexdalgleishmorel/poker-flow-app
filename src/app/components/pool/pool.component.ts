@@ -1,15 +1,10 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
-// import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
-// import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
-import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { catchError, Subscription, interval, of, startWith, switchMap, throwError } from 'rxjs';
-import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
-// import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
-// import { TransactionConfirmationModalComponent } from '../transaction-confirmation-modal/transaction-confirmation-modal.component';
+import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -26,21 +21,10 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    // private authService: AuthService,
-    // private deviceService: DeviceService,
-    // private dialog: MatDialog,
+    private modalCtrl: ModalController,
     private poolService: PoolService,
     private router: Router
-  ) {
-    /*
-    this.dialog.afterOpened.subscribe(() => {
-      this.disabled = true;
-    });
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.disabled = false;
-    });
-    */
-  }
+  ) {}
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params['id'];
@@ -75,9 +59,18 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Connects to a PokerFlow device, validates user buy-in, and commands device to dispense chips
+   * Handles chip withdrawal
    */
-  buyIn() {
+  async buyIn() {
+    const modal = await this.modalCtrl.create({
+      component: BuyInModalComponent,
+      componentProps: {
+        minBuyIn: this.poolData?.settings.min_buy_in,
+        maxBuyIn: this.poolData?.settings.max_buy_in,
+        denominations: this.poolData?.settings.denominations
+      }
+    });
+    modal.present();
     /*
     this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
       if (device) {
@@ -133,7 +126,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Connects to a PokerFlow device, and handles chip deposit
+   * Handles chip deposit
    */
   cashOut() {
     /*

@@ -142,4 +142,13 @@ export class CreateGameModalComponent {
   onMaxBuyInFocusOut() {
     if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(DEFAULT_MAX_BUY_IN);
   }
+
+  decimalFilter(event: any) {
+    const reg = /^-?\d*(\.\d{0,1})?$/;
+    let input = event.target.value + String.fromCharCode(event.charCode);
+ 
+    if (!reg.test(input)) {
+        event.preventDefault();
+    }
+  }
 }

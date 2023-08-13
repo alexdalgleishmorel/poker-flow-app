@@ -42,7 +42,6 @@ export class JoinGameModalComponent {
       const modal = await this.modalCtrl.create({
         component: PasswordModalComponent,
         componentProps: {
-          poolName: poolData.name,
           retry: retry
         }
       });

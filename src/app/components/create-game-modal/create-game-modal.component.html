@@ -59,6 +59,7 @@
                 [min]="0"
                 [formControl]="minBuyInFormControl"
                 (focusout)="onMinBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
                 errorText="Minimum and maximum values conflict"
             >
             </ion-input>
@@ -69,6 +70,7 @@
                 [min]="0"
                 [formControl]="maxBuyInFormControl"
                 (focusout)="onMaxBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
                 errorText="Minimum and maximum values conflict"
             >
             </ion-input>

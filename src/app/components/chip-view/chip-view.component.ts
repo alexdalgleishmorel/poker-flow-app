@@ -33,4 +33,8 @@ export class ChipViewComponent {
   @Input() denominations: number[] = [];
   @Input() assignments: number[] = [];
   @Input() viewOnly: boolean = false;
+
+  hasAssignments(): boolean {
+    return this.assignments.length !== 0;
+  }
 }
