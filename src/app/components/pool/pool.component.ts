@@ -5,6 +5,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
+import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -71,16 +72,21 @@ export class PoolComponent implements OnInit, OnDestroy {
       }
     });
     modal.present();
+
+    const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
+
+    if (deviceWithdrawalRequest) {
+      const modal = await this.modalCtrl.create({
+        component: ChipWithdrawalModalComponent,
+        componentProps: {
+          denominations: this.poolData?.settings.denominations,
+          withdrawalRequest: deviceWithdrawalRequest
+        }
+      });
+      modal.present();
+    }
+
     /*
-    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
-      if (device) {
-        this.dialog.open(BuyInModalComponent, {
-          hasBackdrop: false,
-          autoFocus: true,
-          data: {
-            device: device,
-            poolSettings: this.poolData?.settings
-          }
         }).afterClosed().subscribe((deviceWithdrawalRequest: DeviceWithdrawalRequest) => {
           if (deviceWithdrawalRequest) {
             this.dialog.open(ChipWithdrawalModalComponent, {

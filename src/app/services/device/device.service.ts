@@ -26,8 +26,16 @@ export class DeviceService {
     //return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
   }
 
-  withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
+  async withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
     // device.withdrawChips(withdrawalRequest);
+
+    device.withdrawalRequestStatus?.next(withdrawalRequest.denominations);
+    for (let i = 0; i < 5; i++) {
+      await delay(1000);
+      let status = device?.withdrawalRequestStatus?.getValue()!;
+      status[0]--;
+      device.withdrawalRequestStatus?.next(status);
+    }
   }
 }
 
@@ -182,3 +190,7 @@ function bluetoothToJson(data: DataView) {
   return JSON.parse(jsonString);
 }
 */
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
