@@ -35,12 +35,14 @@ import { JoinGameModalComponent } from './components/join-game-modal/join-game-m
 import { PasswordModalComponent } from './components/common/password-modal/password-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
+import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ActiveGamesListComponent,
     BuyInModalComponent,
+    ChipDepositModalComponent,
     ChipViewComponent,
     ChipSelectComponent,
     ChipWithdrawalModalComponent,

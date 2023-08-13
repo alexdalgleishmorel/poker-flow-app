@@ -7,6 +7,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -117,47 +118,39 @@ export class PoolComponent implements OnInit, OnDestroy {
   /**
    * Handles chip deposit
    */
-  cashOut() {
-    /*
-    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
-      if (device) {
-        this.dialog.open(ChipDepositModalComponent, {
-          hasBackdrop: false,
-          autoFocus: false,
-          data: {
-            device: device,
-            denominations: this.poolData?.settings.denominations
-          }
-        }).afterClosed()
-          .pipe(
-            catchError((error) => {
-              return throwError(() => new Error(error))
-            })
-          )
-          .subscribe((cashOutValue: number) => {
-            this.poolService.postTransaction({
-              pool_id: this.id,
-              profile_id: this.authService.getCurrentUser()?.id,
-              type: TransactionType.CASH_OUT,
-              amount: cashOutValue
-            }).subscribe((transactionResponse: any) => {
-              this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
-                .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-              this.dialog.open(TransactionConfirmationModalComponent, {
-                hasBackdrop: false,
-                autoFocus: false,
-                data: {
-                  type: TransactionType.CASH_OUT,
-                  amount: transactionResponse.amount,
-                  denominations: this.poolData?.settings.denominations,
-                  assignments: device.depositRequestStatus?.getValue()
-                }
-              });
-            });
-          });
+  async cashOut() {
+    if (!this.poolData) {
+      return;
+    }
+
+    // Presenting chip deposit modal
+    let modal = await this.modalCtrl.create({
+      component: ChipDepositModalComponent,
+      componentProps: {
+        denominations: this.poolData?.settings.denominations
       }
     });
-    */
+    modal.present();
+
+    const totalDepositValue = (await modal.onWillDismiss()).data;
+
+    if (!totalDepositValue) {
+      return;
+    }
+
+    // Updating database with new transaction
+    this.poolService.postTransaction({
+      pool_id: this.poolData?.id,
+      profile_id: this.authService.getCurrentUser()?.id,
+      type: TransactionType.CASH_OUT,
+      amount: totalDepositValue
+    }).subscribe(() => {
+      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+        .subscribe((poolData: PoolData) => { 
+          this.poolData = {...poolData};
+          this.displayTransactionSuccess('CASH-OUT');
+        });
+    });
   }
 
   async displayTransactionSuccess(transactionType: string) {

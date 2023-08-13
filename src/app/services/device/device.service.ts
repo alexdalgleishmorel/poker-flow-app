@@ -52,6 +52,18 @@ export class PokerFlowDevice {
   public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+
+  async startChipDeposit() {
+    this.depositRequestStatus?.next([0,0,0,0,0]);
+    for (let i = 0; i < 6; i++) {
+      await delay(1000);
+      let status = this.depositRequestStatus?.getValue()!;
+      status[0]++;
+      this.depositRequestStatus?.next(status);
+    }
+  }
+
+  async completeChipDeposit() {}
 }
 
 /*
