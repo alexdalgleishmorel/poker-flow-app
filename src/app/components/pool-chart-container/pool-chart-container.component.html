@@ -1,0 +1,49 @@
+<div class="content">
+    <div *ngIf="poolTotal else loading">
+        <div class="chart">
+            <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
+        </div>
+        <ion-grid>
+            <ion-row>
+                <ion-col>
+                    <ion-text>
+                        <h1>
+                            Total<br/>
+                            <ion-text color="primary">
+                                ${{poolTotal.toFixed(2)}}
+                            </ion-text>
+                        </h1>
+                    </ion-text>
+                </ion-col>
+                <ion-col>
+                    <ion-text>
+                        <h1>
+                            Available<br/>
+                            <ion-text class="availablePotText">
+                                ${{poolData ? poolData.available_pot.toFixed(2) : 0}}
+                            </ion-text>
+                        </h1>
+                    </ion-text>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div *ngIf="!poolData else emptyTable">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>
+
+<ng-template #emptyTable>
+    <div class="empty-table-text">
+        No pool activity found.
+        <br/><br/>
+        <span class="buy-in-text">
+            <ion-text color="primary"><b>BUY-IN</b></ion-text>
+        </span>
+        <br/>
+        to get started. 
+    </div>
+</ng-template>

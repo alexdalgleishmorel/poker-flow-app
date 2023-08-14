@@ -1,31 +1,38 @@
-<div mat-dialog-content>
-    <h1 mat-dialog-title class="title">Deposit your chips now</h1>
-    <div class="loading-container">
-        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-        <div class="spacer"></div>
-        <app-chip-view [denominations]="denominations" [assignments]="data.device ? data.device.depositRequestStatus : []"></app-chip-view>
-    </div>
-    <div class="spacer"></div>
-    <div class="message">
-        <p>Press <b class="done-text">DONE</b> when all chips are deposited.</p>
-    </div>
-    <div class="spacer"></div>
-    <div class="buttons-container">
-        <button
-        class="cancel-button"
-        mat-raised-button
-        (click)="cancelDeposit()"
-        >
-            CANCEL
-        </button>
-        <div class="spacer"></div>
-        <button
-        class="cancel-button"
-        mat-raised-button
-        color="accent"
-        (click)="completeDeposit()"
+<ion-footer>
+    <div class="modal-buttons-container">
+        <ion-button
+            class="deposit-button"
+            color="primary"
+            (click)="completeDeposit()"
+            shape="round"
+            expand="block"
         >
             DONE
-        </button>
+        </ion-button>
+        <ion-button
+            class="cancel-button"
+            color="light"
+            (click)="cancelDeposit()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
     </div>
-</div>
+</ion-footer>
+
+<ion-content [scrollY]="false">
+    <div class="content">
+        <div>
+            <ion-text><h3>Deposit your chips now</h3></ion-text>
+            <div class="spacer"></div>
+            <ion-progress-bar [value]="0" [buffer]="0" type="determinate"></ion-progress-bar>
+            <div class="spacer"></div>
+            <ion-text color="primary"><h1><b>${{calculateDepositTotal().toFixed(2)}}</b></h1></ion-text>
+            <app-chip-view [denominations]="denominations" [assignments]="depositRequestStatus">
+            </app-chip-view>
+            <div class="spacer"></div>
+            <ion-text>Press <ion-text color="primary"><b>DONE</b></ion-text> when all chips are deposited</ion-text>
+        </div>
+    </div>
+</ion-content>

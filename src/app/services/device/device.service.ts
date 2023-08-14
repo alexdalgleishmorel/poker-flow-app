@@ -21,11 +21,21 @@ export class DeviceService {
 
   async connectToDevice(deviceID?: number): Promise<PokerFlowDevice|null> {
     const pokerFlowDevice = new PokerFlowDevice();
-    return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
+    pokerFlowDevice.status.next(true);
+    return Promise.resolve(pokerFlowDevice);
+    //return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
   }
 
-  withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
-    device.withdrawChips(withdrawalRequest);
+  async withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
+    // device.withdrawChips(withdrawalRequest);
+
+    device.withdrawalRequestStatus?.next(withdrawalRequest.denominations);
+    for (let i = 0; i < 5; i++) {
+      await delay(1000);
+      let status = device?.withdrawalRequestStatus?.getValue()!;
+      status[0]--;
+      device.withdrawalRequestStatus?.next(status);
+    }
   }
 }
 
@@ -33,6 +43,30 @@ export interface DeviceWithdrawalRequest {
   amount: number;
   denominations: number[];
 }
+
+export class PokerFlowDevice {
+  private bluetooth?: any;
+  public id: number = 1;
+  public slots: number = 5;
+  public inventory: number[] = [10, 10, 10, 10, 10];
+  public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+
+  async startChipDeposit() {
+    this.depositRequestStatus?.next([0,0,0,0,0]);
+    for (let i = 0; i < 6; i++) {
+      await delay(1000);
+      let status = this.depositRequestStatus?.getValue()!;
+      status[0]++;
+      this.depositRequestStatus?.next(status);
+    }
+  }
+
+  async completeChipDeposit() {}
+}
+
+/*
 
 export class PokerFlowDevice {
 
@@ -166,4 +200,9 @@ function bluetoothToJson(data: DataView) {
   const numberArray = Array.from(uint8Array);
   const jsonString = String.fromCharCode.apply(null, numberArray);
   return JSON.parse(jsonString);
+}
+*/
+
+function delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
 }

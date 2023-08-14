@@ -16,21 +16,15 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
-    "useDefineForClassFields": false,
+    "target": "es2022",
+    "module": "es2020",
     "lib": [
-      "ES2022",
+      "es2018", 
       "dom"
     ],
-    "types": [
-      "web-bluetooth"
-    ],
+    "useDefineForClassFields": false,
     "paths": {
-      "@mixins": ["src/mixins"],
       "@constants": ["src/constants"],
-      "@variables": ["src/variables"],
-      "@components": ["src/app/components"]
     }
   },
   "angularCompilerOptions": {

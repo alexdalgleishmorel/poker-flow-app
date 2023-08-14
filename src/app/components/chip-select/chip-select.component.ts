@@ -1,7 +1,6 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN } from '@constants';
-import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-chip-select',
@@ -9,7 +8,6 @@ import { debounceTime } from 'rxjs';
   styleUrls: ['./chip-select.component.scss']
 })
 export class ChipSelectComponent implements OnChanges {
-  @ViewChild("denominationInput") denominationInput!: ElementRef;
   @Input() denominations: number[] = DEFAULT_DENOMINATIONS;
   @Output() denominationsChange = new EventEmitter<number[]>;
   @Input() maxBuyIn: number = DEFAULT_MAX_BUY_IN;
@@ -39,7 +37,6 @@ export class ChipSelectComponent implements OnChanges {
   chipSelect(index: number) {
     this.selectedSlot = index;
     this.chipDenominationControl.setValue(this.denominations[this.selectedSlot]);
-    this.denominationInput.nativeElement.focus();
   }
 
   decimalFilter(event: any) {
@@ -56,43 +53,23 @@ export class ChipSelectComponent implements OnChanges {
       
       const value = control.value;
 
-      if (value > 1000 && value % 1000 !== 0) return {'badMultipleError': true};
+      if (value > 1000 && value % 1000 !== 0) {
+        return {'badMultipleError': true};
+      }
 
-      if (value > this.maxBuyIn) return {'maxBuyInError': true};
+      if (value > this.maxBuyIn) {
+        return {'maxBuyInError': true};
+      }
       
       return null;
     }
   }
 
-  onBlur() {
+  onFocusOut() {
     if (!this.chipDenominationControl.value) this.chipDenominationControl.setValue(DEFAULT_DENOMINATIONS[this.selectedSlot]);
   }
 
   ngOnChanges() {
     this.chipDenominationControl.updateValueAndValidity();
   }
-}
-
-@Pipe({
-  name: 'thousandSuff'
-})
-export class ThousandSuffixesPipe implements PipeTransform {
-
-  transform(input: any, args?: any): any {
-    var exp, rounded,
-      suffixes = ['K', 'M', 'B', 'T', 'P', 'E'];
-
-    if (Number.isNaN(input)) {
-      return null;
-    }
-
-    if (input < 1000) {
-      return input;
-    }
-
-    exp = Math.floor(Math.log(input) / Math.log(1000));
-
-    return (input / Math.pow(1000, exp)).toFixed(args) + suffixes[exp - 1];
-  }
-
 }

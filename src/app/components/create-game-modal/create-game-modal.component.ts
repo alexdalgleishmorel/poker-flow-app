@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
-import { PokerFlowDevice } from 'src/app/services/device/device.service';
+import { ModalController } from '@ionic/angular';
+import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -17,8 +18,8 @@ export class CreateGameModalComponent {
     poolName: this.poolNameFormControl,
   });
 
-  public minBuyInFormControl = new FormControl(`${DEFAULT_MIN_BUY_IN}`, [Validators.required]);
-  public maxBuyInFormControl = new FormControl(`${DEFAULT_MAX_BUY_IN}`, [Validators.required]);
+  public minBuyInFormControl = new FormControl(DEFAULT_MIN_BUY_IN, [Validators.required]);
+  public maxBuyInFormControl = new FormControl(DEFAULT_MAX_BUY_IN, [Validators.required]);
 
   public buyInFormGroup: FormGroup = this._formBuilder.group({
     minBuyInFormControl: this.minBuyInFormControl,
@@ -43,68 +44,111 @@ export class CreateGameModalComponent {
     max_buy_in: DEFAULT_MAX_BUY_IN,
     denominations: DEFAULT_DENOMINATIONS
   };
-  public device: PokerFlowDevice;
+  public device?: PokerFlowDevice;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: any,
-    private dialogRef: MatDialogRef<CreateGameModalComponent>,
+    private deviceService: DeviceService,
+    private modalCtrl: ModalController,
     private poolService: PoolService,
+    private router: Router,
     private _formBuilder: FormBuilder
   ) {
 
-    this.device = data.device;
-    this.device.assignDeviceStatus();
-    this.device.status.subscribe(() => {
-      if (this.device.id) {
-        this.minBuyInFormControl.valueChanges.subscribe((value) => {
-          this.poolSettings.min_buy_in = value ? +value : DEFAULT_MIN_BUY_IN;
+    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
+      if (device) {
+        this.device = device;
+        //this.device.assignDeviceStatus();
+        this.device.status.subscribe(() => {
+          if (device.id) {
+            this.minBuyInFormControl.valueChanges.subscribe((value) => {
+              this.validateMinBuyIn(value);
+              this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+              this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
+            });
+        
+            this.maxBuyInFormControl.valueChanges.subscribe((value) => {
+              this.validateMaxBuyIn(value);
+              this.validateMinBuyIn(this.minBuyInFormControl.value);
+              this.poolSettings.max_buy_in = value ? value : DEFAULT_MAX_BUY_IN;
+            });
+        
+            this.passwordFormControl.valueChanges.subscribe((value) => {
+              this.poolSettings.has_password = value ? true : false;
+              this.poolSettings.password = value ? value : '';
+            });
+        
+            this.poolSettings = {
+              has_password: false,
+              min_buy_in: DEFAULT_MIN_BUY_IN,
+              max_buy_in: DEFAULT_MAX_BUY_IN,
+              denominations: DEFAULT_DENOMINATIONS.slice(0, device.slots)
+            }
+          }
         });
-    
-        this.maxBuyInFormControl.valueChanges.subscribe((value) => {
-          this.poolSettings.max_buy_in = value ? +value : DEFAULT_MAX_BUY_IN;
-        });
-    
-        this.passwordFormControl.valueChanges.subscribe((value) => {
-          this.poolSettings.has_password = value ? true : false;
-          this.poolSettings.password = value ? value : '';
-        });
-    
-        this.poolSettings = {
-          has_password: false,
-          min_buy_in: DEFAULT_MIN_BUY_IN,
-          max_buy_in: DEFAULT_MAX_BUY_IN,
-          denominations: DEFAULT_DENOMINATIONS.slice(0, this.device.slots)
-        }
       }
     });
   }
 
+  validateMinBuyIn(value: number|null) {
+    if (!value) {
+      return;
+    }
+    if (this.maxBuyInFormControl.value && value > this.maxBuyInFormControl.value) {
+      this.minBuyInFormControl.setErrors({'error': true});
+    } else {
+      this.minBuyInFormControl.setErrors(null);
+    }
+  }
+
+  validateMaxBuyIn(value: number|null) {
+    if (!value) {
+      return;
+    }
+    if (this.minBuyInFormControl.value && value < this.minBuyInFormControl.value) {
+      this.maxBuyInFormControl.setErrors({'error': true});
+    } else {
+      this.maxBuyInFormControl.setErrors(null);
+    }
+  }
+
   createGame() {
-    if (!this.mainFormGroup.valid) return;
+    if (!this.mainFormGroup.valid || !this.device) {
+      return;
+    }
 
     this.poolSettings.denominations.sort((a,b)=>a-b);
     this.poolService.createPool(
       this.poolNameFormControl.value!,
       this.device.id!,
       this.poolSettings
-    ).then((poolCreationResponse) => {
-      this.dialogRef.close(poolCreationResponse);
+    ).then((poolData: any) => {
+      this.router.navigate(['/', `pool`, poolData.id]);
+      this.modalCtrl.dismiss(poolData);
     });
   }
 
   cancel() {
-    this.dialogRef.close(null);
+    this.modalCtrl.dismiss(null);
   }
 
   trackByFn(index: any, item: any) {
     return index;  
   }
 
-  onMinBuyInBlur() {
-    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(`${DEFAULT_MIN_BUY_IN}`);
+  onMinBuyInFocusOut() {
+    if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(DEFAULT_MIN_BUY_IN);
   }
 
-  onMaxBuyInBlur() {
-    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(`${DEFAULT_MAX_BUY_IN}`);
+  onMaxBuyInFocusOut() {
+    if (!this.maxBuyInFormControl.value) this.maxBuyInFormControl.setValue(DEFAULT_MAX_BUY_IN);
+  }
+
+  decimalFilter(event: any) {
+    const reg = /^-?\d*(\.\d{0,1})?$/;
+    let input = event.target.value + String.fromCharCode(event.charCode);
+ 
+    if (!reg.test(input)) {
+        event.preventDefault();
+    }
   }
 }

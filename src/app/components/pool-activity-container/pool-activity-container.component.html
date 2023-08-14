@@ -1,0 +1,9 @@
+<div class="content" *ngIf="poolData else loading">
+    <app-pool-activity-table [dataSource]="poolData.transactions"></app-pool-activity-table>
+</div>
+
+<ng-template #loading>
+    <div class="content">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>

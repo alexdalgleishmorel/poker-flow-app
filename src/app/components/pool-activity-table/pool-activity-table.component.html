@@ -1,45 +1,40 @@
-<div [ngClass]="{'table-container': dataSource.length > 0, 'empty-table-container' : dataSource.length === 0 }">
-    <div>
-        <table *ngIf="dataSource.length > 0 else emptyTable" mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>NAME</th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.profile.firstName}} {{element.profile.lastName}}
-                </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="type">
-                <th mat-header-cell *matHeaderCellDef>ACTION</th>
-                <td mat-cell *matCellDef="let element">
-                    <b
-                        [ngClass]="{'buy-in': isBuyIn(element.type), 'cash-out': isCashOut(element.type)}"
-                    >
-                        {{isBuyIn(element.type) ? 'BUY-IN' : 'CASH-OUT'}}
-                    </b>
-                </td>
-            </ng-container>
-        
-            <ng-container matColumnDef="amount">
-                <th mat-header-cell *matHeaderCellDef>AMOUNT</th>
-                <td mat-cell *matCellDef="let element">
-                    <b>${{element.amount}}</b>
-                </td>
-            </ng-container>
-        
-            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        
-        </table>
-    </div>
+<div class="content">
+    <ion-content *ngIf="dataSource.length > 0 else emptyTable">
+        <ion-list [inset]="true">
+            <ion-item *ngFor="let transaction of dataSource; let index">
+                <ion-icon 
+                    [name]="isBuyIn(transaction.type) ? 'arrow-forward-outline' : 'arrow-back-outline'" 
+                    [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                >
+                </ion-icon>
+                <div class="spacer"></div>
+                <ion-text>
+                    <br/>
+                    <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
+                    <br/>
+                    <sub>
+                        ${{ transaction.amount.toFixed(2) }} 
+                        <ion-text 
+                            [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                        >
+                        <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
+                        </ion-text>
+                    </sub>
+                    <br/>
+                    <br/>
+    
+                </ion-text>
+            </ion-item>
+        </ion-list>
+    </ion-content>
 </div>
 
-<ng-template #emptyTable class="empty-table">
+<ng-template #emptyTable>
     <div class="empty-table-text">
-        No pool transactions found.
+        No pool activity found.
         <br/><br/>
         <span class="buy-in-text" (click)="buyIn()">
-            <b>Buy-in</b>
+            <ion-text color="primary"><b>BUY-IN</b></ion-text>
         </span>
         <br/>
         to get started. 

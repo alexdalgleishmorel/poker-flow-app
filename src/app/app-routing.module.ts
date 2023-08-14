@@ -1,11 +1,11 @@
 import { Injectable, NgModule } from '@angular/core';
-import { Router, RouterModule, Routes } from '@angular/router';
-import { HubComponent } from './components/hub/hub.component';
+import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router';
+
 import { LoginComponent } from './components/login/login.component';
-import { PoolComponent } from './components/pool/pool.component';
-import { WelcomeComponent } from './components/welcome/welcome.component';
-import { AuthService } from './services/auth/auth.service';
 import { Observable, tap } from 'rxjs';
+import { AuthService } from './services/auth/auth.service';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { SignupFormComponent } from './components/signup-form/signup-form.component';
 
 @Injectable({
   providedIn: 'root'
@@ -27,15 +27,38 @@ export class AppGuard {
 }
 
 const routes: Routes = [
-  { path: '', redirectTo: 'welcome', pathMatch: 'full' },
-  { path: 'hub', component: HubComponent, canActivate: [AppGuard] },
-  { path: 'login', component: LoginComponent },
-  { path: 'pool/:id', component: PoolComponent, canActivate: [AppGuard] },
-  { path: 'welcome', component: WelcomeComponent },
+  {
+    path: '',
+    loadChildren: () => import('./home/home.module').then(m => m.HomePageModule),
+    canActivate: [AppGuard],
+  },
+  { 
+    path: 'login', 
+    component: LoginComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: '/login/signin',
+        pathMatch: 'full'
+      },
+      {
+        path: 'signin',
+        component: LoginFormComponent
+      },
+      {
+        path: 'signup',
+        component: SignupFormComponent
+      },
+    ]
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [
+    RouterModule
+  ]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

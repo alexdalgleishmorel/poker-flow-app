@@ -1,78 +1,24 @@
 @import '../../../mixins.scss';
-@import '../../../variables.scss';
-
-button {
-    border-radius: 90px;
-}
 
 .spacer {
     padding: 10px;
 }
 
-.pool-name-container {
+.table-container {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-message-container {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
 }
 
-.mat-column-pool-name {
-    font-size: large;
+.empty-message {
     text-align: center;
-}
-
-.mat-column-created {
-    font-size: large;
-    text-align: center;
-}
-
-.mat-column-pot {
-    font-size: large;
-    text-align: center;
-}
-
-.mat-column-contributors {
-    font-size: large;
-    text-align: center;
-}
-
-mat-paginator {
-    display: flex;
-    justify-content: center;
-}
-
-.table-container {
-    height: 60vh;
-    @include mobile {
-        height: 75vh;
-    }
-}
-
-.empty-table-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    @include mobile {
-        height: 75vh;
-    }
-}
-
-.empty-table {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.create-game-text {
-    cursor: pointer;
-    color: $primaryColor;
-}
-
-.join-game-text {
-    cursor: pointer;
-    color: $secondaryColor;
+    font-size: xx-large;
 }

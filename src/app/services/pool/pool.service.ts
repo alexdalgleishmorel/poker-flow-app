@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, lastValueFrom, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, lastValueFrom, map, of } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
 
@@ -74,21 +74,44 @@ export interface PoolJoinRequest {
 })
 export class PoolService {
 
+  public poolsByUserID: Subject<PoolData[]> = new Subject<PoolData[]>();
+  public poolsByDeviceID: Subject<PoolData[]> = new Subject<PoolData[]>();
+  public poolByID: Subject<PoolData> = new Subject<PoolData>();
+  public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService
   ) {}
 
   getPoolsByUserID(userID: number | undefined): Observable<any> {
-    return this.apiService.get(`/pool/user/${userID}`);
+    return this.apiService.get(`/pool/user/${userID}`).pipe(
+      map((response: any) => {
+        this.poolsByUserID.next(response);
+        return response;
+      })
+    );
   }
 
   getPoolsByDeviceID(deviceID: number): Observable<any> {
-    return this.apiService.get(`/pool/device/${deviceID}`);
+    return this.apiService.get(`/pool/device/${deviceID}`).pipe(
+      map((response: any) => {
+        this.poolsByDeviceID.next(response);
+        return response;
+      })
+    );
   }
 
-  getPoolByID(poolID: number): Observable<any> {
-    return this.apiService.get(`/pool/${poolID}`);
+  getPoolByID(poolID: number | undefined): Observable<any> {
+    if (!poolID) return of();
+    
+    return this.apiService.get(`/pool/${poolID}`).pipe(
+      map((response: any) => {
+        this.poolByID.next(response);
+        return response;
+      })
+    );
   }
 
   createPool(name: string, deviceID: number, settings: PoolSettings) {
@@ -111,17 +134,15 @@ export class PoolService {
     }));
   }
 
-  joinPool(pool: PoolData, password?: string) {
+  joinPool(poolID: number, password?: string) {
 
     const poolJoinRequest: PoolJoinRequest = {
-      pool_id: pool.id,
+      pool_id: poolID,
       profile_id: this.authService.getCurrentUser()?.id!,
       password: password ? password : ''
     };
 
-    return this.apiService.post('/pool/join', poolJoinRequest).pipe(
-      map(() => pool.id)
-    );
+    return this.apiService.post('/pool/join', poolJoinRequest);
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {

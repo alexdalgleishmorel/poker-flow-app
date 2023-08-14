@@ -1,9 +1,9 @@
 <div class="chip-container">
     <ng-container *ngFor="let denomination of denominations; let i = index; last as isLast">
-        <div>
-            <button mat-mini-fab [color]="selectedSlot === i ? 'primary' : 'disabled'" (click)="chipSelect(i)">
+        <div class="chip-content">
+            <ion-fab-button [color]="selectedSlot === i ? 'primary' : 'medium'" (click)="chipSelect(i)">
                 ${{ denomination | thousandSuff }}
-            </button>
+            </ion-fab-button>
         </div>
         <div *ngIf="!isLast" class="spacer"></div>
     </ng-container>
@@ -11,25 +11,20 @@
 </div>
 <div class="spacer"></div>
 <form class="input-container" [formGroup]="formGroup">
-    <mat-form-field>
-        <mat-label>Chip {{selectedSlot+1}}</mat-label>
-        <div class="money-prefix" matPrefix>&nbsp; $</div>
-        <input
-            #denominationInput
-            matInput
-            type="number"
-            placeholder="Denomination"
-            [formControl]="chipDenominationControl"
-            (keypress)="decimalFilter($event)"
-            (blur)="onBlur()"
-            onkeydown="return event.keyCode !== 69 && event.keyCode !== 187 && event.keyCode !== 189"
-            min="0"
-        >
-    </mat-form-field>
+    <ion-input
+        label="Chip {{selectedSlot+1}} Value"
+        labelPlacement="stacked"
+        type="number"
+        [min]="0"
+        [formControl]="chipDenominationControl"
+        (keypress)="decimalFilter($event)"
+        (focusout)="onFocusOut()"
+    >
+    </ion-input>
 </form>
-<mat-error *ngIf="chipDenominationControl.errors?.['badMultipleError']">
+<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['badMultipleError']">
     Must be a multiple of $1000
-</mat-error>
-<mat-error *ngIf="chipDenominationControl.errors?.['maxBuyInError']">
+</ion-text>
+<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['maxBuyInError']">
     Exceeds max buy-in
-</mat-error>
+</ion-text>

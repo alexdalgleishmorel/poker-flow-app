@@ -1,0 +1,34 @@
+<ion-content>
+  <form class="form-container" [formGroup]="loginFormGroup">
+    <div class="spacer"></div>
+    <ion-input 
+      label="Email"
+      type="email" 
+      [formControl]="emailFormControl"
+      errorText="Invalid email"
+    >
+    </ion-input>
+    <div class="spacer"></div>
+    <ion-input 
+      label="Password" 
+      type="password"
+      [formControl]="passwordFormControl"
+      errorText="Password is required"
+    >
+    </ion-input>
+    <div class="loginFailureMessage" *ngIf="loginErrorMessages.getMessage()">
+      <div class="spacer"></div>
+      <ion-text color="danger" class="error-message">
+          {{loginErrorMessages.getMessage()}}
+      </ion-text>
+    </div>
+    <div class="spacer"></div>
+    <ion-button
+        shape="round"
+        (click)="login()"
+        [disabled]="loginFormGroup.invalid"
+    >
+        LOGIN
+    </ion-button>
+  </form>  
+</ion-content>

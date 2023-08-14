@@ -1,63 +1,41 @@
-<div class="content">
-    <div class="back-button">
-        <button
-            mat-mini-fab color="primary"
-            [disabled]="disabled"
-            (click)="goToHub()"
-        >
-            <mat-icon>keyboard_arrow_left</mat-icon>
-        </button>
-    </div>
-    <div class="information-container">
-        <mat-tab-group id="information-tab-group" [animationDuration]="0">
-            <mat-tab label="POOL" [disabled]="disabled">
-                <ng-template matTabContent>
-                    <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
-                </ng-template>
-            </mat-tab>
-            <mat-tab label="ACTIVITY" [disabled]="disabled">
-                <app-pool-activity-table [dataSource]="poolData ? poolData.transactions : []" (onBuyIn)="buyIn()">
-                </app-pool-activity-table>
-            </mat-tab>
-            <mat-tab label="SETTINGS" [disabled]="disabled">
-                <app-pool-settings-view [(poolData)]="poolData"></app-pool-settings-view>
-            </mat-tab>
-        </mat-tab-group>
-    </div>
-    <div class="flow-container">
-        <mat-stepper orientation="vertical" #stepper>
-            <mat-step state completed="false">
-                <ng-template matStepLabel>Buy In</ng-template>
-                <ng-template matStepContent>
-                    <div>
-                        Deposit money and withdraw chips
-                        <br><br>
-                        <button 
-                            mat-raised-button color="accent"
-                            [disabled]="disabled || !poolData?.settings?.buy_in_enabled"
-                            (click)="buyIn()"
-                        >
-                        BUY IN
-                        </button>
-                    </div>
-                </ng-template>
-            </mat-step>
-            <mat-step state completed="false">
-                <ng-template matStepLabel>Cash Out</ng-template>
-                <ng-template matStepContent>
-                    <div>
-                        Deposit chips and withdraw your earnings from the pool
-                        <br><br>
-                        <button 
-                            mat-raised-button color="primary"
-                            [disabled]="disabled || !poolData?.available_pot"
-                            (click)="cashOut()"
-                        >
-                        Cash Out
-                        </button>
-                    </div>
-                </ng-template>
-            </mat-step>
-        </mat-stepper>
-    </div>
-</div>
+<ion-footer>
+  <div class="main-buttons-container">
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="buyIn()"
+        [disabled]="disabled || !poolData?.settings?.buy_in_enabled"
+        color="primary"
+    >
+        BUY-IN
+    </ion-button>
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="cashOut()"
+        [disabled]="disabled || !poolData?.available_pot"
+        color="tertiary"
+    >
+        CASH-OUT
+    </ion-button>
+  </div>
+</ion-footer>
+<ion-content [scrollY]="false">
+    <ion-tabs>
+        
+        <ion-tab-bar slot="top">
+          <ion-tab-button tab="pot">
+            <ion-label>POOL</ion-label>
+          </ion-tab-button>
+      
+          <ion-tab-button tab="activity">
+            <ion-label>ACTIVITY</ion-label>
+          </ion-tab-button>
+
+          <ion-tab-button tab="settings">
+            <ion-label>SETTINGS</ion-label>
+          </ion-tab-button>
+        </ion-tab-bar>
+
+    </ion-tabs>
+</ion-content>

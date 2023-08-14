@@ -1,161 +1,186 @@
-import { Component, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { POLLING_INTERVAL } from '@constants';
-import { BuyInModalComponent } from 'src/app/components/buy-in-modal/buy-in-modal.component';
-import { ChipDepositModalComponent } from 'src/app/components/chip-deposit-modal/chip-deposit-modal.component';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { catchError, Subscription, interval, of, startWith, switchMap, throwError } from 'rxjs';
-import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
+import { ModalController, ToastController } from '@ionic/angular';
+import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { TransactionConfirmationModalComponent } from '../transaction-confirmation-modal/transaction-confirmation-modal.component';
+import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
 
 @Component({
   selector: 'app-pool',
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnDestroy {
+export class PoolComponent implements OnInit, OnDestroy {
   public poolData?: PoolData;
   public disabled: boolean = false;
-  public id: number;
+  public id?: number;
 
-  private poller: Subscription;
+  private poller?: Subscription;
+  private subscriptions = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private deviceService: DeviceService,
-    private dialog: MatDialog,
+    private modalCtrl: ModalController,
     private poolService: PoolService,
-    private router: Router
-  ) {
+    private router: Router,
+    private toastController: ToastController,
+  ) {}
+
+  ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params['id'];
 
     this.poller = interval(POLLING_INTERVAL)
-    .pipe(
-      startWith(0),
-      switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
-    ).subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-
-    this.dialog.afterOpened.subscribe(() => {
-      this.disabled = true;
-    });
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.disabled = false;
-    });
+      .pipe(
+        startWith(0),
+        switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
+      ).subscribe((poolData: PoolData) => { 
+        if (poolData) {
+          this.poolData = {...poolData};
+          if (!this.poolService.poolViewActive.getValue()) {
+            this.poolService.poolViewActive.next(this.poolData.id);
+          }
+        }
+      });
   }
 
   ngOnDestroy(): void {
-    this.poller.unsubscribe();
+    this.poller?.unsubscribe();
+  }
+
+  ionViewWillEnter() {
+    if (this.poller?.closed) {
+      this.ngOnInit();
+    }
+  }
+
+  ionViewWillLeave() {
+    this.poolService.poolViewActive.next(0);
+    this.ngOnDestroy();
   }
 
   /**
-   * Connects to a PokerFlow device, validates user buy-in, and commands device to dispense chips
+   * Handles chip withdrawal
    */
-  buyIn() {
-    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
-      if (device) {
-        this.dialog.open(BuyInModalComponent, {
-          hasBackdrop: false,
-          autoFocus: true,
-          data: {
-            device: device,
-            poolSettings: this.poolData?.settings
-          }
-        }).afterClosed().subscribe((deviceWithdrawalRequest: DeviceWithdrawalRequest) => {
-          if (deviceWithdrawalRequest) {
-            this.dialog.open(ChipWithdrawalModalComponent, {
-              hasBackdrop: false,
-              autoFocus: false,
-              data: {
-                device: device,
-                denominations: this.poolData?.settings.denominations,
-                withdrawal_request: deviceWithdrawalRequest
-              }
-            }).afterClosed()
-              .pipe(
-                catchError((error) => {
-                  return throwError(() => new Error(error))
-                })
-              )
-              .subscribe(() => {
-                this.poolService.postTransaction({
-                  pool_id: this.id,
-                  profile_id: this.authService.getCurrentUser()?.id,
-                  type: TransactionType.BUY_IN,
-                  amount: deviceWithdrawalRequest.amount
-                }).subscribe((transactionResponse: any) => {
-                  this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
-                    .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-                  this.dialog.open(TransactionConfirmationModalComponent, {
-                    hasBackdrop: false,
-                    autoFocus: false,
-                    data: {
-                      type: TransactionType.BUY_IN,
-                      amount: transactionResponse.amount,
-                      denominations: this.poolData?.settings.denominations,
-                      assignments: deviceWithdrawalRequest.denominations
-                    }
-                  });
-                });
-              });
-          }
+  async buyIn() {
+    if (!this.poolData) {
+      return;
+    }
+
+    // Presenting buy-in modal
+    let modal = await this.modalCtrl.create({
+      component: BuyInModalComponent,
+      componentProps: {
+        minBuyIn: this.poolData?.settings.min_buy_in,
+        maxBuyIn: this.poolData?.settings.max_buy_in,
+        denominations: this.poolData?.settings.denominations
+      }
+    });
+    modal.present();
+
+    const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
+
+    if (!deviceWithdrawalRequest) {
+      return;
+    }
+
+    // Displaying chip withdrawal modal if buy-in interaction was valid
+    modal = await this.modalCtrl.create({
+      component: ChipWithdrawalModalComponent,
+      componentProps: {
+        denominations: this.poolData?.settings.denominations,
+        withdrawalRequest: deviceWithdrawalRequest
+      }
+    });
+    modal.present();
+
+    const chipWithdrawalResponse = (await modal.onWillDismiss()).data;
+
+    // Updating database with new transaction
+    this.poolService.postTransaction({
+      pool_id: this.poolData?.id,
+      profile_id: this.authService.getCurrentUser()?.id,
+      type: TransactionType.BUY_IN,
+      amount: deviceWithdrawalRequest.amount
+    }).subscribe(() => {
+      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+        .subscribe((poolData: PoolData) => { 
+          this.poolData = {...poolData};
+          this.displayTransactionSuccess('BUY-IN');
         });
-      }
-    });
+    });      
   }
 
   /**
-   * Connects to a PokerFlow device, and handles chip deposit
+   * Handles chip deposit
    */
-  cashOut() {
-    this.deviceService.connectToDevice(this.poolData!.device_id).then((device: PokerFlowDevice | null) => {
-      if (device) {
-        this.dialog.open(ChipDepositModalComponent, {
-          hasBackdrop: false,
-          autoFocus: false,
-          data: {
-            device: device,
-            denominations: this.poolData?.settings.denominations
-          }
-        }).afterClosed()
-          .pipe(
-            catchError((error) => {
-              return throwError(() => new Error(error))
-            })
-          )
-          .subscribe((cashOutValue: number) => {
-            this.poolService.postTransaction({
-              pool_id: this.id,
-              profile_id: this.authService.getCurrentUser()?.id,
-              type: TransactionType.CASH_OUT,
-              amount: cashOutValue
-            }).subscribe((transactionResponse: any) => {
-              this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
-                .subscribe((poolData: PoolData) => { if (poolData) this.poolData = {...poolData}; });
-              this.dialog.open(TransactionConfirmationModalComponent, {
-                hasBackdrop: false,
-                autoFocus: false,
-                data: {
-                  type: TransactionType.CASH_OUT,
-                  amount: transactionResponse.amount,
-                  denominations: this.poolData?.settings.denominations,
-                  assignments: device.depositRequestStatus?.getValue()
-                }
-              });
-            });
-          });
+  async cashOut() {
+    if (!this.poolData) {
+      return;
+    }
+
+    // Presenting chip deposit modal
+    let modal = await this.modalCtrl.create({
+      component: ChipDepositModalComponent,
+      componentProps: {
+        denominations: this.poolData?.settings.denominations
       }
     });
+    modal.present();
+
+    const totalDepositValue = (await modal.onWillDismiss()).data;
+
+    if (!totalDepositValue) {
+      return;
+    }
+
+    // Updating database with new transaction
+    this.poolService.postTransaction({
+      pool_id: this.poolData?.id,
+      profile_id: this.authService.getCurrentUser()?.id,
+      type: TransactionType.CASH_OUT,
+      amount: totalDepositValue
+    }).subscribe(() => {
+      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+        .subscribe((poolData: PoolData) => { 
+          this.poolData = {...poolData};
+          this.displayTransactionSuccess('CASH-OUT');
+        });
+    });
+  }
+
+  async displayTransactionSuccess(transactionType: string) {
+    const toastButtons = [
+      {
+        text: 'VIEW',
+        handler: () => { this.router.navigate(['/', `pool`, this.poolData?.id, 'activity']); }
+      },
+      {
+        text: 'DISMISS',
+        role: 'cancel',
+      }
+    ];
+    const toast = await this.toastController.create({
+      cssClass: 'transaction-toast',
+      message: `${transactionType} CONFIRMED`,
+      duration: 3000,
+      position: 'top',
+      color: 'success',
+      buttons: toastButtons
+    });
+
+    await toast.present();
   }
 
   /**
    * Returns the user back to the PokerFlow hub
    */
   goToHub() {
-    this.router.navigate(['/', 'hub']);
+    this.router.navigate(['/', 'home']);
   }
 
   onSettingsChange(settingUpdateInProgress: boolean) {

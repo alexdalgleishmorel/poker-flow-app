@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from "@angular/platform-browser";
-import { MatIconRegistry } from "@angular/material/icon";
-import { Router } from '@angular/router';
 import { AuthService, LoginRequest, SignUpRequest } from 'src/app/services/auth/auth.service';
 import { catchError, throwError } from 'rxjs';
 
@@ -11,129 +7,36 @@ import { catchError, throwError } from 'rxjs';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {}
 
-  public emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  public passwordFormControl = new FormControl('', [Validators.required]);
-  public firstNameFormControl = new FormControl('', [Validators.required]);
-  public lastNameFormControl = new FormControl('', [Validators.required]);
-  public emailRegistrationFormControl = new FormControl('', [Validators.required, Validators.email]);
-  public firstPasswordFormControl = new FormControl('', [Validators.required]);
-  public secondPasswordFormControl = new FormControl('', [Validators.required]);
-
-  public loginFormGroup: FormGroup = this._formBuilder.group({
-    email: this.emailFormControl,
-    password: this.passwordFormControl
-  });
-  public signUpFormGroup: FormGroup = this._formBuilder.group({
-    email: this.emailRegistrationFormControl,
-    firstName: this.firstNameFormControl,
-    lastName: this.lastNameFormControl,
-    firstPassword: this.firstPasswordFormControl,
-    secondPassword: this.secondPasswordFormControl
-  });
-
-  public loginErrorMessages: ErrorMessages = new ErrorMessages();
-  public signUpErrorMessages: ErrorMessages = new ErrorMessages();
-  public hidePassword: boolean = true;
-
-  constructor (
-    private authService: AuthService,
-    private domSanitizer: DomSanitizer,
-    private matIconRegistry: MatIconRegistry,
-    private router: Router,
-    private _formBuilder: FormBuilder
-  ) {
-    this.matIconRegistry.addSvgIcon(
-      'google',
-      this.domSanitizer.bypassSecurityTrustResourceUrl('../../../assets/google-icon.svg')
+export function requestLogin(loginRequest: LoginRequest, authService: AuthService) {
+  const loginErrorMessages: ErrorMessages = new ErrorMessages();
+  return authService.login(loginRequest)
+    .pipe(
+      catchError((error) => {
+        if (error.status === 404) {
+          loginErrorMessages.setMessage(loginErrorMessages.emailNotFoundError);
+        }
+        else if (error.status === 401) {
+          loginErrorMessages.setMessage(loginErrorMessages.invalidCredentialError);
+        } else {
+          loginErrorMessages.setMessage(loginErrorMessages.genericError);
+        }
+        return throwError(() => new Error(loginErrorMessages.getMessage()));
+      })
     );
-  }
-
-  ngOnInit(): void {
-  }
-
-  login() {
-    this.loginErrorMessages.reset();
-
-    const loginRequest: LoginRequest = {
-      email: this.emailFormControl.value!,
-      password: this.passwordFormControl.value!
-    };
-
-    this.requestLogin(loginRequest);
-  }
-
-  signUp() {
-    this.signUpErrorMessages.reset();
-
-    const signUpRequest: SignUpRequest = {
-      email: this.emailRegistrationFormControl.value!,
-      firstName: this.firstNameFormControl.value!,
-      lastName: this.lastNameFormControl.value!,
-      password: this.firstPasswordFormControl.value!
-    };
-
-    this.authService.signup(signUpRequest)
-      .pipe(
-        catchError((error) => {
-          if (error.status === 401) {
-            this.signUpErrorMessages.setMessage(LoginErrorType.emailAlreadyExistsError);
-            this.emailRegistrationFormControl.setErrors({'email': true});
-          } else {
-            this.signUpErrorMessages.setMessage(LoginErrorType.genericError);
-          }
-          return throwError(() => new Error(error));
-        })
-      )
-      .subscribe(() => {
-        this.requestLogin(
-          {
-            email: signUpRequest.email,
-            password: signUpRequest.password
-          }
-        );
-      });
-  }
-
-  requestLogin(loginRequest: LoginRequest) {
-    this.authService.login(loginRequest)
-      .pipe(
-        catchError((error) => {
-          if (error.status === 404) {
-            this.loginErrorMessages.setMessage(LoginErrorType.emailNotFoundError);
-          }
-          else if (error.status === 401) {
-            this.loginErrorMessages.setMessage(LoginErrorType.invalidCredentialError);
-          } else {
-            this.loginErrorMessages.setMessage(LoginErrorType.genericError);
-          }
-          return throwError(() => new Error(error));
-        })
-      )
-      .subscribe(() => {
-        this.router.navigate(['/', 'hub']);
-      });
-  }
-
-  comparePasswords() {
-    (this.firstPasswordFormControl.value !== this.secondPasswordFormControl.value) ? this.secondPasswordFormControl.setErrors({'mismatch': true}) : this.secondPasswordFormControl.setErrors(null);
-  }
 }
 
-class ErrorMessages {
+export class ErrorMessages {
   private currentMessage: string = '';
 
-  private emailAlreadyExistsError: string = 'Invalid email/password.';
-  private emailNotFoundError: string = 'Invalid email/password.';
-  private genericError: string = 'Something went wrong, please try again later.';
-  private invalidCredentialError: string = 'Invalid email/password.';
+  public emailAlreadyExistsError: string = 'Invalid email/password.';
+  public emailNotFoundError: string = 'Invalid email/password.';
+  public genericError: string = 'Something went wrong, please try again later.';
+  public invalidCredentialError: string = 'Invalid email/password.';
 
-  setMessage(errorType: LoginErrorType) {
-    if (errorType === LoginErrorType.emailAlreadyExistsError) this.currentMessage = this.emailAlreadyExistsError;
-    if (errorType === LoginErrorType.emailNotFoundError) this.currentMessage = this.emailNotFoundError;
-    if (errorType === LoginErrorType.genericError) this.currentMessage = this.genericError;
-    if (errorType === LoginErrorType.invalidCredentialError) this.currentMessage = this.invalidCredentialError;
+  setMessage(errorMessage: string) {
+    this.currentMessage = errorMessage;
   }
 
   getMessage() {
@@ -145,7 +48,7 @@ class ErrorMessages {
   }
 }
 
-enum LoginErrorType {
+export enum LoginErrorType {
   emailAlreadyExistsError = 'emailAlreadyExistsError',
   emailNotFoundError = 'emailNotFoundError',
   genericError = 'genericError',

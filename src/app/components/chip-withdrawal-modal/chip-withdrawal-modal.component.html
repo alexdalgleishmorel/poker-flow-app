@@ -1,12 +1,12 @@
-<div mat-dialog-content>
-    <h1 mat-dialog-title class="title">Dispensing chips</h1>
-    <div class="loading-container">
-        <mat-progress-bar mode="determinate" [value]="getChipWithdrawalProgress()"></mat-progress-bar>
-        <div class="spacer"></div>
-        <app-chip-view [denominations]="denominations" [assignments]="data.device ? withdrawalRequestStatus : []"></app-chip-view>
+<ion-content [scrollY]="false">
+    <div class="content">
+        <div>
+            <ion-text><h3>Your chips are being dispensed</h3></ion-text>
+            <div class="spacer"></div>
+            <ion-progress-bar [buffer]="0.01" [value]="getChipWithdrawalProgress()"></ion-progress-bar>
+            <div class="spacer"></div>
+            <app-chip-view [denominations]="denominations" [assignments]="device ? withdrawalRequestStatus : []">
+            </app-chip-view>
+        </div>
     </div>
-    <div class="spacer"></div>
-    <div class="message">
-        Your PokerFlow device is now dispensing your chips
-    </div>
-</div>
+</ion-content>

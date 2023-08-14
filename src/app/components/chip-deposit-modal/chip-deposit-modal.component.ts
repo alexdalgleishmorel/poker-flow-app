@@ -1,38 +1,53 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PokerFlowDevice } from 'src/app/services/device/device.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-chip-deposit-modal',
   templateUrl: './chip-deposit-modal.component.html',
   styleUrls: ['./chip-deposit-modal.component.scss']
 })
-export class ChipDepositModalComponent {
-  public denominations = this.data.denominations;
-  public depositInProgress: boolean;
-  private device: PokerFlowDevice = this.data.device;
-  
-  public receipt: number = 0;
+export class ChipDepositModalComponent implements OnInit {
+  @Input() denominations: number[] = [];
+
+  public depositInProgress: boolean = true;
+  public depositRequestStatus: number[] = [];
+  public device?: PokerFlowDevice;
 
   constructor(
-    public dialogRef: MatDialogRef<ChipDepositModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.depositInProgress = true;
-    this.device.startChipDeposit();
+    private deviceService: DeviceService,
+    private modalCtrl: ModalController
+  ) {}
+
+  ngOnInit(): void {
+    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
+      if (device) {
+        this.device = device;
+        this.device.startChipDeposit();
+        this.device.depositRequestStatus?.subscribe((status: number[]) => {
+          this.depositRequestStatus = status;
+        });
+      }
+    });
   }
 
   completeDeposit() {
-    this.depositInProgress = false;
-    this.device.completeChipDeposit();
-    this.dialogRef.close(this.calculateDepositTotal());
+    if (this.device) {
+      this.depositInProgress = false;
+      this.device.completeChipDeposit();
+      this.modalCtrl.dismiss(this.calculateDepositTotal());
+    }
   }
 
   cancelDeposit() {
-    this.dialogRef.close(null);
+    this.modalCtrl.dismiss(null);
   }
 
-  calculateDepositTotal() {
+  calculateDepositTotal(): number {
+    if (!this.device) {
+      return 0;
+    }
+
     let total: number = 0;
     let slot: number = 0;
     this.device.depositRequestStatus?.getValue().forEach((denominationCount: number) => {

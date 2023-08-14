@@ -1,52 +1,14 @@
-@import '../../../variables.scss';
-
-.buttons-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.loading-container {
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
-}
-
-.message {
-    display: flex;
     text-align: center;
-    justify-content: center;
-}
-
-.title {
-    display: flex;
-    margin: auto;
-    text-align: center;
-    justify-content: center;
-}
-
-button {
-    border-radius: 90px;
 }
 
 .spacer {
     padding: 10px;
-}
-
-.done-text {
-    color: #E91E63;
-}
-
-.amount-container {
-    padding: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.amount-value {
-    color: $pokerFlowGreen;
-    font-size: xx-large;
 }

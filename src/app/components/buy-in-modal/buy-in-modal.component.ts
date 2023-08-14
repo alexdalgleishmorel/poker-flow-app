@@ -1,46 +1,60 @@
-import { Component, Inject, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { ModalController } from '@ionic/angular';
+import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
   templateUrl: './buy-in-modal.component.html',
   styleUrls: ['./buy-in-modal.component.scss']
 })
-export class BuyInModalComponent {
-  private minBuyIn: number = this.data.poolSettings.min_buy_in;
-  private maxBuyIn: number = this.data.poolSettings.max_buy_in;
-  public denominations: number[] = this.data.poolSettings.denominations;
+export class BuyInModalComponent implements AfterViewInit {
+  @Input() minBuyIn: number = 0;
+  @Input() maxBuyIn: number = 0;
+  @Input() denominations: number[] = [];
   public assignments: number[] = [];
 
-  public buyInFormControl = new FormControl(
-    `${this.minBuyIn}`, [
-      Validators.required, 
+  public buyInFormControl: FormControl;
+
+  public form: FormGroup;
+
+  public device?: PokerFlowDevice;
+  
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private deviceService: DeviceService,
+    private modalCtrl: ModalController,
+    private _formBuilder: FormBuilder
+  ) {
+
+    this.buyInFormControl = new FormControl(``, []);
+
+    this.form = this._formBuilder.group({
+      buyIn: this.buyInFormControl
+    });
+
+    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
+      if (device) {
+        this.device = device;
+        //this.device.assignDeviceStatus();
+        this.device.status.subscribe(() => {
+          if (this.device?.inventory) {
+            this.buyInFormControl.updateValueAndValidity();
+          }
+        });
+      }
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.buyInFormControl.setValidators([
+      Validators.required,
       Validators.min(this.minBuyIn), 
       Validators.max(this.maxBuyIn),
       this.buyInValidator()
-    ]
-  );
-
-  public form: FormGroup = this._formBuilder.group({
-    buyIn: this.buyInFormControl
-  });
-
-  public device: PokerFlowDevice = this.data.device;
-  
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<BuyInModalComponent>,
-    private _formBuilder: FormBuilder
-  ) {
-    this.buyInFormControl.setErrors({'required': true});
-    this.device.assignDeviceStatus();
-    this.device.status.subscribe(() => {
-      if (this.device.inventory) {
-        this.buyInFormControl.updateValueAndValidity();
-      }
-    });
+    ]);
+    this.buyInFormControl.updateValueAndValidity();
+    this.changeDetectorRef.detectChanges();
   }
 
   confirmBuyIn() {
@@ -48,11 +62,11 @@ export class BuyInModalComponent {
       amount: +this.buyInFormControl.value!,
       denominations: this.assignments
     };
-    this.dialogRef.close(deviceWithdrawalRequest);
+    this.modalCtrl.dismiss(deviceWithdrawalRequest);
   }
 
   cancelBuyIn() {
-    this.dialogRef.close(null);
+    this.modalCtrl.dismiss(null);
   }
 
   resetAssignments() {
@@ -70,7 +84,7 @@ export class BuyInModalComponent {
 
   inventoryCanSupply(value: number): boolean {
     let buyInToSettle: number = value;
-    let inventoryCopy = [...this.device.inventory!];
+    let inventoryCopy = [...this.device?.inventory!];
     this.resetAssignments();
 
     while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
@@ -102,9 +116,15 @@ export class BuyInModalComponent {
       
       const value = control.value;
 
-      if (!value || !this.device) return null;
+      if (!this.device) {
+        return {'devicConnectionError': true};
+      }
 
-      if (this.device.inventory &&!this.inventoryCanSupply(value)) {
+      if (!value) {
+        return {'required': true};
+      }
+
+      if (this.device.inventory && !this.inventoryCanSupply(value)) {
         this.resetAssignments();
         return { 'insufficientInventory': true };
       }
@@ -122,7 +142,7 @@ export class BuyInModalComponent {
     }
   }
 
-  onBlur() {
+  onBuyInFocusOut() {
     if (!this.buyInFormControl.value) this.buyInFormControl.setValue(this.minBuyIn.toString());
   }
 }
