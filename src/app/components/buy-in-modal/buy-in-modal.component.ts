@@ -1,24 +1,22 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceStatus, DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
   templateUrl: './buy-in-modal.component.html',
   styleUrls: ['./buy-in-modal.component.scss']
 })
-export class BuyInModalComponent implements AfterViewInit {
+export class BuyInModalComponent implements OnInit, AfterViewInit {
   @Input() minBuyIn: number = 0;
   @Input() maxBuyIn: number = 0;
   @Input() denominations: number[] = [];
   public assignments: number[] = [];
 
   public buyInFormControl: FormControl;
-
+  public deviceInventory?: number[];
   public form: FormGroup;
-
-  public device?: PokerFlowDevice;
   
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -32,17 +30,11 @@ export class BuyInModalComponent implements AfterViewInit {
     this.form = this._formBuilder.group({
       buyIn: this.buyInFormControl
     });
+  }
 
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        this.device = device;
-        //this.device.assignDeviceStatus();
-        this.device.status.subscribe(() => {
-          if (this.device?.inventory) {
-            this.buyInFormControl.updateValueAndValidity();
-          }
-        });
-      }
+  ngOnInit(): void {
+    this.deviceService.getDeviceStatus().then((deviceStatus: DeviceStatus) => {
+      this.deviceInventory = deviceStatus.inventory;
     });
   }
 
@@ -84,7 +76,7 @@ export class BuyInModalComponent implements AfterViewInit {
 
   inventoryCanSupply(value: number): boolean {
     let buyInToSettle: number = value;
-    let inventoryCopy = [...this.device?.inventory!];
+    let inventoryCopy = [...this.deviceInventory!];
     this.resetAssignments();
 
     while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
@@ -116,7 +108,7 @@ export class BuyInModalComponent implements AfterViewInit {
       
       const value = control.value;
 
-      if (!this.device) {
+      if (!this.deviceInventory) {
         return {'devicConnectionError': true};
       }
 
@@ -124,7 +116,7 @@ export class BuyInModalComponent implements AfterViewInit {
         return {'required': true};
       }
 
-      if (this.device.inventory && !this.inventoryCanSupply(value)) {
+      if (!this.inventoryCanSupply(value)) {
         this.resetAssignments();
         return { 'insufficientInventory': true };
       }

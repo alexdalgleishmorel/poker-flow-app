@@ -7,6 +7,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
+import { BLE } from '@awesome-cordova-plugins/ble/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -78,6 +79,7 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
   ],
   providers: [
     AuthService,
+    BLE,
     PoolService,
     FormBuilder,
     {

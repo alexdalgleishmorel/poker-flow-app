@@ -26,11 +26,14 @@ export class HubComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
   ) {}
 
   ngOnInit(): void {
+    this.deviceService.connect();
+
     this.profile = this.authService.getCurrentUser();
 
     this.poller = interval(POLLING_INTERVAL)

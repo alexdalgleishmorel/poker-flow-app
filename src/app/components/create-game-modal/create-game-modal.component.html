@@ -9,7 +9,7 @@
             class="create-button"
             color="primary"
             (click)="createGame()"
-            [disabled]="!mainFormGroup.valid || !device?.id"
+            [disabled]="!mainFormGroup.valid || !deviceStatus?.id"
             shape="round"
             expand="block"
         >
