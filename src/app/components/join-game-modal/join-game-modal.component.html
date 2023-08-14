@@ -4,15 +4,17 @@
     </ion-toolbar>
 </ion-header>
 <ion-footer>
-    <ion-button
-        class="cancel-button"
-        color="light"
-        (click)="cancel()"
-        shape="round"
-        expand="block"
-    >
-        CANCEL
-    </ion-button>
+    <div class="modal-buttons-container">
+        <ion-button
+            class="cancel-button"
+            color="light"
+            (click)="cancel()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
 </ion-footer>
 <ion-content [scrollY]="false">
     <div class="list">
