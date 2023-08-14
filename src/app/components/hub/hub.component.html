@@ -1,4 +1,4 @@
-<ion-content [scrollY]="false">
+<ion-header>
     <div class="main-button-container">
         <ion-button
             shape="round"
@@ -8,7 +8,7 @@
         >
             CREATE GAME
         </ion-button>
-        <div class="spacer">or</div>
+        <div class="spacer">test</div>
         <ion-button
             shape="round"
             [disabled]="disabled"
@@ -18,21 +18,19 @@
             JOIN GAME
         </ion-button>
     </div>
+</ion-header>
+<ion-content class="hub-table-container" [scrollY]="false">
+    <ion-tabs>
 
-    <ion-content class="hub-table-container" [scrollY]="false">
-        <ion-tabs>
-
-            <ion-tab-bar slot="top">
-              <ion-tab-button tab="active-games">
-                <ion-label>ACTIVE GAMES</ion-label>
-              </ion-tab-button>
-          
-              <ion-tab-button tab="past-games">
-                <ion-label>PAST GAMES</ion-label>
-              </ion-tab-button>
-            </ion-tab-bar>
-          
-        </ion-tabs>
-    </ion-content>
-    
+        <ion-tab-bar slot="top">
+            <ion-tab-button tab="active-games">
+            <ion-label>ACTIVE GAMES</ion-label>
+            </ion-tab-button>
+        
+            <ion-tab-button tab="past-games">
+            <ion-label>PAST GAMES</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+        
+    </ion-tabs>
 </ion-content>
