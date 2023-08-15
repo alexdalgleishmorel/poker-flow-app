@@ -69,10 +69,10 @@ export class ChipSelectComponent implements OnChanges {
 
   getErrorMessage(): string {
     if (this.chipDenominationControl.errors?.['badMultipleError']) {
-      return 'Must be a multiple of $1000';
+      return 'Must be a multiple of $1000. Value reset to default.';
     }
     if (this.chipDenominationControl.errors?.['maxBuyInError']) {
-      return 'Exceeds max buy-in';
+      return 'Exceeds max buy-in. Value reset to default.';
     }
     return 'Required';
   }
