@@ -72,4 +72,14 @@ export class ChipSelectComponent implements OnChanges {
   ngOnChanges() {
     this.chipDenominationControl.updateValueAndValidity();
   }
+
+  getErrorMessage(): string {
+    if (this.chipDenominationControl.errors?.['badMultipleError']) {
+      return 'Must be a multiple of $1000';
+    }
+    if (this.chipDenominationControl.errors?.['maxBuyInError']) {
+      return 'Exceeds max buy-in';
+    }
+    return 'Required';
+  }
 }

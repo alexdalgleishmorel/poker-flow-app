@@ -19,12 +19,7 @@
         [formControl]="chipDenominationControl"
         (keypress)="decimalFilter($event)"
         (focusout)="onFocusOut()"
+        [errorText]="getErrorMessage()"
     >
     </ion-input>
 </form>
-<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['badMultipleError']">
-    Must be a multiple of $1000
-</ion-text>
-<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['maxBuyInError']">
-    Exceeds max buy-in
-</ion-text>
