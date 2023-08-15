@@ -14,15 +14,9 @@ export class ChipSelectComponent implements OnChanges {
   public selectedSlot: number = 0;
 
   public chipDenominationControl: FormControl;
-  public formGroup: FormGroup;
 
-  constructor(
-    private _formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.chipDenominationControl = new FormControl(this.denominations[0], this.denominationValidator());
-    this.formGroup = this._formBuilder.group({
-      denomination: this.chipDenominationControl
-    });
 
     this.chipDenominationControl.valueChanges.subscribe((value) => {
       if (this.chipDenominationControl.errors) {
