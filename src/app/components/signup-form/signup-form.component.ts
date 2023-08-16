@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { catchError, throwError } from 'rxjs';
 import { AuthService, SignUpRequest } from 'src/app/services/auth/auth.service';

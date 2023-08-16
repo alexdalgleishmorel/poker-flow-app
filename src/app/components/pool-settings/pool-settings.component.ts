@@ -1,4 +1,4 @@
-import { Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/pool.service';
