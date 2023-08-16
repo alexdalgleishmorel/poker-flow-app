@@ -33,9 +33,11 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.deviceService.getDeviceStatus().then((deviceStatus: DeviceStatus) => {
+    this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
       this.deviceInventory = deviceStatus.inventory;
     });
+
+    this.deviceService.updateDeviceStatus();
   }
 
   ngAfterViewInit(): void {

@@ -31,8 +31,6 @@ export class HubComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.deviceService.connect();
-
     this.profile = this.authService.getCurrentUser();
 
     this.poller = interval(POLLING_INTERVAL)
@@ -61,7 +59,6 @@ export class HubComponent implements OnInit, OnDestroy {
    * with that device and navigates to its pool view
    */
   async createGame() {
-    this.deviceService.connect();
     const modal = await this.modalCtrl.create({
       component: CreateGameModalComponent
     });

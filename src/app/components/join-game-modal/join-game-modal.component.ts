@@ -18,11 +18,13 @@ export class JoinGameModalComponent {
     private modalCtrl: ModalController,
     private poolService: PoolService,
   ) {
-      this.deviceService.getDeviceStatus().then((deviceStatus: DeviceStatus) => {
+      this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
         this.poolService.getPoolsByDeviceID(deviceStatus.id).subscribe((pools: PoolData[]) => {
           this.games = pools;
         });
       });
+
+      this.deviceService.updateDeviceStatus();
   }
 
   cancel() {

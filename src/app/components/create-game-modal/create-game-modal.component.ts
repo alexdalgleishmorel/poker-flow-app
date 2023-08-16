@@ -54,7 +54,7 @@ export class CreateGameModalComponent {
     private router: Router,
     private _formBuilder: FormBuilder
   ) {
-    this.deviceService.getDeviceStatus().then((deviceStatus: DeviceStatus) => {
+    this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
       this.deviceStatus = deviceStatus;
 
       this.minBuyInFormControl.valueChanges.subscribe((value) => {
@@ -81,6 +81,8 @@ export class CreateGameModalComponent {
         denominations: DEFAULT_DENOMINATIONS.slice(0, this.deviceStatus.slots)
       }
     });
+
+    this.deviceService.updateDeviceStatus();
   }
 
   validateMinBuyIn(value: number|null) {

@@ -11,7 +11,7 @@ import {
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, firstValueFrom, lastValueFrom, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,9 +21,15 @@ export class DeviceService {
   public depositRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public withdrawalRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
+  public deviceStatus: BehaviorSubject<DeviceStatus> = new BehaviorSubject<DeviceStatus>(
+    {id: 0, inventory: [], slots: 0}
+  );
+
   constructor(
     private ble: BLE,
-  ) {}
+  ) {
+    ble.isEnabled().then(() => {});
+  }
 
   async withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
   }
@@ -34,23 +40,46 @@ export class DeviceService {
   async completeChipDeposit() {
   }
 
-  async getDeviceStatus(): Promise<DeviceStatus> {
-    return Promise.resolve({ id: 1, slots: 1, inventory: [] });
-  }
+  public updateDeviceStatus() {
 
-  private handleDeviceStatus = (event: any) => {
-  }
-
-  private handleWithdrawalUpdate = (event: any) => {
-  }
-
-  private handleDepositUpdate = (event: any) => {
-  }
-
-  public connect() {
-    this.ble.scan([], 5).subscribe((response) => {
-      console.log(response);
+    this.ble.scan([DEVICE_STATUS_SERVICE_ID], 10).subscribe({
+      next: (device) => {
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.ble.startNotification(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => {
+                this.handleDeviceStatus(data);
+              },
+              error: () => {
+                console.log('device status notification subscribe failed');
+              }
+            });
+            this.ble.write(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
+          },
+          error: () => {
+            console.log('connection to poker flow device failed');
+          }
+        });
+      },
+      error: () => {
+        console.log('scan for poker flow device failed');
+      }
     });
+  }
+
+  private handleDeviceStatus = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.deviceStatus.next({
+      id: data.id,
+      slots: data.inventory.length,
+      inventory: data.inventory
+    });
+  }
+
+  private handleWithdrawalUpdate = (data: any) => {
+  }
+
+  private handleDepositUpdate = (data: any) => {
   }
 }
 
@@ -58,9 +87,8 @@ function jsonToBluetooth(data: any): Uint8Array {
   return new TextEncoder().encode(JSON.stringify(data));
 }
 
-function bluetoothToJson(data: DataView) {
-  const uint8Array = new Uint8Array(data.buffer);
-  const numberArray = Array.from(uint8Array);
+function bluetoothToJson(data: Uint8Array) {
+  const numberArray = Array.from(data);
   const jsonString = String.fromCharCode.apply(null, numberArray);
   return JSON.parse(jsonString);
 }
