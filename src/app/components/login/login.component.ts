@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService, LoginRequest, SignUpRequest } from 'src/app/services/auth/auth.service';
+import { Component } from '@angular/core';
+import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
 import { catchError, throwError } from 'rxjs';
 
 @Component({

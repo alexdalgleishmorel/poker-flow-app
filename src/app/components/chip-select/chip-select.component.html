@@ -10,21 +10,14 @@
     <div class="spacer"></div>
 </div>
 <div class="spacer"></div>
-<form class="input-container" [formGroup]="formGroup">
-    <ion-input
-        label="Chip {{selectedSlot+1}} Value"
-        labelPlacement="stacked"
-        type="number"
-        [min]="0"
-        [formControl]="chipDenominationControl"
-        (keypress)="decimalFilter($event)"
-        (focusout)="onFocusOut()"
-    >
-    </ion-input>
-</form>
-<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['badMultipleError']">
-    Must be a multiple of $1000
-</ion-text>
-<ion-text color="danger" *ngIf="chipDenominationControl.errors?.['maxBuyInError']">
-    Exceeds max buy-in
-</ion-text>
+<ion-input
+    label="Chip {{selectedSlot+1}} Value"
+    labelPlacement="stacked"
+    type="number"
+    [min]="0"
+    [formControl]="chipDenominationControl"
+    (keypress)="decimalFilter($event)"
+    (focusout)="onFocusOut()"
+    [errorText]="getErrorMessage()"
+>
+</ion-input>

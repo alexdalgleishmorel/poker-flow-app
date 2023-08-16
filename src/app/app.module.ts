@@ -1,9 +1,6 @@
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { NgModule } from '@angular/core';
 import { FormsModule, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { MatIconModule } from '@angular/material/icon';
-import { MatStepperModule } from '@angular/material/stepper';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
@@ -71,8 +68,6 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    MatIconModule,
-    MatStepperModule,
     IonicModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
@@ -86,12 +81,6 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    },
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: {
-        showErrors: true
-      }
     },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],

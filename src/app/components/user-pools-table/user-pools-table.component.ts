@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-user-pools-table',

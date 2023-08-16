@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnChanges, Output, Pipe, PipeTransform, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN } from '@constants';
 
 @Component({
@@ -14,15 +14,9 @@ export class ChipSelectComponent implements OnChanges {
   public selectedSlot: number = 0;
 
   public chipDenominationControl: FormControl;
-  public formGroup: FormGroup;
 
-  constructor(
-    private _formBuilder: FormBuilder
-  ) {
+  constructor() {
     this.chipDenominationControl = new FormControl(this.denominations[0], this.denominationValidator());
-    this.formGroup = this._formBuilder.group({
-      denomination: this.chipDenominationControl
-    });
 
     this.chipDenominationControl.valueChanges.subscribe((value) => {
       if (this.chipDenominationControl.errors) {
@@ -71,5 +65,15 @@ export class ChipSelectComponent implements OnChanges {
 
   ngOnChanges() {
     this.chipDenominationControl.updateValueAndValidity();
+  }
+
+  getErrorMessage(): string {
+    if (this.chipDenominationControl.errors?.['badMultipleError']) {
+      return 'Must be a multiple of $1000. Value reset to default.';
+    }
+    if (this.chipDenominationControl.errors?.['maxBuyInError']) {
+      return 'Exceeds max buy-in. Value reset to default.';
+    }
+    return 'Required';
   }
 }

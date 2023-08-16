@@ -1,16 +1,17 @@
-<ion-content [scrollY]="false">
-    <div class="main-button-container">
+<ion-footer>
+    <div class="main-buttons-container">
         <ion-button
             shape="round"
+            expand="block"
             [disabled]="disabled"
             color="primary"
             (click)="createGame()"
         >
             CREATE GAME
         </ion-button>
-        <div class="spacer">or</div>
         <ion-button
             shape="round"
+            expand="block"
             [disabled]="disabled"
             color="tertiary"
             (click)="joinNewGame()"
@@ -18,21 +19,19 @@
             JOIN GAME
         </ion-button>
     </div>
+  </ion-footer>
+<ion-content class="hub-table-container" [scrollY]="false">
+    <ion-tabs>
 
-    <ion-content class="hub-table-container" [scrollY]="false">
-        <ion-tabs>
-
-            <ion-tab-bar slot="top">
-              <ion-tab-button tab="active-games">
-                <ion-label>ACTIVE GAMES</ion-label>
-              </ion-tab-button>
-          
-              <ion-tab-button tab="past-games">
-                <ion-label>PAST GAMES</ion-label>
-              </ion-tab-button>
-            </ion-tab-bar>
-          
-        </ion-tabs>
-    </ion-content>
-    
+        <ion-tab-bar slot="top">
+            <ion-tab-button tab="active-games">
+            <ion-label>ACTIVE GAMES</ion-label>
+            </ion-tab-button>
+        
+            <ion-tab-button tab="past-games">
+            <ion-label>PAST GAMES</ion-label>
+            </ion-tab-button>
+        </ion-tab-bar>
+        
+    </ion-tabs>
 </ion-content>
