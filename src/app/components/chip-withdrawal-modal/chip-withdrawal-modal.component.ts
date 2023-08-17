@@ -10,7 +10,8 @@ import { DeviceService, DeviceWithdrawalRequest } from 'src/app/services/device/
 export class ChipWithdrawalModalComponent implements OnInit {
   @Input() denominations: number[] = [];
   @Input() withdrawalRequest?: DeviceWithdrawalRequest;
-  public withdrawalRequestStatus: number[] = [];
+  public status: number[] = [];
+  public progressPercentage: number = 0;
 
   private initialWithdrawalRequest: number[] = [];
   private totalChipsRequested: number = 0;
@@ -27,7 +28,7 @@ export class ChipWithdrawalModalComponent implements OnInit {
 
     this.withdrawalRequest.denominations.forEach((chips: number) => this.totalChipsRequested += chips);
     this.initialWithdrawalRequest = [...this.withdrawalRequest.denominations];
-    this.withdrawalRequestStatus = [...this.withdrawalRequest.denominations];
+    this.status = Array<number>(this.withdrawalRequest.denominations.length).fill(0);
 
     this.deviceService.withdrawChips(this.withdrawalRequest);
 
@@ -35,26 +36,18 @@ export class ChipWithdrawalModalComponent implements OnInit {
       if (!status.length) {
         return;
       }
-      for (let i = 0; i < this.withdrawalRequest!.denominations.length; i ++) {
-        this.withdrawalRequestStatus[i] = this.initialWithdrawalRequest[i] - status[i];
-      }
-      if (JSON.stringify(this.withdrawalRequestStatus) === JSON.stringify(this.initialWithdrawalRequest)) {
+
+      let remainingChips = 0;
+      this.status = status.map((value, index) => {
+        remainingChips += value;
+        return this.initialWithdrawalRequest[index] - value;
+      });
+
+      this.progressPercentage = 1 - (remainingChips / this.totalChipsRequested);
+
+      if (!remainingChips) {
         this.modalCtrl.dismiss(null);
       }
     });
-  }
-
-  getChipWithdrawalProgress() {
-    if (!this.withdrawalRequestStatus.length || !this.deviceService.withdrawalRequestStatus.getValue().length) {
-      return 0;
-    }
-
-    let totalChipsRemainingToWithdraw: number = 0;
-    this.deviceService.withdrawalRequestStatus.getValue().forEach(
-      (chipsRemainingToWithdrawFromSlot: number) => totalChipsRemainingToWithdraw += chipsRemainingToWithdrawFromSlot
-    );
-    const totalChipsWithdrawn = this.totalChipsRequested - totalChipsRemainingToWithdraw;
-
-    return (totalChipsWithdrawn/this.totalChipsRequested);
   }
 }

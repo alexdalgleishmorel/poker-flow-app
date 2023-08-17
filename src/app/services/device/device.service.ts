@@ -25,13 +25,34 @@ export class DeviceService {
     {id: 0, inventory: [], slots: 0}
   );
 
-  constructor(
-    private ble: BLE,
-  ) {
-    ble.isEnabled().then(() => {});
+  private deviceUUID: string = '';
+
+  constructor(private ble: BLE) { 
+    ble.isEnabled().then(() => {}); 
   }
 
   async withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
+      next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.deviceUUID = device.id;
+
+            this.ble.startNotification(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => this.handleWithdrawalUpdate(data),
+              error: () => {}
+            });
+            this.ble.write(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_PUBLISH_ID, jsonToBluetooth(deviceWithdrawalRequest));
+          },
+          error: () => { /* Disconnected from pokerflow device */ }
+        });
+      },
+      error: () => {}
+    });
   }
 
   async startChipDeposit() {
@@ -41,29 +62,29 @@ export class DeviceService {
   }
 
   public updateDeviceStatus() {
-
-    this.ble.scan([DEVICE_STATUS_SERVICE_ID], 10).subscribe({
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
       next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
         this.ble.connect(device.id).subscribe({
           next: (device) => {
+            this.deviceUUID = device.id;
+
             this.ble.startNotification(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID).subscribe({
-              next: (data) => {
-                this.handleDeviceStatus(data);
-              },
-              error: () => {
-                console.log('device status notification subscribe failed');
-              }
+              next: (data) => this.handleDeviceStatus(data),
+              error: () => {}
             });
             this.ble.write(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
           },
           error: () => {
-            console.log('connection to poker flow device failed');
+            this.ble.stopNotification(this.deviceUUID, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID);
+            this.ble.stopNotification(this.deviceUUID, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID);
           }
         });
       },
-      error: () => {
-        console.log('scan for poker flow device failed');
-      }
+      error: () => {}
     });
   }
 
@@ -76,15 +97,17 @@ export class DeviceService {
     });
   }
 
-  private handleWithdrawalUpdate = (data: any) => {
+  private handleWithdrawalUpdate = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.withdrawalRequestStatus.next(data);
   }
 
   private handleDepositUpdate = (data: any) => {
   }
 }
 
-function jsonToBluetooth(data: any): Uint8Array {
-  return new TextEncoder().encode(JSON.stringify(data));
+function jsonToBluetooth(data: any): ArrayBuffer {
+  return new TextEncoder().encode(JSON.stringify(data)).buffer;
 }
 
 function bluetoothToJson(data: Uint8Array) {
