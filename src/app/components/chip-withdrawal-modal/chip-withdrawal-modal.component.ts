@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-chip-withdrawal-modal',
@@ -10,8 +10,8 @@ import { DeviceService, DeviceWithdrawalRequest, PokerFlowDevice } from 'src/app
 export class ChipWithdrawalModalComponent implements OnInit {
   @Input() denominations: number[] = [];
   @Input() withdrawalRequest?: DeviceWithdrawalRequest;
-  public device?: PokerFlowDevice;
-  public withdrawalRequestStatus: number[] = [];
+  public status: number[] = [];
+  public progressPercentage: number = 0;
 
   private initialWithdrawalRequest: number[] = [];
   private totalChipsRequested: number = 0;
@@ -22,41 +22,32 @@ export class ChipWithdrawalModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.withdrawalRequest) {
-      this.withdrawalRequest.denominations.forEach((chips: number) => this.totalChipsRequested += chips);
-      this.initialWithdrawalRequest = [...this.withdrawalRequest.denominations];
-      this.withdrawalRequestStatus = [...this.withdrawalRequest.denominations];
+    if (!this.withdrawalRequest) {
+      return;
     }
 
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device && this.withdrawalRequest) {
-        this.device = device;
-        this.deviceService.withdrawChips(this.device, this.withdrawalRequest);
+    this.withdrawalRequest.denominations.forEach((chips: number) => this.totalChipsRequested += chips);
+    this.initialWithdrawalRequest = [...this.withdrawalRequest.denominations];
+    this.status = Array<number>(this.withdrawalRequest.denominations.length).fill(0);
 
-        this.device.withdrawalRequestStatus?.subscribe((withdrawalRequestStatus: number[]) => {
-          if (!withdrawalRequestStatus.length) {
-            return;
-          }
-          for (let i = 0; i < this.withdrawalRequest!.denominations.length; i ++) {
-            this.withdrawalRequestStatus[i] = this.initialWithdrawalRequest[i] - withdrawalRequestStatus[i];
-          }
-          if (JSON.stringify(this.withdrawalRequestStatus) === JSON.stringify(this.initialWithdrawalRequest)) {
-            this.modalCtrl.dismiss(null);
-          }
-        });
+    this.deviceService.withdrawChips(this.withdrawalRequest);
+
+    this.deviceService.withdrawalRequestStatus.subscribe((status: number[]) => {
+      if (!status.length) {
+        return;
+      }
+
+      let remainingChips = 0;
+      this.status = status.map((value, index) => {
+        remainingChips += value;
+        return this.initialWithdrawalRequest[index] - value;
+      });
+
+      this.progressPercentage = 1 - (remainingChips / this.totalChipsRequested);
+
+      if (!remainingChips) {
+        this.modalCtrl.dismiss(null);
       }
     });
-  }
-
-  getChipWithdrawalProgress() {
-    if (!this.withdrawalRequestStatus.length || !this.device?.withdrawalRequestStatus?.getValue().length) return 0;
-
-    let totalChipsRemainingToWithdraw: number = 0;
-    this.device.withdrawalRequestStatus?.getValue().forEach(
-      (chipsRemainingToWithdrawFromSlot: number) => totalChipsRemainingToWithdraw += chipsRemainingToWithdrawFromSlot
-    );
-    const totalChipsWithdrawn = this.totalChipsRequested - totalChipsRemainingToWithdraw;
-
-    return (totalChipsWithdrawn/this.totalChipsRequested);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-chip-deposit-modal',
@@ -10,9 +10,7 @@ import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.s
 export class ChipDepositModalComponent implements OnInit {
   @Input() denominations: number[] = [];
 
-  public depositInProgress: boolean = true;
   public depositRequestStatus: number[] = [];
-  public device?: PokerFlowDevice;
 
   constructor(
     private deviceService: DeviceService,
@@ -20,37 +18,28 @@ export class ChipDepositModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        this.device = device;
-        this.device.startChipDeposit();
-        this.device.depositRequestStatus?.subscribe((status: number[]) => {
-          this.depositRequestStatus = status;
-        });
-      }
+    this.deviceService.depositRequestStatus.subscribe((status: number[]) => {
+      console.log(`current deposit status: ${this.depositRequestStatus}`);
+      console.log(`received deposit request status: ${status}`);
+      this.depositRequestStatus = status;
     });
+    this.deviceService.startChipDeposit();
   }
 
   completeDeposit() {
-    if (this.device) {
-      this.depositInProgress = false;
-      this.device.completeChipDeposit();
-      this.modalCtrl.dismiss(this.calculateDepositTotal());
-    }
+    this.deviceService.completeChipDeposit();
+    this.modalCtrl.dismiss(this.calculateDepositTotal());
   }
 
   cancelDeposit() {
+    this.deviceService.completeChipDeposit();
     this.modalCtrl.dismiss(null);
   }
 
   calculateDepositTotal(): number {
-    if (!this.device) {
-      return 0;
-    }
-
     let total: number = 0;
     let slot: number = 0;
-    this.device.depositRequestStatus?.getValue().forEach((denominationCount: number) => {
+    this.depositRequestStatus.forEach((denominationCount: number) => {
       total += (denominationCount * this.denominations[slot]);
       slot += 1;
     });

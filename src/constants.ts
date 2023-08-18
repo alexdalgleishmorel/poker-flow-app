@@ -16,7 +16,260 @@ export const WITHDRAWAL_SERVICE_ID: string = 'ae0a7741-9fb4-455f-ac4b-118b49de42
 export const WITHDRAWAL_SERVICE_PUBLISH_ID: string = '6f6f6649-c473-4610-8c9f-fe246e32f9a7';
 export const WITHDRAWAL_SERVICE_SUBSCRIBE_ID: string = 'd414a492-a537-4b7d-9b1f-85749aa4e0a2';
 
-export const OPTIONAL_DEVICE_SERVICES: string[] = [
-    DEPOSIT_SERVICE_ID, 
-    WITHDRAWAL_SERVICE_ID
-];
+export const POOL_BY_ID = {
+    "admin": {
+      "firstName": "Alex",
+      "id": 1,
+      "lastName": "Dalgleish-Morel"
+    },
+    "available_pot": 190,
+    "contributors": [
+      {
+        "contribution": 271.0,
+        "profile": {
+          "firstName": "Alex",
+          "id": 1,
+          "lastName": "Dalgleish-Morel"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Buddy",
+          "id": 2,
+          "lastName": "Guy"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "1"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "2"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "3"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "4"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "5"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "6"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "7"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "8"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "9"
+        }
+      },
+      {
+        "contribution": 5.0,
+        "profile": {
+          "firstName": "Test",
+          "id": 2,
+          "lastName": "10"
+        }
+      }
+    ],
+    "date_created": "Fri, 30 Jun 2023 04:42:55 GMT",
+    "device_id": 1,
+    "id": 1,
+    "name": "test",
+    "settings": {
+      "buy_in_enabled": true,
+      "buy_in_expiry_time": "",
+      "denominations": [
+        1.0,
+        5.0,
+        10.0,
+        20.0,
+        25.0
+      ],
+      "expired": false,
+      "has_password": false,
+      "id": 1,
+      "max_buy_in": 10000.0,
+      "min_buy_in": 5.0
+    },
+    "transactions": []
+  };  
+
+export const POOLS_BY_USER = [
+    {
+      "admin": {
+        "firstName": "Alex",
+        "id": 1,
+        "lastName": "Dalgleish-Morel"
+      },
+      "available_pot": 190,
+      "contributors": [
+        {
+          "contribution": 271.0,
+          "profile": {
+            "firstName": "Alex",
+            "id": 1,
+            "lastName": "Dalgleish-Morel"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Buddy",
+            "id": 2,
+            "lastName": "Guy"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "1"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "2"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "3"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "4"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "5"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "6"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "7"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "8"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "9"
+          }
+        },
+        {
+          "contribution": 5.0,
+          "profile": {
+            "firstName": "Test",
+            "id": 2,
+            "lastName": "10"
+          }
+        }
+      ],
+      "date_created": "Fri, 30 Jun 2023 04:42:55 GMT",
+      "device_id": 1,
+      "id": 1,
+      "name": "test",
+      "settings": {
+        "buy_in_enabled": true,
+        "buy_in_expiry_time": "",
+        "denominations": [
+          1.0,
+          5.0,
+          10.0,
+          20.0,
+          25.0
+        ],
+        "expired": false,
+        "has_password": true,
+        "id": 1,
+        "max_buy_in": 10000.0,
+        "min_buy_in": 5.0
+      },
+      "transactions": []
+    }
+  ];

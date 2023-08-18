@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, lastValueFrom, map, of } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
+import { POOLS_BY_USER, POOL_BY_ID } from '@constants';
 
 export interface PoolData {
   name: string;
@@ -86,25 +87,35 @@ export class PoolService {
   ) {}
 
   getPoolsByUserID(userID: number | undefined): Observable<any> {
+    /*
     return this.apiService.get(`/pool/user/${userID}`).pipe(
       map((response: any) => {
         this.poolsByUserID.next(response);
         return response;
       })
     );
+    */
+   this.poolsByUserID.next(POOLS_BY_USER);
+   return of(POOLS_BY_USER);
   }
 
   getPoolsByDeviceID(deviceID: number): Observable<any> {
+    /*
     return this.apiService.get(`/pool/device/${deviceID}`).pipe(
       map((response: any) => {
         this.poolsByDeviceID.next(response);
         return response;
       })
     );
+    */
+  this.poolsByDeviceID.next(POOLS_BY_USER);
+   return of(POOLS_BY_USER);
   }
 
   getPoolByID(poolID: number | undefined): Observable<any> {
     if (!poolID) return of();
+
+    /*
     
     return this.apiService.get(`/pool/${poolID}`).pipe(
       map((response: any) => {
@@ -112,9 +123,14 @@ export class PoolService {
         return response;
       })
     );
+
+    */
+   this.poolByID.next(POOL_BY_ID);
+    return of(POOL_BY_ID);
   }
 
   createPool(name: string, deviceID: number, settings: PoolSettings) {
+    /*
     if (!settings.has_password) settings.password = '';
 
     const poolCreationRequest: PoolCreationRequest = {
@@ -125,17 +141,22 @@ export class PoolService {
     };
 
     return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
+    */
+   return Promise.resolve(POOL_BY_ID);
   }
 
   updatePoolSettings(poolID: number, updateRequests: PoolUpdateRequest[]) {
+    /*
     return lastValueFrom(this.apiService.post('/pool/settings/update', {
       pool_id: poolID,
       update_requests: updateRequests
     }));
+    */
+   return Promise.resolve(POOL_BY_ID);
   }
 
   joinPool(poolID: number, password?: string) {
-
+    /*
     const poolJoinRequest: PoolJoinRequest = {
       pool_id: poolID,
       profile_id: this.authService.getCurrentUser()?.id!,
@@ -143,9 +164,19 @@ export class PoolService {
     };
 
     return this.apiService.post('/pool/join', poolJoinRequest);
+    */
+   return of("");
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {
+    return of(
+      {
+        amount: poolTransactionRequest.amount,
+        type: poolTransactionRequest.type
+      }
+    );
+    /*
     return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
+    */
   }
 }

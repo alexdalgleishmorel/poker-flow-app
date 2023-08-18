@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
 import { ModalController } from '@ionic/angular';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceStatus } from 'src/app/services/device/device.service';
 import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -44,7 +44,8 @@ export class CreateGameModalComponent {
     max_buy_in: DEFAULT_MAX_BUY_IN,
     denominations: DEFAULT_DENOMINATIONS
   };
-  public device?: PokerFlowDevice;
+
+  public deviceStatus?: DeviceStatus;
 
   constructor(
     private deviceService: DeviceService,
@@ -53,40 +54,35 @@ export class CreateGameModalComponent {
     private router: Router,
     private _formBuilder: FormBuilder
   ) {
+    this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
+      this.deviceStatus = deviceStatus;
 
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        this.device = device;
-        //this.device.assignDeviceStatus();
-        this.device.status.subscribe(() => {
-          if (device.id) {
-            this.minBuyInFormControl.valueChanges.subscribe((value) => {
-              this.validateMinBuyIn(value);
-              this.validateMaxBuyIn(this.maxBuyInFormControl.value);
-              this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
-            });
-        
-            this.maxBuyInFormControl.valueChanges.subscribe((value) => {
-              this.validateMaxBuyIn(value);
-              this.validateMinBuyIn(this.minBuyInFormControl.value);
-              this.poolSettings.max_buy_in = value ? value : DEFAULT_MAX_BUY_IN;
-            });
-        
-            this.passwordFormControl.valueChanges.subscribe((value) => {
-              this.poolSettings.has_password = value ? true : false;
-              this.poolSettings.password = value ? value : '';
-            });
-        
-            this.poolSettings = {
-              has_password: false,
-              min_buy_in: DEFAULT_MIN_BUY_IN,
-              max_buy_in: DEFAULT_MAX_BUY_IN,
-              denominations: DEFAULT_DENOMINATIONS.slice(0, device.slots)
-            }
-          }
-        });
+      this.minBuyInFormControl.valueChanges.subscribe((value) => {
+        this.validateMinBuyIn(value);
+        this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+        this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
+      });
+  
+      this.maxBuyInFormControl.valueChanges.subscribe((value) => {
+        this.validateMaxBuyIn(value);
+        this.validateMinBuyIn(this.minBuyInFormControl.value);
+        this.poolSettings.max_buy_in = value ? value : DEFAULT_MAX_BUY_IN;
+      });
+  
+      this.passwordFormControl.valueChanges.subscribe((value) => {
+        this.poolSettings.has_password = value ? true : false;
+        this.poolSettings.password = value ? value : '';
+      });
+  
+      this.poolSettings = {
+        has_password: false,
+        min_buy_in: DEFAULT_MIN_BUY_IN,
+        max_buy_in: DEFAULT_MAX_BUY_IN,
+        denominations: DEFAULT_DENOMINATIONS.slice(0, this.deviceStatus.slots)
       }
     });
+
+    this.deviceService.updateDeviceStatus();
   }
 
   validateMinBuyIn(value: number|null) {
@@ -112,14 +108,14 @@ export class CreateGameModalComponent {
   }
 
   createGame() {
-    if (!this.mainFormGroup.valid || !this.device) {
+    if (!this.mainFormGroup.valid || !this.deviceStatus) {
       return;
     }
 
     this.poolSettings.denominations.sort((a,b)=>a-b);
     this.poolService.createPool(
       this.poolNameFormControl.value!,
-      this.device.id!,
+      this.deviceStatus.id,
       this.poolSettings
     ).then((poolData: any) => {
       this.router.navigate(['/', `pool`, poolData.id]);

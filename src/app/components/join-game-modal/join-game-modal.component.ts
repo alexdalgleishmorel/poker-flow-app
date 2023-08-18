@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { catchError, of } from 'rxjs';
-import { DeviceService, PokerFlowDevice } from 'src/app/services/device/device.service';
+import { DeviceService, DeviceStatus } from 'src/app/services/device/device.service';
 import { ModalController } from '@ionic/angular';
 import { PasswordModalComponent } from '../common/password-modal/password-modal.component';
 
@@ -18,18 +18,13 @@ export class JoinGameModalComponent {
     private modalCtrl: ModalController,
     private poolService: PoolService,
   ) {
-    this.deviceService.connectToDevice().then((device: PokerFlowDevice|null) => {
-      if (device) {
-        //this.device.assignDeviceStatus();
-        device.status.subscribe(() => {
-          if (device.id) {
-            this.poolService.getPoolsByDeviceID(device.id).subscribe((pools: PoolData[]) => {
-              this.games = pools;
-            });
-          }
+      this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
+        this.poolService.getPoolsByDeviceID(deviceStatus.id).subscribe((pools: PoolData[]) => {
+          this.games = pools;
         });
-      }
-    });
+      });
+
+      this.deviceService.updateDeviceStatus();
   }
 
   cancel() {

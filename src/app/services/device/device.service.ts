@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BLE } from '@awesome-cordova-plugins/ble/ngx';
 import { 
   DEPOSIT_SERVICE_ID, 
   DEPOSIT_SERVICE_PUBLISH_ID, 
@@ -6,7 +7,6 @@ import {
   DEVICE_STATUS_SERVICE_ID, 
   DEVICE_STATUS_SERVICE_PUBLISH_ID, 
   DEVICE_STATUS_SERVICE_SUBSCRIBE_ID, 
-  OPTIONAL_DEVICE_SERVICES, 
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
@@ -17,26 +17,139 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DeviceService {
 
-  constructor() {}
+  public depositRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
+  public withdrawalRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
 
-  async connectToDevice(deviceID?: number): Promise<PokerFlowDevice|null> {
-    const pokerFlowDevice = new PokerFlowDevice();
-    pokerFlowDevice.status.next(true);
-    return Promise.resolve(pokerFlowDevice);
-    //return deviceID ? pokerFlowDevice.findDeviceByID(deviceID) : pokerFlowDevice.findDevice();
+  public deviceStatus: BehaviorSubject<DeviceStatus> = new BehaviorSubject<DeviceStatus>(
+    {id: 0, inventory: [], slots: 0}
+  );
+
+  private deviceUUID: string = '';
+
+  constructor(private ble: BLE) { 
+    ble.isEnabled().then(() => {}); 
   }
 
-  async withdrawChips(device: PokerFlowDevice, withdrawalRequest: DeviceWithdrawalRequest) {
-    // device.withdrawChips(withdrawalRequest);
+  async withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
+      next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.deviceUUID = device.id;
 
-    device.withdrawalRequestStatus?.next(withdrawalRequest.denominations);
-    for (let i = 0; i < 5; i++) {
-      await delay(1000);
-      let status = device?.withdrawalRequestStatus?.getValue()!;
-      status[0]--;
-      device.withdrawalRequestStatus?.next(status);
-    }
+            this.ble.startNotification(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => this.handleWithdrawalUpdate(data),
+              error: () => {}
+            });
+            this.ble.write(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_PUBLISH_ID, jsonToBluetooth(deviceWithdrawalRequest));
+          },
+          error: () => {
+            this.ble.stopNotification(this.deviceUUID, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID);
+            this.onWithdrawalComplete();
+          }
+        });
+      },
+      error: () => {}
+    });
   }
+
+  async startChipDeposit() {
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
+      next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.deviceUUID = device.id;
+
+            this.ble.startNotification(device.id, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => this.handleDepositUpdate(data),
+              error: () => {}
+            });
+            this.ble.write(device.id, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
+          },
+          error: () => {
+            this.ble.stopNotification(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID);
+            this.onDepositComplete();
+          }
+        });
+      },
+      error: () => {}
+    });
+  }
+
+  async completeChipDeposit() {
+    this.ble.write(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
+  }
+
+  public updateDeviceStatus() {
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
+      next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.deviceUUID = device.id;
+
+            this.ble.startNotification(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => this.handleDeviceStatus(data),
+              error: () => {}
+            });
+            this.ble.write(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
+          },
+          error: () => {
+            this.ble.stopNotification(this.deviceUUID, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID);
+          }
+        });
+      },
+      error: () => {}
+    });
+  }
+
+  private handleDeviceStatus = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.deviceStatus.next({
+      id: data.id,
+      slots: data.inventory.length,
+      inventory: data.inventory
+    });
+  }
+
+  private handleWithdrawalUpdate = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.withdrawalRequestStatus.next(data);
+  }
+
+  private handleDepositUpdate = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.depositRequestStatus.next(data);
+  }
+
+  private onWithdrawalComplete() {
+    this.withdrawalRequestStatus.next([]);
+  }
+
+  private onDepositComplete() {
+    this.depositRequestStatus.next([]);
+  }
+}
+
+function jsonToBluetooth(data: any): ArrayBuffer {
+  return new TextEncoder().encode(JSON.stringify(data)).buffer;
+}
+
+function bluetoothToJson(data: Uint8Array) {
+  const numberArray = Array.from(data);
+  const jsonString = String.fromCharCode.apply(null, numberArray);
+  return JSON.parse(jsonString);
 }
 
 export interface DeviceWithdrawalRequest {
@@ -44,165 +157,8 @@ export interface DeviceWithdrawalRequest {
   denominations: number[];
 }
 
-export class PokerFlowDevice {
-  private bluetooth?: any;
-  public id: number = 1;
-  public slots: number = 5;
-  public inventory: number[] = [10, 10, 10, 10, 10];
-  public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-  public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
-  async startChipDeposit() {
-    this.depositRequestStatus?.next([0,0,0,0,0]);
-    for (let i = 0; i < 6; i++) {
-      await delay(1000);
-      let status = this.depositRequestStatus?.getValue()!;
-      status[0]++;
-      this.depositRequestStatus?.next(status);
-    }
-  }
-
-  async completeChipDeposit() {}
-}
-
-/*
-
-export class PokerFlowDevice {
-
-  private bluetooth?: BluetoothDevice;
-  public id?: number;
-  public slots?: number;
-  public inventory?: number[];
-  public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  public withdrawalRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-  public depositRequestStatus?: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
-  async findDevice(): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ 
-      filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] ,
-      optionalServices: OPTIONAL_DEVICE_SERVICES
-    })
-      .catch(() => null)
-      .then((selectedDevice: BluetoothDevice | null) => {
-        if (!selectedDevice) return null;
-        this.bluetooth = selectedDevice;
-        return this;
-      });
-  }
-
-  async findDeviceByID(deviceID: number): Promise<PokerFlowDevice|null> {
-    return window.navigator.bluetooth.requestDevice({ 
-      filters: [{ services: [DEVICE_STATUS_SERVICE_ID] }] ,
-      optionalServices: OPTIONAL_DEVICE_SERVICES
-    })
-      .catch(() => null)
-      .then((selectedDevice: BluetoothDevice | null) => {
-        if (!selectedDevice) return null;
-        this.bluetooth = selectedDevice;
-        return this;
-      })
-  }
-
-  async assignDeviceStatus() {
-    return this.bluetooth?.gatt?.connect().then((gattServer: BluetoothRemoteGATTServer) => {
-      return gattServer.getPrimaryService(DEVICE_STATUS_SERVICE_ID);
-    })
-    .then((deviceStatusService: BluetoothRemoteGATTService) => {
-      deviceStatusService.getCharacteristic(DEVICE_STATUS_SERVICE_SUBSCRIBE_ID)
-        .then((deviceStatusServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
-          deviceStatusServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleDeviceStatus);
-          return deviceStatusServiceSubscribeChannel.startNotifications();
-        })
-      return deviceStatusService.getCharacteristic(DEVICE_STATUS_SERVICE_PUBLISH_ID)
-    })
-    .then((deviceStatusServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
-      deviceStatusServicePublishChannel.writeValue(Uint8Array.of(1));
-    })
-  }
-
-  withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
-    this.bluetooth!.gatt!.connect()
-      .then((gattServer: BluetoothRemoteGATTServer) => {
-        return gattServer.getPrimaryService(WITHDRAWAL_SERVICE_ID);
-      })
-      .then((withdrawalService: BluetoothRemoteGATTService) => {
-        withdrawalService.getCharacteristic(WITHDRAWAL_SERVICE_SUBSCRIBE_ID)
-          .then((withdrawalServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
-            withdrawalServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleWithdrawalUpdate);
-            withdrawalServiceSubscribeChannel.startNotifications();
-          });
-        return withdrawalService.getCharacteristic(WITHDRAWAL_SERVICE_PUBLISH_ID);
-      })
-      .then((withdrawalServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
-        return withdrawalServicePublishChannel.writeValue(jsonToBluetooth(deviceWithdrawalRequest));
-      });
-  }
-
-  startChipDeposit() {
-    this.bluetooth!.gatt!.connect()
-      .then((gattServer: BluetoothRemoteGATTServer) => {
-        return gattServer.getPrimaryService(DEPOSIT_SERVICE_ID);
-      })
-      .then((depositService: BluetoothRemoteGATTService) => {
-        depositService.getCharacteristic(DEPOSIT_SERVICE_SUBSCRIBE_ID)
-          .then((depositServiceSubscribeChannel: BluetoothRemoteGATTCharacteristic) => {
-            depositServiceSubscribeChannel.addEventListener('characteristicvaluechanged', this.handleDepositUpdate);
-            depositServiceSubscribeChannel.startNotifications();
-          });
-        return depositService.getCharacteristic(DEPOSIT_SERVICE_PUBLISH_ID);
-      })
-      .then((depositServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
-        return depositServicePublishChannel.writeValue(Uint8Array.of(1));
-      });
-  }
-
-  completeChipDeposit() {
-    this.bluetooth!.gatt!.connect()
-      .then((gattServer: BluetoothRemoteGATTServer) => {
-        return gattServer.getPrimaryService(DEPOSIT_SERVICE_ID);
-      })
-      .then((depositService: BluetoothRemoteGATTService) => {
-        depositService.getCharacteristic(DEPOSIT_SERVICE_SUBSCRIBE_ID)
-        return depositService.getCharacteristic(DEPOSIT_SERVICE_PUBLISH_ID);
-      })
-      .then((depositServicePublishChannel: BluetoothRemoteGATTCharacteristic) => {
-        return depositServicePublishChannel.writeValue(Uint8Array.of(1));
-      });
-  }
-
-  private handleDeviceStatus = (event: any) => {
-    const data = event.target.value;
-    const deviceStatus = bluetoothToJson(data);
-    this.id = deviceStatus.id;
-    this.inventory = deviceStatus.inventory;
-    this.slots = deviceStatus.inventory.length;
-    this.status.next(true);
-  }
-
-  private handleWithdrawalUpdate = (event: any) => {
-    const data: DataView = event.target.value;
-    this.withdrawalRequestStatus?.next(bluetoothToJson(data));
-  }
-
-  private handleDepositUpdate = (event: any) => {
-    const data: DataView = event.target.value;
-    this.depositRequestStatus?.next(bluetoothToJson(data));
-  }
-}
-
-function jsonToBluetooth(data: any): Uint8Array {
-  return new TextEncoder().encode(JSON.stringify(data));
-}
-
-function bluetoothToJson(data: DataView) {
-  const uint8Array = new Uint8Array(data.buffer);
-  const numberArray = Array.from(uint8Array);
-  const jsonString = String.fromCharCode.apply(null, numberArray);
-  return JSON.parse(jsonString);
-}
-*/
-
-function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
+export interface DeviceStatus {
+  id: number;
+  slots: number;
+  inventory: number[];
 }

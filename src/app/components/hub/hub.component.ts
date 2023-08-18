@@ -6,6 +6,7 @@ import { Subscription, catchError, interval, startWith, of, switchMap } from 'rx
 import { IonModal, ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
+import { DeviceService } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-hub',
@@ -24,6 +25,7 @@ export class HubComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
   ) {}
