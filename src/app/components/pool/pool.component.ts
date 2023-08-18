@@ -20,7 +20,6 @@ export class PoolComponent implements OnInit, OnDestroy {
   public id?: number;
 
   private poller?: Subscription;
-  private subscriptions = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,

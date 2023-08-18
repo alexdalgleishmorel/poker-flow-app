@@ -10,12 +10,16 @@ import {
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
+import { ModalController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { DeviceConnectModalComponent } from 'src/app/components/common/device-connect-modal/device-connect-modal.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceService {
+
+  public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public depositRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public withdrawalRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
@@ -26,20 +30,22 @@ export class DeviceService {
 
   private deviceUUID: string = '';
 
-  constructor(private ble: BLE) { 
+  constructor(
+    private ble: BLE,
+    private modalCtrl: ModalController
+  ) { 
     ble.isEnabled().then(() => {}); 
   }
 
   async withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
-    let deviceFound: boolean = false;
+    this.beforeDeviceConnection();
+
     this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
       next: (device) => {
-        if (deviceFound) { return; }
-        deviceFound = true;
         this.ble.stopScan();
         this.ble.connect(device.id).subscribe({
           next: (device) => {
-            this.deviceUUID = device.id;
+            this.afterDeviceConnected(device);
 
             this.ble.startNotification(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID).subscribe({
               next: (data) => this.handleWithdrawalUpdate(data),
@@ -50,6 +56,7 @@ export class DeviceService {
           error: () => {
             this.ble.stopNotification(this.deviceUUID, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID);
             this.onWithdrawalComplete();
+            this.isConnected.next(false);
           }
         });
       },
@@ -58,15 +65,14 @@ export class DeviceService {
   }
 
   async startChipDeposit() {
-    let deviceFound: boolean = false;
+    this.beforeDeviceConnection();
+
     this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
       next: (device) => {
-        if (deviceFound) { return; }
-        deviceFound = true;
         this.ble.stopScan();
         this.ble.connect(device.id).subscribe({
           next: (device) => {
-            this.deviceUUID = device.id;
+            this.afterDeviceConnected(device);
 
             this.ble.startNotification(device.id, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID).subscribe({
               next: (data) => this.handleDepositUpdate(data),
@@ -77,6 +83,7 @@ export class DeviceService {
           error: () => {
             this.ble.stopNotification(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID);
             this.onDepositComplete();
+            this.isConnected.next(false);
           }
         });
       },
@@ -88,16 +95,15 @@ export class DeviceService {
     this.ble.write(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
   }
 
-  public updateDeviceStatus() {
-    let deviceFound: boolean = false;
+  async updateDeviceStatus() {
+    this.beforeDeviceConnection();
+
     this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
       next: (device) => {
-        if (deviceFound) { return; }
-        deviceFound = true;
         this.ble.stopScan();
         this.ble.connect(device.id).subscribe({
           next: (device) => {
-            this.deviceUUID = device.id;
+            this.afterDeviceConnected(device);
 
             this.ble.startNotification(device.id, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID).subscribe({
               next: (data) => this.handleDeviceStatus(data),
@@ -107,6 +113,7 @@ export class DeviceService {
           },
           error: () => {
             this.ble.stopNotification(this.deviceUUID, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID);
+            this.isConnected.next(false);
           }
         });
       },
@@ -139,6 +146,19 @@ export class DeviceService {
 
   private onDepositComplete() {
     this.depositRequestStatus.next([]);
+  }
+
+  private async beforeDeviceConnection() {
+    let modal = await this.modalCtrl.create({ component: DeviceConnectModalComponent });
+    modal.present();
+    this.isConnected.subscribe(connected => {
+      if (connected) { modal.dismiss(); }
+    });
+  }
+
+  private async afterDeviceConnected(device: any) {
+    this.deviceUUID = device.id;
+    this.isConnected.next(true);
   }
 }
 

@@ -34,6 +34,7 @@ import { PasswordModalComponent } from './components/common/password-modal/passw
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
+import { DeviceConnectModalComponent } from './components/common/device-connect-modal/device-connect-modal.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     ChipSelectComponent,
     ChipWithdrawalModalComponent,
     CreateGameModalComponent,
+    DeviceConnectModalComponent,
     HubComponent,
     JoinGameModalComponent,
     LoadingSpinnerComponent,
