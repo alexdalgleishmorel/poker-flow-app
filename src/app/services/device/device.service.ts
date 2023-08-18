@@ -7,11 +7,10 @@ import {
   DEVICE_STATUS_SERVICE_ID, 
   DEVICE_STATUS_SERVICE_PUBLISH_ID, 
   DEVICE_STATUS_SERVICE_SUBSCRIBE_ID, 
-  OPTIONAL_DEVICE_SERVICES, 
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
   WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
-import { BehaviorSubject, Observable, Subject, firstValueFrom, lastValueFrom, map } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +47,10 @@ export class DeviceService {
             });
             this.ble.write(device.id, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_PUBLISH_ID, jsonToBluetooth(deviceWithdrawalRequest));
           },
-          error: () => { /* Disconnected from pokerflow device */ }
+          error: () => {
+            this.ble.stopNotification(this.deviceUUID, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID);
+            this.onWithdrawalComplete();
+          }
         });
       },
       error: () => {}
@@ -56,9 +58,34 @@ export class DeviceService {
   }
 
   async startChipDeposit() {
+    let deviceFound: boolean = false;
+    this.ble.startScan([DEVICE_STATUS_SERVICE_ID]).subscribe({
+      next: (device) => {
+        if (deviceFound) { return; }
+        deviceFound = true;
+        this.ble.stopScan();
+        this.ble.connect(device.id).subscribe({
+          next: (device) => {
+            this.deviceUUID = device.id;
+
+            this.ble.startNotification(device.id, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID).subscribe({
+              next: (data) => this.handleDepositUpdate(data),
+              error: () => {}
+            });
+            this.ble.write(device.id, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
+          },
+          error: () => {
+            this.ble.stopNotification(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_SUBSCRIBE_ID);
+            this.onDepositComplete();
+          }
+        });
+      },
+      error: () => {}
+    });
   }
 
   async completeChipDeposit() {
+    this.ble.write(this.deviceUUID, DEPOSIT_SERVICE_ID, DEPOSIT_SERVICE_PUBLISH_ID, Uint8Array.of(1).buffer);
   }
 
   public updateDeviceStatus() {
@@ -80,7 +107,6 @@ export class DeviceService {
           },
           error: () => {
             this.ble.stopNotification(this.deviceUUID, DEVICE_STATUS_SERVICE_ID, DEVICE_STATUS_SERVICE_SUBSCRIBE_ID);
-            this.ble.stopNotification(this.deviceUUID, WITHDRAWAL_SERVICE_ID, WITHDRAWAL_SERVICE_SUBSCRIBE_ID);
           }
         });
       },
@@ -102,7 +128,17 @@ export class DeviceService {
     this.withdrawalRequestStatus.next(data);
   }
 
-  private handleDepositUpdate = (data: any) => {
+  private handleDepositUpdate = (buffer: any) => {
+    var data = bluetoothToJson(new Uint8Array(buffer[0]));
+    this.depositRequestStatus.next(data);
+  }
+
+  private onWithdrawalComplete() {
+    this.withdrawalRequestStatus.next([]);
+  }
+
+  private onDepositComplete() {
+    this.depositRequestStatus.next([]);
   }
 }
 

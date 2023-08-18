@@ -18,10 +18,12 @@ export class ChipDepositModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.deviceService.startChipDeposit();
     this.deviceService.depositRequestStatus.subscribe((status: number[]) => {
+      console.log(`current deposit status: ${this.depositRequestStatus}`);
+      console.log(`received deposit request status: ${status}`);
       this.depositRequestStatus = status;
     });
+    this.deviceService.startChipDeposit();
   }
 
   completeDeposit() {
@@ -30,13 +32,14 @@ export class ChipDepositModalComponent implements OnInit {
   }
 
   cancelDeposit() {
+    this.deviceService.completeChipDeposit();
     this.modalCtrl.dismiss(null);
   }
 
   calculateDepositTotal(): number {
     let total: number = 0;
     let slot: number = 0;
-    this.deviceService.depositRequestStatus.getValue().forEach((denominationCount: number) => {
+    this.depositRequestStatus.forEach((denominationCount: number) => {
       total += (denominationCount * this.denominations[slot]);
       slot += 1;
     });

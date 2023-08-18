@@ -16,12 +16,6 @@ export const WITHDRAWAL_SERVICE_ID: string = 'ae0a7741-9fb4-455f-ac4b-118b49de42
 export const WITHDRAWAL_SERVICE_PUBLISH_ID: string = '6f6f6649-c473-4610-8c9f-fe246e32f9a7';
 export const WITHDRAWAL_SERVICE_SUBSCRIBE_ID: string = 'd414a492-a537-4b7d-9b1f-85749aa4e0a2';
 
-export const OPTIONAL_DEVICE_SERVICES: string[] = [
-    DEPOSIT_SERVICE_ID, 
-    WITHDRAWAL_SERVICE_ID
-];
-
-
 export const POOL_BY_ID = {
     "admin": {
       "firstName": "Alex",
