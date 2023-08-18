@@ -34,7 +34,6 @@
                 type="number"
                 [min]="minBuyIn"
                 [formControl]="buyInFormControl"
-                (focusout)="onBuyInFocusOut()"
                 (keypress)="decimalFilter($event)"
                 (keydown)="resetAssignments()"
             >
@@ -54,6 +53,6 @@
             </ng-template>
         </form>
         <div class="spacer"></div>
-        <app-chip-view [denominations]="denominations" [assignments]="assignments"></app-chip-view>
+        <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
     </div>
 </ion-content>

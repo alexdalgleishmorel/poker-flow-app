@@ -3,29 +3,6 @@
       <ion-title>Create a game</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-footer>
-    <div class="modal-buttons-container">
-        <ion-button
-            class="create-button"
-            color="primary"
-            (click)="createGame()"
-            [disabled]="!mainFormGroup.valid || !deviceStatus?.id"
-            shape="round"
-            expand="block"
-        >
-            CREATE GAME
-        </ion-button>
-        <ion-button
-            class="cancel-button"
-            color="light"
-            (click)="cancel()"
-            shape="round"
-            expand="block"
-        >
-            CANCEL
-        </ion-button>
-    </div>
-</ion-footer>
 <ion-content>
     <div class="form-container">
         <ion-text color="primary"><h3>Name Your Pool</h3></ion-text>
@@ -38,6 +15,7 @@
         </ion-input>
         <div class="section-spacer"></div>
         <ion-text color="primary"><h3>Chip Values</h3></ion-text>
+        <ion-text>Select a chip to set its value.</ion-text>
         <div class="vertical-spacer"></div>
         <app-chip-select [(denominations)]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
         <div class="section-spacer"></div>
@@ -75,5 +53,26 @@
             errorText="Password is required"
         >
         </ion-input>
-        </div>
+    </div>
+    <div class="modal-buttons-container">
+        <ion-button
+            class="create-button"
+            color="primary"
+            (click)="createGame()"
+            [disabled]="!mainFormGroup.valid || !deviceStatus?.id"
+            shape="round"
+            expand="block"
+        >
+            CREATE GAME
+        </ion-button>
+        <ion-button
+            class="cancel-button"
+            color="light"
+            (click)="cancel()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
 </ion-content>

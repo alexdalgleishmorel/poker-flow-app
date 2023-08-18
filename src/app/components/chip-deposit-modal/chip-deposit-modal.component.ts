@@ -19,8 +19,6 @@ export class ChipDepositModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.deviceService.depositRequestStatus.subscribe((status: number[]) => {
-      console.log(`current deposit status: ${this.depositRequestStatus}`);
-      console.log(`received deposit request status: ${status}`);
       this.depositRequestStatus = status;
     });
     this.deviceService.startChipDeposit();

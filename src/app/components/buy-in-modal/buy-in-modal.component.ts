@@ -135,8 +135,4 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
         event.preventDefault();
     }
   }
-
-  onBuyInFocusOut() {
-    if (!this.buyInFormControl.value) this.buyInFormControl.setValue(this.minBuyIn.toString());
-  }
 }
