@@ -9,6 +9,7 @@ import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-with
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
 import { DeviceService } from 'src/app/services/device/device.service';
+import { TransactionCancelledModalComponent } from '../common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -107,6 +108,14 @@ export class PoolComponent implements OnInit, OnDestroy {
 
     const chipWithdrawalResponse = (await modal.onWillDismiss()).data;
 
+    if (!chipWithdrawalResponse) {
+      modal = await this.modalCtrl.create({
+        component: TransactionCancelledModalComponent
+      });
+      modal.present();
+      return;
+    }
+
     // Updating database with new transaction
     this.poolService.postTransaction({
       pool_id: this.poolData?.id,
@@ -119,7 +128,7 @@ export class PoolComponent implements OnInit, OnDestroy {
           this.poolData = {...poolData};
           this.displayTransactionSuccess('BUY-IN');
         });
-    });      
+    });
   }
 
   /**
@@ -148,6 +157,10 @@ export class PoolComponent implements OnInit, OnDestroy {
     const totalDepositValue = (await modal.onWillDismiss()).data;
 
     if (!totalDepositValue) {
+      modal = await this.modalCtrl.create({
+        component: TransactionCancelledModalComponent
+      });
+      modal.present();
       return;
     }
 

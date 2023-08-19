@@ -35,6 +35,7 @@ import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.comp
 import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 import { DeviceConnectModalComponent } from './components/common/device-connect-modal/device-connect-modal.component';
+import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { DeviceConnectModalComponent } from './components/common/device-connect-
     PoolSettingsComponent,
     SignupFormComponent,
     ThousandSuffixesPipe,
+    TransactionCancelledModalComponent,
     UserPoolsTableComponent
   ],
   imports: [

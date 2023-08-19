@@ -1,3 +1,16 @@
+<ion-footer *ngIf="remainingChips">
+    <div class="modal-buttons-container">
+        <ion-button
+            color="light"
+            (click)="cancel()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
+  </ion-footer>
+
 <ion-content [scrollY]="false">
     <div class="content">
         <div>
@@ -15,7 +28,7 @@
             <ion-button
                 *ngIf="!remainingChips"
                 color="primary"
-                (click)="dismiss()"
+                (click)="dismissWithSuccess()"
                 shape="round"
                 expand="block"
             >

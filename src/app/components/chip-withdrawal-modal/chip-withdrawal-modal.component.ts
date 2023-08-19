@@ -51,7 +51,11 @@ export class ChipWithdrawalModalComponent implements OnInit {
     });
   }
 
-  dismiss() {
-    this.modalCtrl.dismiss(null);
+  dismissWithSuccess() {
+    this.modalCtrl.dismiss(true);
+  }
+
+  cancel() {
+    this.modalCtrl.dismiss(false);
   }
 }
