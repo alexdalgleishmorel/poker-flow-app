@@ -157,10 +157,12 @@ export class PoolComponent implements OnInit, OnDestroy {
     const totalDepositValue = (await modal.onWillDismiss()).data;
 
     if (!totalDepositValue) {
-      modal = await this.modalCtrl.create({
-        component: TransactionCancelledModalComponent
-      });
-      modal.present();
+      if (this.deviceService.isConnected.getValue()) {
+        modal = await this.modalCtrl.create({
+          component: TransactionCancelledModalComponent
+        });
+        modal.present();
+      }
       return;
     }
 
