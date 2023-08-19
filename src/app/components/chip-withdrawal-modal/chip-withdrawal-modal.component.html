@@ -1,12 +1,26 @@
 <ion-content [scrollY]="false">
     <div class="content">
         <div>
-            <ion-text><h3>Your chips are being dispensed</h3></ion-text>
+            <ion-text>
+                <h3>
+                    {{remainingChips ? 'Your chips are being dispensed' : 'All chips dispensed'}}
+                </h3>
+            </ion-text>
             <div class="spacer"></div>
             <ion-progress-bar [buffer]="0.01" [value]="progressPercentage"></ion-progress-bar>
             <div class="spacer"></div>
             <app-chip-view [denominations]="denominations" [assignments]="status">
             </app-chip-view>
+            <div class="spacer"></div>
+            <ion-button
+                *ngIf="!remainingChips"
+                color="primary"
+                (click)="dismiss()"
+                shape="round"
+                expand="block"
+            >
+                DISMISS
+            </ion-button>
         </div>
     </div>
 </ion-content>

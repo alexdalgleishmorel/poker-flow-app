@@ -12,6 +12,7 @@ export class ChipWithdrawalModalComponent implements OnInit {
   @Input() withdrawalRequest?: DeviceWithdrawalRequest;
   public status: number[] = [];
   public progressPercentage: number = 0;
+  public remainingChips: number = 1;
 
   private initialWithdrawalRequest: number[] = [];
   private totalChipsRequested: number = 0;
@@ -27,6 +28,8 @@ export class ChipWithdrawalModalComponent implements OnInit {
     }
 
     this.withdrawalRequest.denominations.forEach((chips: number) => this.totalChipsRequested += chips);
+    this.remainingChips = this.totalChipsRequested;
+
     this.initialWithdrawalRequest = [...this.withdrawalRequest.denominations];
     this.status = Array<number>(this.withdrawalRequest.denominations.length).fill(0);
 
@@ -42,12 +45,13 @@ export class ChipWithdrawalModalComponent implements OnInit {
         remainingChips += value;
         return this.initialWithdrawalRequest[index] - value;
       });
+      this.remainingChips = remainingChips;
 
       this.progressPercentage = 1 - (remainingChips / this.totalChipsRequested);
-
-      if (!remainingChips) {
-        this.modalCtrl.dismiss(null);
-      }
     });
+  }
+
+  dismiss() {
+    this.modalCtrl.dismiss(null);
   }
 }
