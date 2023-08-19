@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { PoolData } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -15,6 +16,7 @@ export class UserPoolsTableComponent {
   @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   @Output() onCreateGame: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onJoinGame: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() getData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   public displayedColumns: string[] = [];
 
   constructor(
@@ -34,5 +36,9 @@ export class UserPoolsTableComponent {
 
   joinGame() {
     this.onJoinGame.emit();
+  }
+
+  onInfiniteScroll(event: any) {
+    this.getData.emit(event as InfiniteScrollCustomEvent);
   }
 }

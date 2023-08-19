@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -11,17 +13,36 @@ export class ActiveGamesListComponent implements OnInit {
   @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   public pools?: PoolData[];
 
+  private itemOffset: number = 0;
+  private itemsPerPage: number = 15;
+
   constructor(
+    private authService: AuthService,
     private poolService: PoolService
   ) { }
 
   ngOnInit() {
-    this.poolService.poolsByUserID.subscribe((pools) => {
-      this.pools = [...pools];
-    })
+    if (this.registerUser) {
+      return;
+    }
+    this.getData();
   }
 
   poolSelect(poolData: PoolData) {
     this.onPoolSelect.emit(poolData);
+  }
+
+  onGetData(event: InfiniteScrollCustomEvent) {
+    this.getData(event);
+  }
+
+  private getData(event?: InfiniteScrollCustomEvent) {
+    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage).subscribe(pools => {
+      this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
+      this.itemOffset += pools.length;
+      if (event) {
+        event.target.complete();
+      }
+    });
   }
 }

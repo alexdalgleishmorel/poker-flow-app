@@ -12,8 +12,13 @@ export class ApiService {
     private http: HttpClient
   ) {}
 
-  get(endpoint: string) {
-    return this.http.get(`${BASE_URL}${endpoint}`);
+  get(endpoint: string, itemOffset: number = 0, itemsPerPage: number = 15) {
+    return this.http.get(`${BASE_URL}${endpoint}`, {
+      params: {
+        itemOffset: itemOffset,
+        itemsPerPage: itemsPerPage
+      }
+    });
   }
 
   post(endpoint: string, options: any) {

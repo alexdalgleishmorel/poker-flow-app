@@ -75,8 +75,6 @@ export interface PoolJoinRequest {
 })
 export class PoolService {
 
-  public poolsByUserID: Subject<PoolData[]> = new Subject<PoolData[]>();
-  public poolsByDeviceID: Subject<PoolData[]> = new Subject<PoolData[]>();
   public poolByID: Subject<PoolData> = new Subject<PoolData>();
   public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -86,10 +84,9 @@ export class PoolService {
     private authService: AuthService
   ) {}
 
-  getPoolsByUserID(userID: number | undefined): Observable<any> {
-    return this.apiService.get(`/pool/user/${userID}`).pipe(
+  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
+    return this.apiService.get(`/pool/user/${userID}`, itemOffset, itemsPerPage).pipe(
       map((response: any) => {
-        this.poolsByUserID.next(response);
         return response;
       })
     );
@@ -98,7 +95,6 @@ export class PoolService {
   getPoolsByDeviceID(deviceID: number): Observable<any> {
     return this.apiService.get(`/pool/device/${deviceID}`).pipe(
       map((response: any) => {
-        this.poolsByDeviceID.next(response);
         return response;
       })
     );

@@ -1,8 +1,5 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { POLLING_INTERVAL } from '@constants';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { AuthService, Profile } from 'src/app/services/auth/auth.service';
-import { Subscription, catchError, interval, startWith, of, switchMap } from 'rxjs';
+import { Component, ViewChild } from '@angular/core';
+import { PoolData } from 'src/app/services/pool/pool.service';
 import { IonModal, ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
@@ -13,46 +10,17 @@ import { DeviceService } from 'src/app/services/device/device.service';
   templateUrl: './hub.component.html',
   styleUrls: ['./hub.component.scss']
 })
-export class HubComponent implements OnInit, OnDestroy {
+export class HubComponent {
   @ViewChild('createGameModal') createGameModal!: IonModal;
   @ViewChild('joinGameModal') joinGameModal!: IonModal;
   
   public disabled: boolean = false;
   public poolData?: PoolData[];
 
-  private profile?: Profile;
-  private poller?: Subscription;
-
   constructor(
-    private authService: AuthService,
     private deviceService: DeviceService,
     private modalCtrl: ModalController,
-    private poolService: PoolService,
   ) {}
-
-  ngOnInit(): void {
-    this.profile = this.authService.getCurrentUser();
-
-    this.poller = interval(POLLING_INTERVAL)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.poolService.getPoolsByUserID(this.profile?.id).pipe(catchError(() => of(null))))
-      ).subscribe((poolData: PoolData[]) => { if (poolData) this.poolData = [...poolData]; });
-  }
-
-  ngOnDestroy() {
-    this.poller?.unsubscribe();
-  }
-
-  ionViewWillEnter() {
-    if (this.poller?.closed) {
-      this.ngOnInit();
-    }
-  }
-
-  ionViewWillLeave() {
-    this.ngOnDestroy();
-  }
 
   /**
    * Finds a PokerFlow device, creates a new game associated

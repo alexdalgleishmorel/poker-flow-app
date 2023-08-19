@@ -1,5 +1,9 @@
 <div class="content" *ngIf="pools else loading">
-    <app-user-pools-table [dataSource]="[]" [history]="true"></app-user-pools-table>
+    <app-user-pools-table 
+        [dataSource]="pools" 
+        [history]="true"
+        (getData)="onGetData($event)"
+    ></app-user-pools-table>
 </div>
 
 <ng-template #loading>
@@ -7,4 +11,3 @@
         <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>
-

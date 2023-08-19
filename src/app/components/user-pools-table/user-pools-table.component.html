@@ -6,16 +6,19 @@
                 <div class="spacer"></div>
                 <ion-text>
                     <br/>
-                    <b>{{ pool.name }}</b>
+                    <ion-text><b>{{ pool.name }}</b></ion-text>
                     <br/>
                     <sub>
-                        {{pool.contributors.length}} contributors | ${{pool.available_pot.toFixed(2)}} pot
+                        <ion-text color="primary">{{pool.contributors.length}} contributors</ion-text>
                     </sub>
                     <br/>
                     <br/>
                 </ion-text>
             </ion-item>
         </ion-list>
+        <ion-infinite-scroll (ionInfinite)="onInfiniteScroll($event)">
+            <ion-infinite-scroll-content loadingSpinner="circular"></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
     </ion-content>
 </div>
 
