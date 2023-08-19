@@ -16,6 +16,8 @@ export class ActiveGamesListComponent implements OnInit {
   private itemOffset: number = 0;
   private itemsPerPage: number = 15;
 
+  public noNewData: boolean = false;
+
   constructor(
     private authService: AuthService,
     private poolService: PoolService
@@ -40,6 +42,9 @@ export class ActiveGamesListComponent implements OnInit {
     this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage).subscribe(pools => {
       this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
       this.itemOffset += pools.length;
+      if (!pools.length) {
+        this.noNewData = true;
+      }
       if (event) {
         event.target.complete();
       }

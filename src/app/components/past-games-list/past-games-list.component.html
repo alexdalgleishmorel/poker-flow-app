@@ -1,6 +1,7 @@
 <div class="content" *ngIf="pools else loading">
     <app-user-pools-table 
         [dataSource]="pools" 
+        [noNewData]="noNewData"
         [history]="true"
         (getData)="onGetData($event)"
     ></app-user-pools-table>

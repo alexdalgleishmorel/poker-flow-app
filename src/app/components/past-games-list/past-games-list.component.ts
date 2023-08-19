@@ -16,6 +16,8 @@ export class PastGamesListComponent implements OnInit {
   private itemOffset: number = 0;
   private itemsPerPage: number = 15;
 
+  public noNewData: boolean = false;
+
   constructor(
     private authService: AuthService,
     private poolService: PoolService
@@ -37,6 +39,9 @@ export class PastGamesListComponent implements OnInit {
     ).subscribe(pools => {
       this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
       this.itemOffset += pools.length;
+      if (!pools.length) {
+        this.noNewData = true;
+      }
       if (event) {
         event.target.complete();
       }

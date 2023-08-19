@@ -9,6 +9,7 @@ import { PoolData } from 'src/app/services/pool/pool.service';
   styleUrls: ['./user-pools-table.component.scss']
 })
 export class UserPoolsTableComponent {
+  @Input() noNewData: boolean = false;
   @Input() disabled: boolean = false;
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
