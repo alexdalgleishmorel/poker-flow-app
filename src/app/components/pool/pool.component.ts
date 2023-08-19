@@ -8,6 +8,7 @@ import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
+import { DeviceService } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-pool',
@@ -24,6 +25,7 @@ export class PoolComponent implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
+    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
     private router: Router,
@@ -80,6 +82,12 @@ export class PoolComponent implements OnInit, OnDestroy {
       }
     });
     modal.present();
+    this.deviceService.connectionCancelled.subscribe(cancelled => {
+      if (cancelled) {
+        modal.dismiss();
+        this.deviceService.connectionCancelled.next(false);
+      }
+    });
 
     const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
 
@@ -130,6 +138,12 @@ export class PoolComponent implements OnInit, OnDestroy {
       }
     });
     modal.present();
+    this.deviceService.connectionCancelled.subscribe(cancelled => {
+      if (cancelled) {
+        modal.dismiss();
+        this.deviceService.connectionCancelled.next(false);
+      }
+    });
 
     const totalDepositValue = (await modal.onWillDismiss()).data;
 

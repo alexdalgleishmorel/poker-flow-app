@@ -1,5 +1,20 @@
-<div class="content loading">
-  <ion-text>Establising device connection</ion-text>
-  <div class="spacer"></div>
-  <app-loading-spinner></app-loading-spinner>
-</div>
+<ion-footer>
+  <div class="modal-buttons-container">
+      <ion-button
+          color="light"
+          (click)="cancel()"
+          shape="round"
+          expand="block"
+      >
+          CANCEL
+      </ion-button>
+  </div>
+</ion-footer>
+
+<ion-content>
+  <div class="content">
+    <ion-text>Connecting to device</ion-text>
+    <div class="spacer"></div>
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+</ion-content>

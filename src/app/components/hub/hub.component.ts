@@ -63,6 +63,12 @@ export class HubComponent implements OnInit, OnDestroy {
       component: CreateGameModalComponent
     });
     modal.present();
+    this.deviceService.connectionCancelled.subscribe(cancelled => {
+      if (cancelled) {
+        modal.dismiss();
+        this.deviceService.connectionCancelled.next(false);
+      }
+    });
   }
 
   /**
@@ -74,5 +80,11 @@ export class HubComponent implements OnInit, OnDestroy {
       component: JoinGameModalComponent
     });
     modal.present();
+    this.deviceService.connectionCancelled.subscribe(cancelled => {
+      if (cancelled) {
+        modal.dismiss();
+        this.deviceService.connectionCancelled.next(false);
+      }
+    });
   }
 }

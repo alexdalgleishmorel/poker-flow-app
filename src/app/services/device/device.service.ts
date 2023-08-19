@@ -9,7 +9,8 @@ import {
   DEVICE_STATUS_SERVICE_SUBSCRIBE_ID, 
   WITHDRAWAL_SERVICE_ID, 
   WITHDRAWAL_SERVICE_PUBLISH_ID, 
-  WITHDRAWAL_SERVICE_SUBSCRIBE_ID } from '@constants';
+  WITHDRAWAL_SERVICE_SUBSCRIBE_ID 
+} from '@constants';
 import { ModalController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { DeviceConnectModalComponent } from 'src/app/components/common/device-connect-modal/device-connect-modal.component';
@@ -20,21 +21,16 @@ import { DeviceConnectModalComponent } from 'src/app/components/common/device-co
 export class DeviceService {
 
   public isConnected: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public connectionCancelled: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public depositRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
   public withdrawalRequestStatus: BehaviorSubject<number[]> = new BehaviorSubject<number[]>([]);
-
-  public deviceStatus: BehaviorSubject<DeviceStatus> = new BehaviorSubject<DeviceStatus>(
-    {id: 0, inventory: [], slots: 0}
-  );
+  public deviceStatus: BehaviorSubject<DeviceStatus> = new BehaviorSubject<DeviceStatus>(DEFAULT_DEVICE_STATUS);
 
   private deviceUUID: string = '';
 
-  constructor(
-    private ble: BLE,
-    private modalCtrl: ModalController
-  ) { 
-    ble.isEnabled().then(() => {}); 
+  constructor(private ble: BLE, private modalCtrl: ModalController) { 
+    ble.isEnabled().then(() => {});
   }
 
   async withdrawChips(deviceWithdrawalRequest: DeviceWithdrawalRequest) {
@@ -121,6 +117,11 @@ export class DeviceService {
     });
   }
 
+  public cancelDeviceScan() {
+    this.connectionCancelled.next(true);
+    this.ble.stopScan();
+  }
+
   private handleDeviceStatus = (buffer: any) => {
     var data = bluetoothToJson(new Uint8Array(buffer[0]));
     this.deviceStatus.next({
@@ -152,7 +153,9 @@ export class DeviceService {
     let modal = await this.modalCtrl.create({ component: DeviceConnectModalComponent });
     modal.present();
     this.isConnected.subscribe(connected => {
-      if (connected) { modal.dismiss(); }
+      if (connected) { 
+        modal.dismiss();
+      }
     });
   }
 
@@ -182,3 +185,5 @@ export interface DeviceStatus {
   slots: number;
   inventory: number[];
 }
+
+const DEFAULT_DEVICE_STATUS = {id: 0, inventory: [], slots: 0};
