@@ -2,10 +2,9 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { BehaviorSubject, Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 
 import { BASE_URL } from '../api/api.service';
-// import { MatDialog } from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,6 @@ import { BASE_URL } from '../api/api.service';
 export class AuthService {
 
   constructor(
-    // private dialog: MatDialog,
     private http: HttpClient,
     private router: Router
   ) {}
@@ -29,7 +27,6 @@ export class AuthService {
   }
 
   doLogoutUser(): void {
-    // this.dialog.closeAll();
     this.loggedIn$.next(false);
     localStorage.removeItem(this.JWT_TOKEN);
   }
@@ -59,20 +56,8 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<Profile> {
-    /*
     return this.http.post<any>(`${BASE_URL}/login`, loginRequest)
       .pipe(tap(data => this.doLoginUser(data)));
-      */
-    const token = {
-      jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlIjp7ImlkIjoxLCJlbWFpbCI6ImFsZXhAbG9jYWwuY29tIiwiZmlyc3ROYW1lIjoiQWxleCIsImxhc3ROYW1lIjoiRGFsZ2xlaXNoLU1vcmVsIn0sInRva2VuIjoibW9ja19qd3RfdG9rZW5fZnJvbV9hcGkifQ.UZoBeUO1De2HBmWJD6yU5QjgPc9FK3orVtlb-tLI6ug"
-    };
-    this.doLoginUser(token);
-    return of({
-      id: 1,
-      email: 'alex@local.com',
-      firstName: 'Alex',
-      lastName: 'Dalgleish-Morel'
-    });
   }
 
   logout() {
