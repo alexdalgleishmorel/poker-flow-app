@@ -35,7 +35,12 @@ export class PoolComponent implements OnInit {
     if (this.id) {
       this.poolService.currentPoolID.next(this.id);
       this.poolService.poolViewActive.next(this.id);
+      this.poolService.getPoolByID(this.id).subscribe(() => {});
     }
+
+    this.poolService.poolByID.subscribe(poolData => {
+      this.poolData = {...poolData};
+    });
   }
 
   ionViewWillEnter() {
