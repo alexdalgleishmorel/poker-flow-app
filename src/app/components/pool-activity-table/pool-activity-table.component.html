@@ -5,28 +5,31 @@
         </ion-refresher>
         <ion-list [inset]="true">
             <ion-item *ngFor="let transaction of dataSource; let index">
-                <ion-icon 
-                    [name]="isBuyIn(transaction.type) ? 'arrow-forward-outline' : 'arrow-back-outline'" 
-                    [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
-                >
-                </ion-icon>
-                <div class="spacer"></div>
-                <ion-text>
-                    <br/>
-                    <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
-                    <br/>
-                    <sub>
-                        ${{ transaction.amount.toFixed(2) }} 
-                        <ion-text 
-                            [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
-                        >
-                        <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
-                        </ion-text>
-                    </sub>
-                    <br/>
-                    <br/>
-    
-                </ion-text>
+                <ion-avatar slot="start">
+                    <ion-icon 
+                        [name]="isBuyIn(transaction.type) ? 'arrow-forward-outline' : 'arrow-back-outline'" 
+                        [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                    >
+                    </ion-icon>
+                </ion-avatar>
+                <ion-label>
+                    <ion-text>
+                        <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
+                        <br/>
+                        <sub>
+                            ${{ transaction.amount.toFixed(2) }} 
+                            <ion-text 
+                                [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                            >
+                            <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
+                            </ion-text>
+                            <br/>
+                            <ion-text color="secondary">{{getDate(transaction.date)}}</ion-text>
+                        </sub>
+                        <br/>
+                        <br/>
+                    </ion-text>
+                </ion-label>
             </ion-item>
         </ion-list>
     </ion-content>

@@ -29,4 +29,10 @@ export class PoolActivityTableComponent {
   handleRefresh(event: any) {
     this.refreshData.emit(event);
   }
+
+  getDate(date: string) {
+    return new Date(date).toLocaleString(
+      [], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}
+    );
+  }
 }
