@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolService, PoolTransaction } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool-activity-container',
@@ -8,7 +8,7 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 })
 export class PoolActivityContainerComponent  implements OnInit {
 
-  public poolData?: PoolData;
+  public transactions?: PoolTransaction[];
 
   constructor(
     private poolService: PoolService
@@ -16,8 +16,18 @@ export class PoolActivityContainerComponent  implements OnInit {
 
   ngOnInit() {
     this.poolService.poolByID.subscribe((poolData) => {
-      this.poolData = {...poolData};
-    })
+      this.transactions = [...poolData.transactions];
+    });
+
+    this.getData();
   }
 
+  getData() {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
+  }
+
+  handleRefresh(event: any) {
+    this.getData();
+    event.target.complete();
+  }
 }

@@ -63,7 +63,6 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     if (!activePoolView && this.chart) {
       this.chart.destroy();
       this.chart = null;
-      this.poolData = undefined;
       this.poolService.poolChartViewActive.next(false);
     } else if (activePoolView && this.canCreateChart()) {
       this.createChart();
