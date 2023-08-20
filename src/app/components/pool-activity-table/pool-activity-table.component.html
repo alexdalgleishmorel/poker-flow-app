@@ -1,42 +1,37 @@
 <div class="content">
-    <ion-content *ngIf="dataSource.length > 0 else emptyTable">
-        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-        </ion-refresher>
-        <ion-list [inset]="true">
-            <ion-item *ngFor="let transaction of dataSource; let index">
-                <ion-avatar slot="start">
-                    <ion-icon 
-                        [name]="isBuyIn(transaction.type) ? 'arrow-forward-outline' : 'arrow-back-outline'" 
-                        [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
-                    >
-                    </ion-icon>
-                </ion-avatar>
+    <ion-content>
+        <ion-searchbar (ionInput)="handleSearch($event)"></ion-searchbar>
+        <ion-list [inset]="true" *ngIf="transactions && transactions.length > 0 else emptyTable">
+            <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+                <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+            </ion-refresher>
+            <ion-item *ngFor="let transaction of transactions; let index">
                 <ion-label>
                     <ion-text>
                         <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
                         <br/>
                         <sub>
-                            ${{ transaction.amount.toFixed(2) }} 
-                            <ion-text 
-                                [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
-                            >
-                            <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
-                            </ion-text>
-                            <br/>
                             <ion-text color="secondary">{{getDate(transaction.date)}}</ion-text>
                         </sub>
-                        <br/>
-                        <br/>
                     </ion-text>
                 </ion-label>
+                <ion-text class="transaction-text">
+                    <ion-text 
+                        [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                    >
+                        <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
+                    </ion-text>
+                    <br/>
+                    ${{ transaction.amount.toFixed(2) }}
+                </ion-text>
+                <br/>
             </ion-item>
         </ion-list>
     </ion-content>
 </div>
 
 <ng-template #emptyTable>
-    <ion-content>
+    <div class="content">
         <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
             <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
         </ion-refresher>
@@ -49,5 +44,5 @@
             <br/>
             to get started. 
         </div>
-    </ion-content>
+    </div>
 </ng-template>

@@ -31,13 +31,17 @@ export class PoolComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.params['id'];
-    this.poolService.currentPoolID.next(this.id ? this.id : 0);
+    this.id = Number(this.activatedRoute.snapshot.params['id']);
+    if (this.id) {
+      this.poolService.currentPoolID.next(this.id);
+      this.poolService.poolViewActive.next(this.id);
+    }
   }
 
   ionViewWillEnter() {
     if (this.id) {
       this.poolService.currentPoolID.next(this.id);
+      this.poolService.poolViewActive.next(this.id);
     }
   }
 
