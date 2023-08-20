@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { PoolData } from 'src/app/services/pool/pool.service';
@@ -8,7 +8,7 @@ import { PoolData } from 'src/app/services/pool/pool.service';
   templateUrl: './user-pools-table.component.html',
   styleUrls: ['./user-pools-table.component.scss']
 })
-export class UserPoolsTableComponent {
+export class UserPoolsTableComponent implements OnInit {
   @Input() noNewData: boolean = false;
   @Input() disabled: boolean = false;
   @Input() history: boolean = false;
@@ -21,9 +21,16 @@ export class UserPoolsTableComponent {
   @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   public displayedColumns: string[] = [];
 
+  private unfilteredData: PoolData[] = [];
+  private filteredData: PoolData[] = [];
+
   constructor(
     private router: Router
   ) {}
+
+  ngOnInit() {
+    this.unfilteredData = this.dataSource;
+  }
 
   openGame(poolData: PoolData) {
     this.onPoolSelect.emit(poolData);
@@ -46,5 +53,19 @@ export class UserPoolsTableComponent {
 
   handleRefresh(event: any) {
     this.refreshData.emit(event as InfiniteScrollCustomEvent);
+  }
+
+  handleSearch(event: any) {
+    const searchValue = event.target.value.toLowerCase();
+    this.dataSource = this.unfilteredData;
+
+    if (!searchValue) {
+      return;
+    }
+
+    this.filteredData = this.dataSource.filter(
+      (poolData: PoolData) => poolData.name.toLowerCase().includes(searchValue)
+    );
+    this.dataSource = this.filteredData;
   }
 }
