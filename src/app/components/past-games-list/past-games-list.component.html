@@ -3,7 +3,8 @@
         [dataSource]="pools" 
         [noNewData]="noNewData"
         [history]="true"
-        (getData)="onGetData($event)"
+        (getMoreData)="onGetMoreData($event)"
+        (refreshData)="onRefreshData($event)"
     ></app-user-pools-table>
 </div>
 

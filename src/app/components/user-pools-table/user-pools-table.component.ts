@@ -17,7 +17,8 @@ export class UserPoolsTableComponent {
   @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   @Output() onCreateGame: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onJoinGame: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() getData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
+  @Output() getMoreData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
+  @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   public displayedColumns: string[] = [];
 
   constructor(
@@ -40,6 +41,10 @@ export class UserPoolsTableComponent {
   }
 
   onInfiniteScroll(event: any) {
-    this.getData.emit(event as InfiniteScrollCustomEvent);
+    this.getMoreData.emit(event as InfiniteScrollCustomEvent);
+  }
+
+  handleRefresh(event: any) {
+    this.refreshData.emit(event as InfiniteScrollCustomEvent);
   }
 }

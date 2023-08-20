@@ -34,7 +34,14 @@ export class ActiveGamesListComponent implements OnInit {
     this.onPoolSelect.emit(poolData);
   }
 
-  onGetData(event: InfiniteScrollCustomEvent) {
+  onGetMoreData(event: InfiniteScrollCustomEvent) {
+    this.getData(event);
+  }
+
+  onRefreshData(event: InfiniteScrollCustomEvent) {
+    this.itemOffset = 0;
+    this.pools = undefined;
+    this.noNewData = false;
     this.getData(event);
   }
 

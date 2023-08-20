@@ -1,5 +1,8 @@
 <div class="table-container">
     <ion-content *ngIf="dataSource.length > 0 else emptyTable">
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
         <ion-list>
             <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool)">
                 <ion-icon name="people-outline" color="primary"></ion-icon>
@@ -23,26 +26,36 @@
 </div>
 
 <ng-template #emptyTable>
-    <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
-        <div class="empty-message">
-            No games found. 
-            <br/><br/>
-            <ion-text color="primary" (click)="createGame()">
-                <b>Create</b>
-            </ion-text> or 
-            <ion-text color="tertiary" (click)="joinGame()">
-                <b>join</b>
-            </ion-text> 
-            <br/>
-            a game to get started.
+    <ion-content [scrollY]="false">
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
+        <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
+            <div class="empty-message">
+                No games found. 
+                <br/><br/>
+                <ion-text color="primary" (click)="createGame()">
+                    <b>Create</b>
+                </ion-text> or 
+                <ion-text color="tertiary" (click)="joinGame()">
+                    <b>join</b>
+                </ion-text> 
+                <br/>
+                a game to get started.
+            </div>
         </div>
-    </div>
+    </ion-content>
 </ng-template>
 
 <ng-template #emptyHistoryTableMessage>
-    <div class="empty-message-container">
-        <div class="empty-message">
-            No past games found.
+    <ion-content [scrollY]="false">
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
+        <div class="empty-message-container">
+            <div class="empty-message">
+                No past games found.
+            </div>
         </div>
-    </div>
+    </ion-content>
 </ng-template>
