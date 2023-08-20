@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { POLLING_INTERVAL } from '@constants';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { catchError, Subscription, interval, of, startWith, switchMap } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
@@ -16,12 +15,10 @@ import { TransactionCancelledModalComponent } from '../common/transaction-cancel
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnInit, OnDestroy {
+export class PoolComponent implements OnInit {
   public poolData?: PoolData;
   public disabled: boolean = false;
   public id?: number;
-
-  private poller?: Subscription;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,34 +32,17 @@ export class PoolComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.params['id'];
-
-    this.poller = interval(POLLING_INTERVAL)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null))))
-      ).subscribe((poolData: PoolData) => { 
-        if (poolData) {
-          this.poolData = {...poolData};
-          if (!this.poolService.poolViewActive.getValue()) {
-            this.poolService.poolViewActive.next(this.poolData.id);
-          }
-        }
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.poller?.unsubscribe();
+    this.poolService.currentPoolID.next(this.id ? this.id : 0);
   }
 
   ionViewWillEnter() {
-    if (this.poller?.closed) {
-      this.ngOnInit();
+    if (this.id) {
+      this.poolService.currentPoolID.next(this.id);
     }
   }
 
   ionViewWillLeave() {
     this.poolService.poolViewActive.next(0);
-    this.ngOnDestroy();
   }
 
   /**

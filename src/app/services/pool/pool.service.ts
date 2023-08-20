@@ -79,12 +79,17 @@ export class PoolService {
   public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
+  public currentPoolID: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService
   ) {}
 
   getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
+    if (!userID) {
+      return of([]);
+    }
     return this.apiService.get(`/pool/user/${userID}`, itemOffset, itemsPerPage).pipe(
       map((response: any) => {
         return response;
@@ -92,8 +97,11 @@ export class PoolService {
     );
   }
 
-  getPoolsByDeviceID(deviceID: number): Observable<any> {
-    return this.apiService.get(`/pool/device/${deviceID}`).pipe(
+  getPoolsByDeviceID(deviceID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
+    if (!deviceID) {
+      return of([]);
+    }
+    return this.apiService.get(`/pool/device/${deviceID}`, itemOffset, itemsPerPage).pipe(
       map((response: any) => {
         return response;
       })

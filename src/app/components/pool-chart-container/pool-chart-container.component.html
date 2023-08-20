@@ -1,4 +1,7 @@
 <div class="content">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+        <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+    </ion-refresher>
     <div *ngIf="poolTotal else loading">
         <div class="chart">
             <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
