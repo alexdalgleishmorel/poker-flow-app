@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject, lastValueFrom, map, of } from 'rxjs';
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
-import { POOLS_BY_USER, POOL_BY_ID } from '@constants';
 
 export interface PoolData {
   name: string;
@@ -87,82 +86,69 @@ export class PoolService {
   ) {}
 
   getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
-    // if (!userID) {
-    //   return of([]);
-    // }
-    // return this.apiService.get(`/pool/user/${userID}`, itemOffset, itemsPerPage).pipe(
-    //   map((response: any) => {
-    //     return response;
-    //   })
-    // );
-    return of(POOLS_BY_USER);
+    if (!userID) {
+      return of([]);
+    }
+    return this.apiService.get(`/pool/user/${userID}`, itemOffset, itemsPerPage).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 
   getPoolsByDeviceID(deviceID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
-    // if (!deviceID) {
-    //   return of([]);
-    // }
-    // return this.apiService.get(`/pool/device/${deviceID}`, itemOffset, itemsPerPage).pipe(
-    //   map((response: any) => {
-    //     return response;
-    //   })
-    // );
-    return of(POOLS_BY_USER);
+    if (!deviceID) {
+      return of([]);
+    }
+    return this.apiService.get(`/pool/device/${deviceID}`, itemOffset, itemsPerPage).pipe(
+      map((response: any) => {
+        return response;
+      })
+    );
   }
 
   getPoolByID(poolID: number | undefined): Observable<any> {
-    // if (!poolID) return of();
+    if (!poolID) return of();
     
-    // return this.apiService.get(`/pool/${poolID}`).pipe(
-    //   map((response: any) => {
-    //     this.poolByID.next(response);
-    //     return response;
-    //   })
-    // );
-    this.poolByID.next(POOL_BY_ID);
-    return of(POOL_BY_ID);
+    return this.apiService.get(`/pool/${poolID}`).pipe(
+      map((response: any) => {
+        this.poolByID.next(response);
+        return response;
+      })
+    );
   }
 
   createPool(name: string, deviceID: number, settings: PoolSettings) {
-    // if (!settings.has_password) settings.password = '';
+    if (!settings.has_password) settings.password = '';
 
-    // const poolCreationRequest: PoolCreationRequest = {
-    //   pool_name: name,
-    //   device_id: deviceID,
-    //   settings: settings,
-    //   admin_id: this.authService.getCurrentUser()?.id
-    // };
+    const poolCreationRequest: PoolCreationRequest = {
+      pool_name: name,
+      device_id: deviceID,
+      settings: settings,
+      admin_id: this.authService.getCurrentUser()?.id
+    };
 
-    // return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
-    return Promise.resolve(POOL_BY_ID);
+    return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
   }
 
   updatePoolSettings(poolID: number, updateRequests: PoolUpdateRequest[]) {
-    // return lastValueFrom(this.apiService.post('/pool/settings/update', {
-    //   pool_id: poolID,
-    //   update_requests: updateRequests
-    // }));
-    return Promise.resolve(POOL_BY_ID);
+    return lastValueFrom(this.apiService.post('/pool/settings/update', {
+      pool_id: poolID,
+      update_requests: updateRequests
+    }));
   }
 
   joinPool(poolID: number, password?: string) {
-    // const poolJoinRequest: PoolJoinRequest = {
-    //   pool_id: poolID,
-    //   profile_id: this.authService.getCurrentUser()?.id!,
-    //   password: password ? password : ''
-    // };
+    const poolJoinRequest: PoolJoinRequest = {
+      pool_id: poolID,
+      profile_id: this.authService.getCurrentUser()?.id!,
+      password: password ? password : ''
+    };
 
-    // return this.apiService.post('/pool/join', poolJoinRequest);
-    return of("");
+    return this.apiService.post('/pool/join', poolJoinRequest);
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest) {
-    // return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
-    return of(
-      {
-        amount: poolTransactionRequest.amount,
-        type: poolTransactionRequest.type
-      }
-    );
+    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
   }
 }

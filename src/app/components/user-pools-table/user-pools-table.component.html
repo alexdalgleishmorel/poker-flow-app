@@ -1,51 +1,48 @@
 <div class="table-container">
-    <ion-searchbar (ionInput)="handleSearch($event)"></ion-searchbar>
-    <ion-content *ngIf="dataSource.length > 0 else emptyTable">
+    <ion-content>
+        <ion-searchbar (ionInput)="handleSearch($event)"></ion-searchbar>
         <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
             <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
         </ion-refresher>
-        <ion-list>
-            <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool)">
-                <ion-icon name="people-outline" color="primary"></ion-icon>
-                <div class="spacer"></div>
-                <ion-text>
-                    <br/>
-                    <ion-text><b>{{ pool.name }}</b></ion-text>
-                    <br/>
-                    <sub>
-                        <ion-text color="secondary">{{pool.contributors.length}} contributors</ion-text>
-                    </sub>
-                    <br/>
-                    <br/>
-                </ion-text>
-            </ion-item>
-        </ion-list>
-        <ion-infinite-scroll (ionInfinite)="onInfiniteScroll($event)" [disabled]="noNewData">
-            <ion-infinite-scroll-content loadingSpinner="circular"></ion-infinite-scroll-content>
-        </ion-infinite-scroll>
+        <div *ngIf="dataSource.length > 0 else emptyTable">
+            <ion-list>
+                <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool)">
+                    <ion-icon name="people-outline" color="primary"></ion-icon>
+                    <div class="spacer"></div>
+                    <ion-text>
+                        <br/>
+                        <ion-text><b>{{ pool.name }}</b></ion-text>
+                        <br/>
+                        <sub>
+                            <ion-text color="secondary">{{pool.contributors.length}} contributors</ion-text>
+                        </sub>
+                        <br/>
+                        <br/>
+                    </ion-text>
+                </ion-item>
+            </ion-list>
+            <ion-infinite-scroll (ionInfinite)="onInfiniteScroll($event)" [disabled]="noNewData">
+                <ion-infinite-scroll-content loadingSpinner="circular"></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+        </div>
     </ion-content>
 </div>
 
 <ng-template #emptyTable>
-    <ion-content>
-        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-        </ion-refresher>
-        <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
-            <div class="empty-message">
-                No games found. 
-                <br/><br/>
-                <ion-text color="primary" (click)="createGame()">
-                    <b>Create</b>
-                </ion-text> or 
-                <ion-text color="tertiary" (click)="joinGame()">
-                    <b>join</b>
-                </ion-text> 
-                <br/>
-                a game to get started.
-            </div>
+    <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
+        <div class="empty-message">
+            No games found. 
+            <br/><br/>
+            <ion-text color="primary" (click)="createGame()">
+                <b>Create</b>
+            </ion-text> or 
+            <ion-text color="tertiary" (click)="joinGame()">
+                <b>join</b>
+            </ion-text> 
+            <br/>
+            a game to get started.
         </div>
-    </ion-content>
+    </div>
 </ng-template>
 
 <ng-template #emptyHistoryTableMessage>

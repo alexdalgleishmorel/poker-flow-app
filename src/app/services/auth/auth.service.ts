@@ -56,20 +56,8 @@ export class AuthService {
   }
 
   login(loginRequest: LoginRequest): Observable<Profile> {
-    /*
     return this.http.post<any>(`${BASE_URL}/login`, loginRequest)
       .pipe(tap(data => this.doLoginUser(data)));
-    */
-    const token = {
-      jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlIjp7ImlkIjoxLCJlbWFpbCI6ImFsZXhAbG9jYWwuY29tIiwiZmlyc3ROYW1lIjoiQWxleCIsImxhc3ROYW1lIjoiRGFsZ2xlaXNoLU1vcmVsIn0sInRva2VuIjoibW9ja19qd3RfdG9rZW5fZnJvbV9hcGkifQ.UZoBeUO1De2HBmWJD6yU5QjgPc9FK3orVtlb-tLI6ug"
-    };
-    this.doLoginUser(token);
-    return of({
-      id: 1,
-      email: 'alex@local.com',
-      firstName: 'Alex',
-      lastName: 'Dalgleish-Morel'
-    });
   }
 
   logout() {

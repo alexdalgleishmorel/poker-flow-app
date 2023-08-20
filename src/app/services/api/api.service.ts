@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
 
-export const BASE_URL: string = 'http://localhost:8000';
+export const BASE_URL: string = 'http://10.0.0.138:8000';
 
 @Injectable({
   providedIn: 'root'
