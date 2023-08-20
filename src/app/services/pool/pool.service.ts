@@ -119,6 +119,7 @@ export class PoolService {
     //     return response;
     //   })
     // );
+    this.poolByID.next(POOL_BY_ID);
     return of(POOL_BY_ID);
   }
 

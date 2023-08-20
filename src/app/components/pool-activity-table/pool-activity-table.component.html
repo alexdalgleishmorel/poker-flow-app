@@ -1,10 +1,10 @@
-<div class="content">
-    <ion-content>
-        <ion-searchbar (ionInput)="handleSearch($event)"></ion-searchbar>
+<div class="table-container">
+    <ion-searchbar (ionInput)="handleSearch($event)"></ion-searchbar>
+    <ion-content *ngIf="transactions && transactions.length > 0 else emptyTable">
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
         <ion-list [inset]="true" *ngIf="transactions && transactions.length > 0 else emptyTable">
-            <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-                <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-            </ion-refresher>
             <ion-item *ngFor="let transaction of transactions; let index">
                 <ion-label>
                     <ion-text>

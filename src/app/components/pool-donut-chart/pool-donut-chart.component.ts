@@ -54,7 +54,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit(): void {
-    this.poolService.poolViewActive.subscribe((active) => {
+    this.poolService.poolViewActive.subscribe(active => {
       this.initializeChart(active);
     });
   }
@@ -74,7 +74,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     return !this.chart && !this.poolService.poolChartViewActive.getValue() && this.poolData?.id === this.poolService.poolViewActive.getValue();
   }
 
-  createChart(){
+  createChart() {
     let delayed: boolean;
 
     let names: string[] = [];
