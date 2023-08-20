@@ -17,7 +17,17 @@ export class PoolActivityContainerComponent  implements OnInit {
   ngOnInit() {
     this.poolService.poolByID.subscribe((poolData) => {
       this.poolData = {...poolData};
-    })
+    });
+
+    this.getData();
   }
 
+  getData() {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
+  }
+
+  handleRefresh(event: any) {
+    this.getData();
+    event.target.complete();
+  }
 }

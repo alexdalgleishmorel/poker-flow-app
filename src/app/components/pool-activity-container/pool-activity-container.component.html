@@ -1,5 +1,5 @@
 <div class="content" *ngIf="poolData else loading">
-    <app-pool-activity-table [dataSource]="poolData.transactions"></app-pool-activity-table>
+    <app-pool-activity-table [dataSource]="poolData.transactions" (refreshData)="handleRefresh($event)"></app-pool-activity-table>
 </div>
 
 <ng-template #loading>

@@ -51,6 +51,17 @@ export class PoolSettingsComponent implements OnInit {
         }
       }
     });
+
+    this.getData();
+  }
+
+  getData() {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
+  }
+
+  handleRefresh(event: any) {
+    this.getData();
+    event.target.complete();
   }
 
   populateSettings(poolData: PoolData) {

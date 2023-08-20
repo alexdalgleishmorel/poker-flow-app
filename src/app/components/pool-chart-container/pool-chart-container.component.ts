@@ -16,16 +16,7 @@ export class PoolChartContainerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getChartData();
-  }
-
-  handleRefresh(event: any) {
-    this.getChartData();
-    event.target.complete();
-  }
-
-  getChartData() {
-    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(poolData => {
+    this.poolService.poolByID.subscribe(poolData => {
       if (poolData) {
         this.poolData = {...poolData};
         if (!this.poolService.poolViewActive.getValue()) {
@@ -37,5 +28,16 @@ export class PoolChartContainerComponent implements OnInit {
         this.poolTotal += contributor.contribution;
       });
     });
+
+    this.getChartData();
+  }
+
+  handleRefresh(event: any) {
+    this.getChartData();
+    event.target.complete();
+  }
+
+  getChartData() {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
   }
 }

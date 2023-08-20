@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -11,6 +12,7 @@ export class PoolActivityTableComponent {
 
   @Input() dataSource: any[] = [];
   @Output() onBuyIn = new EventEmitter<boolean>;
+  @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
 
   buyIn() {
     this.onBuyIn.emit();
@@ -22,5 +24,9 @@ export class PoolActivityTableComponent {
 
   isCashOut(transactionType: TransactionType) {
     return transactionType === TransactionType.CASH_OUT
+  }
+
+  handleRefresh(event: any) {
+    this.refreshData.emit(event);
   }
 }

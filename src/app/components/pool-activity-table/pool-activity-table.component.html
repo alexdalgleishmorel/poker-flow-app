@@ -1,5 +1,8 @@
 <div class="content">
     <ion-content *ngIf="dataSource.length > 0 else emptyTable">
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
         <ion-list [inset]="true">
             <ion-item *ngFor="let transaction of dataSource; let index">
                 <ion-icon 
@@ -30,13 +33,18 @@
 </div>
 
 <ng-template #emptyTable>
-    <div class="empty-table-text">
-        No pool activity found.
-        <br/><br/>
-        <span class="buy-in-text" (click)="buyIn()">
-            <ion-text color="primary"><b>BUY-IN</b></ion-text>
-        </span>
-        <br/>
-        to get started. 
-    </div>
+    <ion-content>
+        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+        </ion-refresher>
+        <div class="empty-table-text">
+            No pool activity found.
+            <br/><br/>
+            <span class="buy-in-text" (click)="buyIn()">
+                <ion-text color="primary"><b>BUY-IN</b></ion-text>
+            </span>
+            <br/>
+            to get started. 
+        </div>
+    </ion-content>
 </ng-template>
