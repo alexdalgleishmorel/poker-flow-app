@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DeviceService, DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
@@ -18,6 +18,7 @@ export class ChipWithdrawalModalComponent implements OnInit {
   private totalChipsRequested: number = 0;
 
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private deviceService: DeviceService,
     private modalCtrl: ModalController
   ) {}
@@ -48,6 +49,8 @@ export class ChipWithdrawalModalComponent implements OnInit {
       this.remainingChips = remainingChips;
 
       this.progressPercentage = 1 - (remainingChips / this.totalChipsRequested);
+
+      this.changeDetectorRef.detectChanges();
     });
   }
 

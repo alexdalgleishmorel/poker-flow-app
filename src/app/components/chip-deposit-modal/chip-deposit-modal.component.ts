@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { DeviceService } from 'src/app/services/device/device.service';
 
@@ -13,6 +13,7 @@ export class ChipDepositModalComponent implements OnInit {
   public depositRequestStatus: number[] = [];
 
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private deviceService: DeviceService,
     private modalCtrl: ModalController
   ) {}
@@ -20,6 +21,7 @@ export class ChipDepositModalComponent implements OnInit {
   ngOnInit(): void {
     this.deviceService.depositRequestStatus.subscribe((status: number[]) => {
       this.depositRequestStatus = status;
+      this.changeDetectorRef.detectChanges();
     });
     this.deviceService.startChipDeposit();
   }
