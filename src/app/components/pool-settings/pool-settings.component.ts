@@ -90,6 +90,7 @@ export class PoolSettingsComponent implements OnInit {
       this.poolService.updatePoolSettings(this.poolData.id, updateRequests)
         .then(() => {
           this.settingsFormGroup.markAsPristine();
+          this.getData();
         });
     }
   }
