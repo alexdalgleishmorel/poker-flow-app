@@ -12,6 +12,20 @@ ion-spinner {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.retry-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+.small-spacer {
+    padding: 5px;
 }

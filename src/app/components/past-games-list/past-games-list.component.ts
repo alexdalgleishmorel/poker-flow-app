@@ -31,7 +31,7 @@ export class PastGamesListComponent implements OnInit {
     this.getData(event);
   }
 
-  onRefreshData(event: InfiniteScrollCustomEvent) {
+  onRefreshData(event?: InfiniteScrollCustomEvent) {
     this.itemOffset = 0;
     this.pools = undefined;
     this.noNewData = false;

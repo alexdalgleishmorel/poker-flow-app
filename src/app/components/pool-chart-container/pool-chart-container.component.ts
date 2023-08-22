@@ -32,9 +32,11 @@ export class PoolChartContainerComponent implements OnInit {
     this.getChartData();
   }
 
-  handleRefresh(event: any) {
+  handleRefresh(event?: any) {
     this.getChartData();
-    event.target.complete();
+    if (event) {
+      event.target.complete();
+    }
   }
 
   getChartData() {

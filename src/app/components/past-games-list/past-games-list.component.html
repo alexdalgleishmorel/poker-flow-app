@@ -10,6 +10,6 @@
 
 <ng-template #loading>
     <div class="content">
-        <app-loading-spinner></app-loading-spinner>
+        <app-loading-spinner (requestRetry)="onRefreshData()"></app-loading-spinner>
     </div>
 </ng-template>

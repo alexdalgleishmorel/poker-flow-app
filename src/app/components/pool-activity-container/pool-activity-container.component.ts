@@ -26,8 +26,10 @@ export class PoolActivityContainerComponent  implements OnInit {
     this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
   }
 
-  handleRefresh(event: any) {
+  handleRefresh(event?: any) {
     this.getData();
-    event.target.complete();
+    if (event) {
+      event.target.complete();
+    }
   }
 }

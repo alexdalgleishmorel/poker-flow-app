@@ -72,6 +72,6 @@
 
 <ng-template #loading>
     <div class="content">
-        <app-loading-spinner></app-loading-spinner>
+        <app-loading-spinner (requestRetry)="handleRefresh()"></app-loading-spinner>
     </div>
 </ng-template>
