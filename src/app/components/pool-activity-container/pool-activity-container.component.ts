@@ -16,7 +16,7 @@ export class PoolActivityContainerComponent  implements OnInit {
 
   ngOnInit() {
     this.poolService.poolByID.subscribe((poolData) => {
-      this.transactions = [...poolData.transactions];
+      this.transactions = [...poolData.transactions].reverse();
     });
 
     this.getData();
