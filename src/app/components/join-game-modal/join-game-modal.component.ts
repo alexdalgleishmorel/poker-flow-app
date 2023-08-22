@@ -4,6 +4,7 @@ import { catchError, of } from 'rxjs';
 import { DeviceService, DeviceStatus } from 'src/app/services/device/device.service';
 import { ModalController } from '@ionic/angular';
 import { PasswordModalComponent } from '../common/password-modal/password-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-join-game-modal',
@@ -17,6 +18,7 @@ export class JoinGameModalComponent {
     private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
+    private router: Router
   ) {
     this.deviceService.updateDeviceStatus();
   }
@@ -56,6 +58,7 @@ export class JoinGameModalComponent {
       }
     } else {
       this.poolService.joinPool(poolData.id).subscribe(() => {
+        this.router.navigate(['/', `pool`, poolData.id]);
         this.modalCtrl.dismiss(poolData.id);
       });
     }
