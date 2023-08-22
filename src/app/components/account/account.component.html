@@ -1,3 +1,17 @@
-<p>
-  account works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>My Profile</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{profile?.firstName}} {{profile?.lastName}}</ion-card-title>
+      <ion-card-subtitle>{{profile?.email}}</ion-card-subtitle>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <ion-button color="primary" shape="round" expand="block" (click)="logout()">LOGOUT</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

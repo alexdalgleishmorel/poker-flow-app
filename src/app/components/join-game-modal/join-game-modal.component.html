@@ -17,7 +17,7 @@
     </div>
 </ion-footer>
 <ion-content [scrollY]="false">
-    <div class="list">
-        <app-active-games-list [registerUser]="true" (onPoolSelect)="joinGame($event, false)"></app-active-games-list>
+    <div *ngIf="deviceStatus" class="list">
+        <app-active-games-list [registerUser]="true" [deviceID]="this.deviceStatus.id" (onPoolSelect)="joinGame($event, false)"></app-active-games-list>
     </div>
 <ion-content>

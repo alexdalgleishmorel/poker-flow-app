@@ -44,7 +44,9 @@ export class PoolChartContainerComponent implements OnInit {
       }
     });
     setTimeout(() => {
-      event.target.complete();
+      if (event) {
+        event.target.complete();
+      }
     }, API_TIMEOUT_CONSTRAINT);
   }
 }

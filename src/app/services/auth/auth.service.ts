@@ -66,7 +66,7 @@ export class AuthService {
   }
 
   doLogoutAndRedirectToLogin() {
-    this.logout();
+    this.logout().subscribe(() => {});
     this.router.navigate(['/', 'login']);
   }
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PoolData } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 import { IonModal, ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
@@ -20,7 +20,12 @@ export class HubComponent {
   constructor(
     private deviceService: DeviceService,
     private modalCtrl: ModalController,
+    private poolService: PoolService
   ) {}
+
+  ionViewWillEnter() {
+    this.poolService.newDataRequest.next(true);
+  }
 
   /**
    * Finds a PokerFlow device, creates a new game associated

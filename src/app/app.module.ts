@@ -36,9 +36,11 @@ import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
 import { DeviceConnectModalComponent } from './components/common/device-connect-modal/device-connect-modal.component';
 import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
+import { AccountComponent } from './components/account/account.component';
 
 @NgModule({
   declarations: [
+    AccountComponent,
     AppComponent,
     ActiveGamesListComponent,
     BuyInModalComponent,

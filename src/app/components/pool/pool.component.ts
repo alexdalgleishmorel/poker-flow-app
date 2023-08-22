@@ -48,6 +48,7 @@ export class PoolComponent implements OnInit {
       this.poolService.currentPoolID.next(this.id);
       this.poolService.poolViewActive.next(this.id);
     }
+    this.poolService.newDataRequest.next(true);
   }
 
   ionViewWillLeave() {

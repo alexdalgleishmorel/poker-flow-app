@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { catchError, of } from 'rxjs';
 import { DeviceService, DeviceStatus } from 'src/app/services/device/device.service';
 import { ModalController } from '@ionic/angular';
 import { PasswordModalComponent } from '../common/password-modal/password-modal.component';
@@ -13,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class JoinGameModalComponent {
   public games: any[] = [];
+  public deviceStatus?: DeviceStatus;
 
   constructor(
     private deviceService: DeviceService,
@@ -20,6 +20,11 @@ export class JoinGameModalComponent {
     private poolService: PoolService,
     private router: Router
   ) {
+    this.deviceService.deviceStatus.subscribe((status: DeviceStatus) => {
+      if (status.id) {
+        this.deviceStatus = status;
+      }
+    });
     this.deviceService.updateDeviceStatus();
   }
 
@@ -41,20 +46,15 @@ export class JoinGameModalComponent {
       const password = (await modal.onWillDismiss()).data;
 
       if (password) {
-        this.poolService.joinPool(poolData.id, password)
-          .pipe(
-            catchError(() => {
-              return of({'error': true});
-            })
-          )
-          .subscribe((response: any) => {
-            if (!response.error) {
-              this.modalCtrl.dismiss(poolData.id);
-            }
-            else {
-              this.joinGame(poolData, true);
-            }
-          });
+        this.poolService.joinPool(poolData.id, password).subscribe({
+          next: () => {
+            this.router.navigate(['/', `pool`, poolData.id]);
+            this.modalCtrl.dismiss(poolData.id);
+          },
+          error: () => {
+            this.joinGame(poolData, true);
+          }
+        });
       }
     } else {
       this.poolService.joinPool(poolData.id).subscribe(() => {

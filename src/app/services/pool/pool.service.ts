@@ -9,6 +9,7 @@ export interface PoolData {
   id: number;
   device_id: number;
   available_pot: number;
+  member_ids: number[];
   contributors: PoolMember[];
   transactions: PoolTransaction[];
   admin: Profile;
@@ -77,6 +78,8 @@ export class PoolService {
   public poolByID: Subject<PoolData> = new Subject<PoolData>();
   public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  public newDataRequest: Subject<boolean> = new Subject<boolean>();
 
   public currentPoolID: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { map } from 'rxjs';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -9,12 +9,14 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
   templateUrl: './active-games-list.component.html',
   styleUrls: ['./active-games-list.component.scss'],
 })
-export class ActiveGamesListComponent implements OnInit {
+export class ActiveGamesListComponent implements OnInit, OnChanges {
+  @Input() deviceID?: number;
   @Input() registerUser: boolean = false;
   @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   public pools?: PoolData[];
 
-  private itemOffset: number = 0;
+  private byUserItemOffset: number = 0;
+  private byDeviceItemOffset: number = 0;
   private itemsPerPage: number = 15;
 
   public noNewData: boolean = false;
@@ -22,14 +24,12 @@ export class ActiveGamesListComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private poolService: PoolService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    if (this.registerUser) {
-      this.getDeviceData();
-      return;
-    }
-    this.getData();
+    this.poolService.newDataRequest.subscribe(() => {
+      this.onRefreshData();
+    });
   }
 
   poolSelect(poolData: PoolData) {
@@ -41,21 +41,22 @@ export class ActiveGamesListComponent implements OnInit {
   }
 
   onRefreshData(event?: InfiniteScrollCustomEvent) {
-    this.itemOffset = 0;
+    this.byUserItemOffset = 0;
+    this.byDeviceItemOffset = 0;
     this.pools = undefined;
     this.noNewData = false;
     !this.registerUser ? this.getData(event) : this.getDeviceData(event);
   }
 
   private getData(event?: InfiniteScrollCustomEvent) {
-    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage)
+    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.byUserItemOffset, this.itemsPerPage)
     .pipe(
       map(pools => {
+        this.byUserItemOffset += pools.length;
         return pools.filter((pool: PoolData) => !pool.settings.expired);
       })
     ).subscribe(pools => {
       this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
-      this.itemOffset += pools.length;
       if (!pools.length) {
         this.noNewData = true;
       }
@@ -66,14 +67,15 @@ export class ActiveGamesListComponent implements OnInit {
   }
 
   private getDeviceData(event?: InfiniteScrollCustomEvent) {
-    this.poolService.getPoolsByDeviceID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage)
+    this.poolService.getPoolsByDeviceID(this.deviceID, this.byDeviceItemOffset, this.itemsPerPage)
     .pipe(
       map(pools => {
-        return pools.filter((pool: PoolData) => !pool.settings.expired);
+        this.byDeviceItemOffset += pools.length;
+        const userID = this.authService.getCurrentUser()?.id;
+        return pools.filter((pool: PoolData) => !pool.settings.expired && (userID ? !pool.member_ids.includes(userID) : false));
       })
     ).subscribe(pools => {
       this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
-      this.itemOffset += pools.length;
       if (!pools.length) {
         this.noNewData = true;
       }
@@ -81,5 +83,11 @@ export class ActiveGamesListComponent implements OnInit {
         event.target.complete();
       }
     });
+  }
+
+  ngOnChanges(): void {
+    if (!this.pools) {
+      this.onRefreshData();
+    }
   }
 }
