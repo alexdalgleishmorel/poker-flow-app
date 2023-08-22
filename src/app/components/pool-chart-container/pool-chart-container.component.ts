@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { API_TIMEOUT_CONSTRAINT } from '@constants';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -33,13 +34,17 @@ export class PoolChartContainerComponent implements OnInit {
   }
 
   handleRefresh(event?: any) {
-    this.getChartData();
-    if (event) {
-      event.target.complete();
-    }
+    this.getChartData(event);
   }
 
-  getChartData() {
-    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
+  getChartData(event?: any) {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {
+      if (event) {
+        event.target.complete();
+      }
+    });
+    setTimeout(() => {
+      event.target.complete();
+    }, API_TIMEOUT_CONSTRAINT);
   }
 }

@@ -22,14 +22,16 @@ export class PoolActivityContainerComponent  implements OnInit {
     this.getData();
   }
 
-  getData() {
-    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {});
+  getData(event?: any) {
+    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {
+      if (event) {
+        event.target.complete();
+      }
+    });
   }
 
   handleRefresh(event?: any) {
-    this.getData();
-    if (event) {
-      event.target.complete();
-    }
+    this.transactions = undefined;
+    this.getData(event);
   }
 }
