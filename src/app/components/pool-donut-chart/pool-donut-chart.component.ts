@@ -87,64 +87,66 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     });
     let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
 
-    this.chart = new Chart('pool-donut-chart', {
-      type: 'doughnut',
-      data: {
-        labels: ['Available Pot'].concat(names),
-        datasets: [
-          {
-            label: 'Buy In',
-            data: contributions.length > 0 ? [0].concat(contributions) : [],
-            backgroundColor: Object.values(this.colors),
-          },
-          {
-            data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
-            backgroundColor: POKERFLOW_GREEN,
-            circumference: 360*availableRatio,
-            weight: 0.4,
-          }
-        ]
-      },
-      plugins: [
-        emptyDoughnutPlugin,
-      ],
-      options: {
-        responsive: true,
-        plugins: {
-          emptyDoughnut: {
-            color: '#58595b',
-            width: 20,
-            radiusDecrease: 20,
-            availablePot: this.poolData?.available_pot
-          },
-          legend: {
-            position: 'top',
-            labels: {
-              filter: function(item, chart) {
-                return !item.text.includes('Available Pot');
+    setTimeout(() => {
+      this.chart = new Chart('pool-donut-chart', {
+        type: 'doughnut',
+        data: {
+          labels: ['Available Pot'].concat(names),
+          datasets: [
+            {
+              label: 'Buy In',
+              data: contributions.length > 0 ? [0].concat(contributions) : [],
+              backgroundColor: Object.values(this.colors),
+            },
+            {
+              data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
+              backgroundColor: POKERFLOW_GREEN,
+              circumference: 360*availableRatio,
+              weight: 0.4,
+            }
+          ]
+        },
+        plugins: [
+          emptyDoughnutPlugin,
+        ],
+        options: {
+          responsive: true,
+          plugins: {
+            emptyDoughnut: {
+              color: '#58595b',
+              width: 20,
+              radiusDecrease: 20,
+              availablePot: this.poolData?.available_pot
+            },
+            legend: {
+              position: 'top',
+              labels: {
+                filter: function(item, chart) {
+                  return !item.text.includes('Available Pot');
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (data) => ' $'.concat(data.parsed.toFixed(2))
               }
             }
           },
-          tooltip: {
-            callbacks: {
-              label: (data) => ' $'.concat(data.parsed.toFixed(2))
-            }
-          }
-        },
-        animation: {
-          onComplete: () => {
-            delayed = true;
+          animation: {
+            onComplete: () => {
+              delayed = true;
+            },
+            delay: (context) => {
+              let delay = 0;
+              if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                delay = context.dataIndex * 300 + context.datasetIndex * 100;
+              }
+              return delay;
+            },
           },
-          delay: (context) => {
-            let delay = 0;
-            if (context.type === 'data' && context.mode === 'default' && !delayed) {
-              delay = context.dataIndex * 300 + context.datasetIndex * 100;
-            }
-            return delay;
-          },
-        },
-      }
-    });
+        }
+      });
+    }, 1000);
   }
 
   /**
