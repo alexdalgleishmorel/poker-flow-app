@@ -97,6 +97,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
               label: 'Buy In',
               data: contributions.length > 0 ? [0].concat(contributions) : [],
               backgroundColor: Object.values(this.colors),
+              borderColor: 'transparent'
             },
             {
               data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
