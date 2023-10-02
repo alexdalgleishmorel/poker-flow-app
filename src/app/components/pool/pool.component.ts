@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { catchError, of } from 'rxjs';
-import { ModalController, ToastController } from '@ionic/angular';
+import { IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -15,10 +15,12 @@ import { TransactionCancelledModalComponent } from '../common/transaction-cancel
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnInit {
+export class PoolComponent implements OnInit, AfterViewInit {
   public poolData?: PoolData;
   public disabled: boolean = false;
   public id?: number;
+
+  @ViewChild('tabs') tabs?: IonTabs;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,6 +45,10 @@ export class PoolComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.tabs?.select('pot');
+  }
+
   ionViewWillEnter() {
     if (this.id) {
       this.poolService.currentPoolID.next(this.id);
@@ -53,6 +59,10 @@ export class PoolComponent implements OnInit {
 
   ionViewWillLeave() {
     this.poolService.poolViewActive.next(0);
+  }
+
+  onTabChange(tabName: string) {
+    this.tabs?.select(tabName);
   }
 
   /**

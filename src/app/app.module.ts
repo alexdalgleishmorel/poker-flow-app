@@ -37,6 +37,7 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
 import { DeviceConnectModalComponent } from './components/common/device-connect-modal/device-connect-modal.component';
 import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 import { AccountComponent } from './components/account/account.component';
+import { StatsComponent } from './components/stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +65,7 @@ import { AccountComponent } from './components/account/account.component';
     PoolDonutChartComponent,
     PoolSettingsComponent,
     SignupFormComponent,
+    StatsComponent,
     ThousandSuffixesPipe,
     TransactionCancelledModalComponent,
     UserPoolsTableComponent

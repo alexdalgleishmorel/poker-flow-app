@@ -7,30 +7,6 @@
             <div class="chart">
                 <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
             </div>
-            <ion-grid>
-                <ion-row>
-                    <ion-col>
-                        <ion-text>
-                            <h1>
-                                Total<br/>
-                                <ion-text color="primary">
-                                    ${{poolTotal.toFixed(2)}}
-                                </ion-text>
-                            </h1>
-                        </ion-text>
-                    </ion-col>
-                    <ion-col>
-                        <ion-text>
-                            <h1>
-                                Available<br/>
-                                <ion-text class="availablePotText">
-                                    ${{poolData ? poolData.available_pot.toFixed(2) : 0}}
-                                </ion-text>
-                            </h1>
-                        </ion-text>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
         </div>
     </div>
 </ion-content>

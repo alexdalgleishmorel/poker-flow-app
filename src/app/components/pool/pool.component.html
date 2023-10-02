@@ -21,21 +21,22 @@
   </div>
 </ion-footer>
 <ion-content [scrollY]="false">
-    <ion-tabs>
-        
-        <ion-tab-bar slot="top">
-          <ion-tab-button tab="pot">
-            <ion-label>POOL</ion-label>
-          </ion-tab-button>
-      
-          <ion-tab-button tab="activity">
-            <ion-label>ACTIVITY</ion-label>
-          </ion-tab-button>
-
-          <ion-tab-button tab="settings">
-            <ion-label>SETTINGS</ion-label>
-          </ion-tab-button>
-        </ion-tab-bar>
-
-    </ion-tabs>
+  <ion-tabs #tabs>
+    <ion-tab-bar slot="top">
+      <ion-segment [scrollable]="true" value="pot">
+        <ion-segment-button value="pot" (click)="onTabChange('pot')">
+          <ion-icon name="pie-chart-outline"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="activity" (click)="onTabChange('activity')">
+          <ion-icon name="swap-horizontal-outline"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="stats" (click)="onTabChange('stats')">
+          <ion-icon name="bar-chart-outline"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="settings" (click)="onTabChange('settings')">
+          <ion-icon name="settings-outline"></ion-icon>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-tab-bar>
+  </ion-tabs>
 </ion-content>
