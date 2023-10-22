@@ -54,7 +54,6 @@ export interface PoolSettings {
 
 export interface PoolCreationRequest {
   pool_name: string;
-  device_id: number;
   settings: PoolSettings;
   admin_id?: number;
 }
@@ -121,12 +120,11 @@ export class PoolService {
     );
   }
 
-  createPool(name: string, deviceID: number, settings: PoolSettings) {
+  createPool(name: string, settings: PoolSettings) {
     if (!settings.has_password) settings.password = '';
 
     const poolCreationRequest: PoolCreationRequest = {
       pool_name: name,
-      device_id: deviceID,
       settings: settings,
       admin_id: this.authService.getCurrentUser()?.id
     };

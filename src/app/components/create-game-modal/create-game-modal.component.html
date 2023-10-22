@@ -43,23 +43,13 @@
             errorText="Minimum and maximum values conflict"
         >
         </ion-input>
-        <div class="section-spacer"></div>
-        <ion-text color="primary"><h3>Optional Password</h3></ion-text>
-        <div class="vertical-spacer"></div>
-        <ion-input 
-            label="Password" 
-            type="password"
-            [formControl]="passwordFormControl"
-            errorText="Password is required"
-        >
-        </ion-input>
     </div>
     <div class="modal-buttons-container">
         <ion-button
             class="create-button"
             color="primary"
             (click)="createGame()"
-            [disabled]="!mainFormGroup.valid || !deviceStatus?.id"
+            [disabled]="!mainFormGroup.valid"
             shape="round"
             expand="block"
         >

@@ -4,10 +4,7 @@ import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/po
 import { catchError, of } from 'rxjs';
 import { IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
-import { ChipWithdrawalModalComponent } from '../chip-withdrawal-modal/chip-withdrawal-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
-import { DeviceService } from 'src/app/services/device/device.service';
 import { TransactionCancelledModalComponent } from '../common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 
 @Component({
@@ -25,7 +22,6 @@ export class PoolComponent implements OnInit, AfterViewInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
     private router: Router,
@@ -83,36 +79,10 @@ export class PoolComponent implements OnInit, AfterViewInit {
       }
     });
     modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
 
     const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
 
     if (!deviceWithdrawalRequest) {
-      return;
-    }
-
-    // Displaying chip withdrawal modal if buy-in interaction was valid
-    modal = await this.modalCtrl.create({
-      component: ChipWithdrawalModalComponent,
-      componentProps: {
-        denominations: this.poolData?.settings.denominations,
-        withdrawalRequest: deviceWithdrawalRequest
-      }
-    });
-    modal.present();
-
-    const chipWithdrawalResponse = (await modal.onWillDismiss()).data;
-
-    if (!chipWithdrawalResponse) {
-      modal = await this.modalCtrl.create({
-        component: TransactionCancelledModalComponent
-      });
-      modal.present();
       return;
     }
 
@@ -139,32 +109,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // Presenting chip deposit modal
-    let modal = await this.modalCtrl.create({
-      component: ChipDepositModalComponent,
-      componentProps: {
-        denominations: this.poolData?.settings.denominations
-      }
-    });
-    modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
-
-    const totalDepositValue = (await modal.onWillDismiss()).data;
-
-    if (!totalDepositValue) {
-      if (this.deviceService.isConnected.getValue()) {
-        modal = await this.modalCtrl.create({
-          component: TransactionCancelledModalComponent
-        });
-        modal.present();
-      }
-      return;
-    }
+    let totalDepositValue = 10;
 
     // Updating database with new transaction
     this.poolService.postTransaction({

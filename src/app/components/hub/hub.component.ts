@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { IonModal, ModalController } from '@ionic/angular';
+import { AlertController, IonModal, ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
-import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
-import { DeviceService } from 'src/app/services/device/device.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-hub',
@@ -12,15 +11,15 @@ import { DeviceService } from 'src/app/services/device/device.service';
 })
 export class HubComponent {
   @ViewChild('createGameModal') createGameModal!: IonModal;
-  @ViewChild('joinGameModal') joinGameModal!: IonModal;
   
   public disabled: boolean = false;
   public poolData?: PoolData[];
 
   constructor(
-    private deviceService: DeviceService,
+    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
-    private poolService: PoolService
+    private poolService: PoolService,
+    private router: Router
   ) {}
 
   ionViewWillEnter() {
@@ -36,12 +35,6 @@ export class HubComponent {
       component: CreateGameModalComponent
     });
     modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
   }
 
   /**
@@ -49,15 +42,31 @@ export class HubComponent {
    * with that device, and allows the user to join a game
    */
   async joinNewGame() {
-    const modal = await this.modalCtrl.create({
-      component: JoinGameModalComponent
+    const alert = await this.alertCtrl.create({
+      buttons: ['CANCEL', 'JOIN'],
+      backdropDismiss: false,
+      inputs: [
+        {
+          placeholder: 'Pool ID',
+          cssClass: 'centered-text',
+          attributes: {
+            maxlength: 8
+          },
+        },
+      ],
+      message: 'Please provide a pool ID',
     });
-    modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
+    alert.present();
+
+    const poolID = (await alert.onWillDismiss()).data.values[0];
+
+    if (poolID) {
+      this.poolService.getPoolByID(poolID).subscribe({
+        next: (response: any) => {
+          this.router.navigate(['/', `pool`, poolID]);
+        },
+        error: (response: any) => {}
+      });
+    }
   }
 }

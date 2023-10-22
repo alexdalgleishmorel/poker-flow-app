@@ -4,7 +4,6 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouteReuseStrategy } from '@angular/router';
-import { BLE } from '@awesome-cordova-plugins/ble/ngx';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
@@ -32,9 +31,6 @@ import { CreateGameModalComponent } from './components/create-game-modal/create-
 import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
 import { PasswordModalComponent } from './components/common/password-modal/password-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
-import { ChipWithdrawalModalComponent } from './components/chip-withdrawal-modal/chip-withdrawal-modal.component';
-import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
-import { DeviceConnectModalComponent } from './components/common/device-connect-modal/device-connect-modal.component';
 import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 import { AccountComponent } from './components/account/account.component';
 import { StatsComponent } from './components/stats/stats.component';
@@ -45,12 +41,9 @@ import { StatsComponent } from './components/stats/stats.component';
     AppComponent,
     ActiveGamesListComponent,
     BuyInModalComponent,
-    ChipDepositModalComponent,
     ChipViewComponent,
     ChipSelectComponent,
-    ChipWithdrawalModalComponent,
     CreateGameModalComponent,
-    DeviceConnectModalComponent,
     HubComponent,
     JoinGameModalComponent,
     LoadingSpinnerComponent,
@@ -82,7 +75,6 @@ import { StatsComponent } from './components/stats/stats.component';
   ],
   providers: [
     AuthService,
-    BLE,
     PoolService,
     FormBuilder,
     {

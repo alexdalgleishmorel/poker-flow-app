@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
-import { DeviceService, DeviceStatus, DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
+import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -15,12 +15,10 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   public assignments: number[] = [];
 
   public buyInFormControl: FormControl;
-  public deviceInventory?: number[];
   public form: FormGroup;
   
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private _formBuilder: FormBuilder
   ) {
@@ -32,13 +30,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void {
-    this.deviceService.deviceStatus.subscribe((deviceStatus: DeviceStatus) => {
-      this.deviceInventory = deviceStatus.inventory;
-    });
-
-    this.deviceService.updateDeviceStatus();
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     this.buyInFormControl.setValidators([
@@ -68,20 +60,15 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     this.denominations.forEach(() => this.assignments.push(0));
   }
 
-  totalChipsInInventory(deviceInventory: number[]) {
-    let totalChips: number = 0;
-    deviceInventory.forEach((inventory) => {
-      totalChips += inventory;
-    });
-    return totalChips;
-  }
-
-  inventoryCanSupply(value: number): boolean {
+  canAssignChips(value: number): boolean {
     let buyInToSettle: number = value;
-    let inventoryCopy = [...this.deviceInventory!];
     this.resetAssignments();
 
-    while (buyInToSettle > 0 && this.totalChipsInInventory(inventoryCopy) > 0) {
+    if (value > this.maxBuyIn || value < this.minBuyIn) {
+      return false;
+    }
+
+    while (buyInToSettle > 0) {
       let slot: number = 0;
       let chipMatch: boolean = false;
       
@@ -89,10 +76,9 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
         let availableChips = Math.floor(buyInToSettle/denomination);
 
-        if (inventoryCopy[slot] && availableChips > 0) {
+        if (availableChips > 0) {
           chipMatch = true;
           this.assignments[slot] += 1;
-          inventoryCopy[slot] -= 1;
           buyInToSettle = +(buyInToSettle - denomination).toFixed(2);
         }
         
@@ -110,21 +96,27 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
       
       const value = control.value;
 
-      if (!this.deviceInventory) {
-        return {'devicConnectionError': true};
-      }
-
       if (!value) {
         return {'required': true};
       }
 
-      if (!this.inventoryCanSupply(value)) {
+      if (!this.canAssignChips(value)) {
         this.resetAssignments();
         return { 'insufficientInventory': true };
       }
       
       return null;
     }
+  }
+
+  getErrorMessage(): string {
+    if (this.buyInFormControl.value > this.maxBuyIn) {
+      return `Maximum $${this.maxBuyIn}`;
+    }
+    if (this.buyInFormControl.value < this.minBuyIn) {
+      return `Minimum ${this.minBuyIn}`;
+    }
+    return '';
   }
 
   decimalFilter(event: any) {

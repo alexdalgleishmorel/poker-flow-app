@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { DeviceService, DeviceStatus } from 'src/app/services/device/device.service';
 import { ModalController } from '@ionic/angular';
 import { PasswordModalComponent } from '../common/password-modal/password-modal.component';
 import { Router } from '@angular/router';
@@ -12,21 +11,12 @@ import { Router } from '@angular/router';
 })
 export class JoinGameModalComponent {
   public games: any[] = [];
-  public deviceStatus?: DeviceStatus;
 
   constructor(
-    private deviceService: DeviceService,
     private modalCtrl: ModalController,
     private poolService: PoolService,
     private router: Router
-  ) {
-    this.deviceService.deviceStatus.subscribe((status: DeviceStatus) => {
-      if (status.id) {
-        this.deviceStatus = status;
-      }
-    });
-    this.deviceService.updateDeviceStatus();
-  }
+  ) {}
 
   cancel() {
     this.modalCtrl.dismiss(null);
