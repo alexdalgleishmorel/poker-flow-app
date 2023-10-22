@@ -23,6 +23,7 @@
     "@angular/router": "^16.0.0",
     "@awesome-cordova-plugins/ble": "^6.4.0",
     "@capacitor/app": "5.0.6",
+    "@capacitor/clipboard": "^5.0.6",
     "@capacitor/core": "5.2.2",
     "@capacitor/haptics": "5.0.6",
     "@capacitor/ios": "^5.2.3",

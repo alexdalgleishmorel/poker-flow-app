@@ -23,7 +23,7 @@
 <ion-content [scrollY]="false">
   <ion-tabs #tabs>
     <ion-tab-bar slot="top">
-      <ion-segment [scrollable]="true" value="pot">
+      <ion-segment #segmentBar [scrollable]="true" value="pot">
         <ion-segment-button value="pot" (click)="onTabChange('pot')">
           <ion-icon name="pie-chart-outline"></ion-icon>
         </ion-segment-button>

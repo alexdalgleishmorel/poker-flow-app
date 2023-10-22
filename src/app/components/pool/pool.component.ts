@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { catchError, of } from 'rxjs';
-import { IonTabs, ModalController, ToastController } from '@ionic/angular';
+import { IonSegment, IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -17,6 +17,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
   public poolID: string = '';
 
   @ViewChild('tabs') tabs?: IonTabs;
+  @ViewChild('segmentBar') segmentBar?: IonSegment;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -54,6 +55,9 @@ export class PoolComponent implements OnInit, AfterViewInit {
 
   ionViewWillLeave() {
     this.poolService.poolViewActive.next('');
+    if (this.segmentBar) {
+      this.segmentBar.value = 'pot';
+    }
   }
 
   onTabChange(tabName: string) {

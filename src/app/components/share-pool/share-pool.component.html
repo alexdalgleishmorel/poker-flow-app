@@ -1,3 +1,18 @@
-<p>
-  share-pool works!
-</p>
+<ion-content>
+  <div class="content">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="centered">SHARE YOUR GAME</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content class="centered">
+        <ion-card-subtitle class="centered">Copy the game ID to share with your friends.</ion-card-subtitle>
+        <div class="spacer"></div>
+        <ion-button [color]="!copied ? 'primary' : 'success'" shape="round" (click)="copyPoolID()">
+          {{!copied ? 'COPY GAME ID' : 'GAME ID COPIED'}}&nbsp;
+          <ion-icon [name]="!copied ? 'copy-outline' : 'checkmark-outline'"></ion-icon>
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
