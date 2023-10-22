@@ -37,7 +37,7 @@ export class ActiveGamesListComponent implements OnInit, OnChanges {
   }
 
   onGetMoreData(event: InfiniteScrollCustomEvent) {
-    !this.registerUser ? this.getData(event) : this.getDeviceData(event);
+    this.getData(event);
   }
 
   onRefreshData(event?: InfiniteScrollCustomEvent) {
@@ -45,7 +45,7 @@ export class ActiveGamesListComponent implements OnInit, OnChanges {
     this.byDeviceItemOffset = 0;
     this.pools = undefined;
     this.noNewData = false;
-    !this.registerUser ? this.getData(event) : this.getDeviceData(event);
+    this.getData(event);
   }
 
   private getData(event?: InfiniteScrollCustomEvent) {
@@ -54,25 +54,6 @@ export class ActiveGamesListComponent implements OnInit, OnChanges {
       map(pools => {
         this.byUserItemOffset += pools.length;
         return pools.filter((pool: PoolData) => !pool.settings.expired);
-      })
-    ).subscribe(pools => {
-      this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
-      if (!pools.length) {
-        this.noNewData = true;
-      }
-      if (event) {
-        event.target.complete();
-      }
-    });
-  }
-
-  private getDeviceData(event?: InfiniteScrollCustomEvent) {
-    this.poolService.getPoolsByDeviceID(this.deviceID, this.byDeviceItemOffset, this.itemsPerPage)
-    .pipe(
-      map(pools => {
-        this.byDeviceItemOffset += pools.length;
-        const userID = this.authService.getCurrentUser()?.id;
-        return pools.filter((pool: PoolData) => !pool.settings.expired && (userID ? !pool.member_ids.includes(userID) : false));
       })
     ).subscribe(pools => {
       this.pools = this.pools ? [...this.pools.concat(pools)] : pools;

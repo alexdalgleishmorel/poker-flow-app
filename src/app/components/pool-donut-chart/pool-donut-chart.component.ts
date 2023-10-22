@@ -62,7 +62,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     });
   }
 
-  initializeChart(activePoolView: number) {
+  initializeChart(activePoolView: string) {
     if (!activePoolView && this.chart) {
       this.chart.destroy();
       this.chart = null;

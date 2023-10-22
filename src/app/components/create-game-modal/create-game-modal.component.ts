@@ -31,7 +31,6 @@ export class CreateGameModalComponent {
   });
 
   public poolSettings: PoolSettings = {
-    has_password: false,
     min_buy_in: DEFAULT_MIN_BUY_IN,
     max_buy_in: DEFAULT_MAX_BUY_IN,
     denominations: DEFAULT_DENOMINATIONS
@@ -57,7 +56,6 @@ export class CreateGameModalComponent {
     });
 
     this.poolSettings = {
-      has_password: false,
       min_buy_in: DEFAULT_MIN_BUY_IN,
       max_buy_in: DEFAULT_MAX_BUY_IN,
       denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATIONS.length)

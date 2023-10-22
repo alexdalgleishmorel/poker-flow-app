@@ -23,34 +23,9 @@ export class JoinGameModalComponent {
   }
 
   async joinGame(poolData: PoolData, retry: boolean = false) {
-    if (poolData.settings.has_password) {
-
-      const modal = await this.modalCtrl.create({
-        component: PasswordModalComponent,
-        componentProps: {
-          retry: retry
-        }
-      });
-      modal.present();
-
-      const password = (await modal.onWillDismiss()).data;
-
-      if (password) {
-        this.poolService.joinPool(poolData.id, password).subscribe({
-          next: () => {
-            this.router.navigate(['/', `pool`, poolData.id]);
-            this.modalCtrl.dismiss(poolData.id);
-          },
-          error: () => {
-            this.joinGame(poolData, true);
-          }
-        });
-      }
-    } else {
-      this.poolService.joinPool(poolData.id).subscribe(() => {
-        this.router.navigate(['/', `pool`, poolData.id]);
-        this.modalCtrl.dismiss(poolData.id);
-      });
-    }
+    this.poolService.joinPool(poolData.id).subscribe(() => {
+      this.router.navigate(['/', `pool`, poolData.id]);
+      this.modalCtrl.dismiss(poolData.id);
+    });
   }
 }

@@ -5,7 +5,6 @@ import { catchError, of } from 'rxjs';
 import { IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { TransactionCancelledModalComponent } from '../common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -15,7 +14,7 @@ import { TransactionCancelledModalComponent } from '../common/transaction-cancel
 export class PoolComponent implements OnInit, AfterViewInit {
   public poolData?: PoolData;
   public disabled: boolean = false;
-  public id?: number;
+  public poolID: string = '';
 
   @ViewChild('tabs') tabs?: IonTabs;
 
@@ -29,11 +28,11 @@ export class PoolComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.activatedRoute.snapshot.params['id']);
-    if (this.id) {
-      this.poolService.currentPoolID.next(this.id);
-      this.poolService.poolViewActive.next(this.id);
-      this.poolService.getPoolByID(this.id).subscribe(() => {});
+    this.poolID = this.activatedRoute.snapshot.params['id'];
+    if (this.poolID) {
+      this.poolService.currentPoolID.next(this.poolID);
+      this.poolService.poolViewActive.next(this.poolID);
+      this.poolService.getPoolByID(this.poolID).subscribe(() => {});
     }
 
     this.poolService.poolByID.subscribe(poolData => {
@@ -46,15 +45,15 @@ export class PoolComponent implements OnInit, AfterViewInit {
   }
 
   ionViewWillEnter() {
-    if (this.id) {
-      this.poolService.currentPoolID.next(this.id);
-      this.poolService.poolViewActive.next(this.id);
+    if (this.poolID) {
+      this.poolService.currentPoolID.next(this.poolID);
+      this.poolService.poolViewActive.next(this.poolID);
     }
     this.poolService.newDataRequest.next(true);
   }
 
   ionViewWillLeave() {
-    this.poolService.poolViewActive.next(0);
+    this.poolService.poolViewActive.next('');
   }
 
   onTabChange(tabName: string) {
@@ -93,7 +92,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
       type: TransactionType.BUY_IN,
       amount: deviceWithdrawalRequest.amount
     }).subscribe(() => {
-      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+      this.poolService.getPoolByID(this.poolID).pipe(catchError(() => of(null)))
         .subscribe((poolData: PoolData) => { 
           this.poolData = {...poolData};
           this.displayTransactionSuccess('BUY-IN');
@@ -118,7 +117,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
       type: TransactionType.CASH_OUT,
       amount: totalDepositValue
     }).subscribe(() => {
-      this.poolService.getPoolByID(this.id).pipe(catchError(() => of(null)))
+      this.poolService.getPoolByID(this.poolID).pipe(catchError(() => of(null)))
         .subscribe((poolData: PoolData) => { 
           this.poolData = {...poolData};
           this.displayTransactionSuccess('CASH-OUT');

@@ -34,6 +34,7 @@ import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.comp
 import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
 import { AccountComponent } from './components/account/account.component';
 import { StatsComponent } from './components/stats/stats.component';
+import { SharePoolComponent } from './components/share-pool/share-pool.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { StatsComponent } from './components/stats/stats.component';
     PoolChartContainerComponent,
     PoolDonutChartComponent,
     PoolSettingsComponent,
+    SharePoolComponent,
     SignupFormComponent,
     StatsComponent,
     ThousandSuffixesPipe,

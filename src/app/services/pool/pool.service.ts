@@ -6,7 +6,7 @@ import { AuthService, Profile } from '../auth/auth.service';
 export interface PoolData {
   name: string;
   date_created: string;
-  id: number;
+  id: string;
   device_id: number;
   available_pot: number;
   member_ids: number[];
@@ -35,20 +35,18 @@ export interface PoolTransaction {
 }
 
 export interface PoolTransactionRequest {
-  pool_id: number;
+  pool_id: string;
   profile_id?: number;
   type: TransactionType;
   amount: number;
 }
 
 export interface PoolSettings {
-  has_password: boolean;
   min_buy_in: number;
   max_buy_in: number;
   denominations: number[];
   password?: string;
   buy_in_enabled?: boolean;
-  buy_in_expiry_time?: string;
   expired?: boolean;
 }
 
@@ -64,7 +62,7 @@ export interface PoolUpdateRequest {
 }
 
 export interface PoolJoinRequest {
-  pool_id: number;
+  pool_id: string;
   profile_id: number;
   password: string;
 }
@@ -75,12 +73,12 @@ export interface PoolJoinRequest {
 export class PoolService {
 
   public poolByID: Subject<PoolData> = new Subject<PoolData>();
-  public poolViewActive: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public poolViewActive: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public newDataRequest: Subject<boolean> = new Subject<boolean>();
 
-  public currentPoolID: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public currentPoolID: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(
     private apiService: ApiService,
@@ -98,18 +96,7 @@ export class PoolService {
     );
   }
 
-  getPoolsByDeviceID(deviceID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
-    if (!deviceID) {
-      return of([]);
-    }
-    return this.apiService.get(`/pool/device/${deviceID}`, itemOffset, itemsPerPage).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
-  }
-
-  getPoolByID(poolID: number | undefined): Observable<any> {
+  getPoolByID(poolID: string): Observable<any> {
     if (!poolID) return of();
     
     return this.apiService.get(`/pool/${poolID}`).pipe(
@@ -121,8 +108,6 @@ export class PoolService {
   }
 
   createPool(name: string, settings: PoolSettings) {
-    if (!settings.has_password) settings.password = '';
-
     const poolCreationRequest: PoolCreationRequest = {
       pool_name: name,
       settings: settings,
@@ -132,14 +117,14 @@ export class PoolService {
     return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
   }
 
-  updatePoolSettings(poolID: number, updateRequests: PoolUpdateRequest[]) {
+  updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]) {
     return lastValueFrom(this.apiService.post('/pool/settings/update', {
       pool_id: poolID,
       update_requests: updateRequests
     }));
   }
 
-  joinPool(poolID: number, password?: string) {
+  joinPool(poolID: string, password?: string) {
     const poolJoinRequest: PoolJoinRequest = {
       pool_id: poolID,
       profile_id: this.authService.getCurrentUser()?.id!,

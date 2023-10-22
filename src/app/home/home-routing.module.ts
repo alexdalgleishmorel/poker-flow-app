@@ -10,6 +10,7 @@ import { PoolChartContainerComponent } from '../components/pool-chart-container/
 import { PoolActivityContainerComponent } from '../components/pool-activity-container/pool-activity-container.component';
 import { PoolSettingsComponent } from '../components/pool-settings/pool-settings.component';
 import { StatsComponent } from '../components/stats/stats.component';
+import { SharePoolComponent } from '../components/share-pool/share-pool.component';
 
 const routes: Routes = [
   {
@@ -68,6 +69,10 @@ const routes: Routes = [
           {
             path: 'stats',
             component: StatsComponent
+          },
+          {
+            path: 'share',
+            component: SharePoolComponent
           }
         ]
       }
