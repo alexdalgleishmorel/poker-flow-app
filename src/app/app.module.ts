@@ -35,6 +35,7 @@ import { TransactionCancelledModalComponent } from './components/common/transact
 import { AccountComponent } from './components/account/account.component';
 import { StatsComponent } from './components/stats/stats.component';
 import { SharePoolComponent } from './components/share-pool/share-pool.component';
+import { ChipService } from './services/chip/chip.service';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { SharePoolComponent } from './components/share-pool/share-pool.component
   ],
   providers: [
     AuthService,
+    ChipService,
     PoolService,
     FormBuilder,
     {
