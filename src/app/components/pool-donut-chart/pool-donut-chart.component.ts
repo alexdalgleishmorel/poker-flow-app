@@ -40,16 +40,13 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
   @Input() poolData?: PoolData;
   public chart: any = null;
   private colors: string[] = [
-    '#f5f237',
     '#f67019',
     '#4dc9f6',
     '#f53794',
     '#537bc4',
     '#166a8f',
     '#58595b',
-    '#8549ba',
-    '#23f647',
-    '#f53737'
+    '#8549ba'
   ];
 
   constructor(
@@ -92,7 +89,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
 
     setTimeout(() => {
       this.chart = new Chart('pool-donut-chart', {
-        type: 'pie',
+        type: 'doughnut',
         data: {
           labels: ['Available Pot'].concat(names),
           datasets: [
@@ -103,15 +100,10 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
               borderColor: 'transparent'
             },
             {
-              data: [],
-              weight: this.poolData?.available_pot ? 0.5 : 0
-            },
-            {
               data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
               backgroundColor: POKERFLOW_GREEN,
-              borderColor: 'transparent',
-              weight: this.poolData?.available_pot ? this.poolData.available_pot/100 : 0
-              //weight: this.poolData?.current_pot ? this.poolData.current_pot/this.poolData.available_pot : 0
+              circumference: 360*availableRatio,
+              weight: 0.4,
             }
           ]
         },

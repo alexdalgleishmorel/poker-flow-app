@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NFCPlugin } from 'capacitor-nfc';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +6,4 @@ import { NFCPlugin } from 'capacitor-nfc';
 export class ChipService {
 
   constructor() {}
-
-  scan() {}
 }

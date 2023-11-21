@@ -66,10 +66,12 @@ const routes: Routes = [
             path: 'settings',
             component: PoolSettingsComponent
           },
+          /*
           {
             path: 'stats',
             component: StatsComponent
           },
+          */
           {
             path: 'share',
             component: SharePoolComponent
