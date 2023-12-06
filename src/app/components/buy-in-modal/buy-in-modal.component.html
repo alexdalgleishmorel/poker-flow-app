@@ -1,8 +1,3 @@
-<ion-header>
-    <ion-toolbar>
-      <ion-title>BUY-IN</ion-title>
-    </ion-toolbar>
-</ion-header>
 <ion-footer>
     <div *ngIf="!buyInConfirmed">
         <div class="range-container">
@@ -32,9 +27,12 @@
 </ion-footer>
 <ion-content [scrollY]="false">
     <div class="content" *ngIf="!buyInConfirmed else confirmed">
-        <ion-text class="buy-in-value" color="primary">
-            <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
-        </ion-text>
+        <div class="buy-in-container">
+            <ion-text color="medium">TOTAL BUY-IN</ion-text>
+            <ion-text class="buy-in-value" color="primary">
+                <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
+            </ion-text>
+        </div>
         <div class="spacer"></div>
         <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
     </div>

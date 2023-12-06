@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+export const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
