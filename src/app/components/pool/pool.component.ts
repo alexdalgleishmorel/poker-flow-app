@@ -5,6 +5,7 @@ import { catchError, of } from 'rxjs';
 import { IonSegment, IonTabs, ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
 
 @Component({
   selector: 'app-pool',
@@ -112,7 +113,21 @@ export class PoolComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    let totalDepositValue = 10;
+    // Presenting chip deposit modal
+    let modal = await this.modalCtrl.create({
+      component: ChipDepositModalComponent,
+      componentProps: {
+        availablePot: this.poolData.available_pot,
+        denominations: this.poolData.settings.denominations
+      }
+    });
+    modal.present();
+
+    const totalDepositValue = (await modal.onWillDismiss()).data;
+
+    if (!totalDepositValue) {
+      return;
+    }
 
     // Updating database with new transaction
     this.poolService.postTransaction({

@@ -1,12 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { currencyFormatter } from 'src/app/app.component';
 import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
-
-const currencyFormatter = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-});
 
 @Component({
   selector: 'app-buy-in-modal',
