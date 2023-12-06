@@ -17,10 +17,11 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   @Input() minBuyIn: number = 0;
   @Input() maxBuyIn: number = 0;
   @Input() denominations: number[] = [];
-  public assignments: number[] = [];
+  public buyInConfirmed: boolean = false;
 
-  public buyInFormControl: FormControl;
-  public buyInStep: number;
+  public assignments: number[] = [];
+  public buyInFormControl: FormControl = new FormControl(0);
+  public buyInStep: number = 1;
   public form: FormGroup;
   
   constructor(
@@ -28,17 +29,16 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     private modalCtrl: ModalController,
     private _formBuilder: FormBuilder
   ) {
-
-    this.buyInFormControl = new FormControl(this.minBuyIn, []);
-    const eligibleDenoms = this.denominations.filter(denom => denom >= 1);
-    this.buyInStep = eligibleDenoms.length ? eligibleDenoms[0] : 1;
-
     this.form = this._formBuilder.group({
       buyIn: this.buyInFormControl
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const eligibleDenoms = this.denominations.filter(denom => denom >= 1);
+    this.buyInStep = eligibleDenoms.length ? eligibleDenoms[0] : 1;
+    this.buyInFormControl.setValue(this.minBuyIn);
+  }
 
   ngAfterViewInit(): void {
     this.buyInFormControl.setValidators([
@@ -51,12 +51,16 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  confirmBuyIn() {
+  closeWithBuyInData() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
       amount: this.buyInFormControl.value,
       denominations: this.assignments
     };
     this.modalCtrl.dismiss(deviceWithdrawalRequest);
+  }
+
+  confirmBuyIn() {
+    this.buyInConfirmed = true;
   }
 
   cancelBuyIn() {

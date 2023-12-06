@@ -4,32 +4,34 @@
     </ion-toolbar>
 </ion-header>
 <ion-footer>
-    <div class="range-container">
-        <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
-        <ion-text color="medium">Slide to change buy-in</ion-text>
-    </div>
-    <div class="modal-buttons-container">
-        <ion-button
-            color="primary"
-            (click)="confirmBuyIn()"
-            [disabled]="form.invalid"
-            shape="round"
-            expand="block"
-        >
-            BUY-IN
-        </ion-button>
-        <ion-button
-            color="light"
-            (click)="cancelBuyIn()"
-            shape="round"
-            expand="block"
-        >
-            CANCEL
-        </ion-button>
+    <div *ngIf="!buyInConfirmed">
+        <div class="range-container">
+            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
+            <ion-text color="medium">Slide to adjust buy-in</ion-text>
+        </div>
+        <div class="modal-buttons-container">
+            <ion-button
+                color="primary"
+                (click)="confirmBuyIn()"
+                [disabled]="form.invalid"
+                shape="round"
+                expand="block"
+            >
+                CONFIRM
+            </ion-button>
+            <ion-button
+                color="light"
+                (click)="cancelBuyIn()"
+                shape="round"
+                expand="block"
+            >
+                CANCEL
+            </ion-button>
+        </div>
     </div>
 </ion-footer>
-<ion-content>
-    <div class="content">
+<ion-content [scrollY]="false">
+    <div class="content" *ngIf="!buyInConfirmed else confirmed">
         <ion-text class="buy-in-value" color="primary">
             <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
         </ion-text>
@@ -37,3 +39,27 @@
         <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
     </div>
 </ion-content>
+
+<ng-template #confirmed>
+    <div class="content">
+        <ion-text class="confirmed-text" color="success">
+            <b>BUY-IN CONFIRMED</b>
+        </ion-text>
+        <div class="spacer"></div>
+        <ion-text color="medium">
+            Collect the following amounts of each chip
+        </ion-text>
+        <div class="spacer"></div>
+        <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
+        <div class="spacer"></div>
+        <ion-button
+            color="primary"
+            (click)="closeWithBuyInData()"
+            [disabled]="form.invalid"
+            shape="round"
+            expand="block"
+        >
+            DONE
+        </ion-button>
+    </div>
+</ng-template>

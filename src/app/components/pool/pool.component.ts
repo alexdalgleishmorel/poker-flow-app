@@ -38,7 +38,6 @@ export class PoolComponent implements OnInit, AfterViewInit {
 
     this.poolService.poolByID.subscribe(poolData => {
       this.poolData = {...poolData};
-      this.buyIn();
     });
   }
 
@@ -77,16 +76,16 @@ export class PoolComponent implements OnInit, AfterViewInit {
     let modal = await this.modalCtrl.create({
       component: BuyInModalComponent,
       componentProps: {
-        minBuyIn: this.poolData?.settings.min_buy_in,
-        maxBuyIn: this.poolData?.settings.max_buy_in,
-        denominations: this.poolData?.settings.denominations
+        minBuyIn: this.poolData.settings.min_buy_in,
+        maxBuyIn: this.poolData.settings.max_buy_in,
+        denominations: this.poolData.settings.denominations
       }
     });
     modal.present();
 
-    const deviceWithdrawalRequest = (await modal.onWillDismiss()).data;
+    const withdrawRequest = (await modal.onWillDismiss()).data;
 
-    if (!deviceWithdrawalRequest) {
+    if (!withdrawRequest) {
       return;
     }
 
@@ -95,7 +94,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
       pool_id: this.poolData?.id,
       profile_id: this.authService.getCurrentUser()?.id,
       type: TransactionType.BUY_IN,
-      amount: deviceWithdrawalRequest.amount
+      amount: withdrawRequest.amount
     }).subscribe(() => {
       this.poolService.getPoolByID(this.poolID).pipe(catchError(() => of(null)))
         .subscribe((poolData: PoolData) => { 
