@@ -1,8 +1,7 @@
 <div class="chip-container">
     <ng-container *ngFor="let denomination of denominations; let i = index;">
         <div class="chip-content">
-            <ion-toggle></ion-toggle>
-            <ion-fab-button [disabled]="!assignments[i] && !viewOnly" color="tertiary">
+            <ion-fab-button size="large" [disabled]="!assignments[i] && !viewOnly" color="tertiary">
                 ${{ denomination | thousandSuff }}
             </ion-fab-button>
             <div class="spacer" *ngIf="hasAssignments()"></div>

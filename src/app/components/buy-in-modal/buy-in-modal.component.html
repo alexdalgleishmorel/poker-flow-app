@@ -4,6 +4,10 @@
     </ion-toolbar>
 </ion-header>
 <ion-footer>
+    <div class="range-container">
+        <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
+        <ion-text color="medium">Slide to change buy-in</ion-text>
+    </div>
     <div class="modal-buttons-container">
         <ion-button
             color="primary"
@@ -24,30 +28,11 @@
         </ion-button>
     </div>
 </ion-footer>
-<ion-content [scrollY]="false">
+<ion-content>
     <div class="content">
-        <form [formGroup]="form">
-            <ion-input
-                placeholder="Enter a buy-in value"
-                type="number"
-                [min]="minBuyIn"
-                [formControl]="buyInFormControl"
-                (keypress)="decimalFilter($event)"
-                (keydown)="resetAssignments()"
-                [errorText]="getErrorMessage()"
-            >
-            </ion-input>
-            <!--
-            <ion-text color="danger" *ngIf="buyInFormControl.errors?.['min'] else maxBuyInError">
-                Minimum <b>${{minBuyIn.toFixed(2)}}</b>
-            </ion-text>
-            <ng-template #maxBuyInError>
-                <ion-text color="danger" *ngIf="buyInFormControl.errors?.['max']">
-                    Maximum <b>${{maxBuyIn.toFixed(2)}}</b>
-                </ion-text>
-            </ng-template>
-            -->
-        </form>
+        <ion-text class="buy-in-value" color="primary">
+            <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
+        </ion-text>
         <div class="spacer"></div>
         <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
     </div>

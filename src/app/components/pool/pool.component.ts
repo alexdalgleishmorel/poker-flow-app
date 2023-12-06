@@ -38,6 +38,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
 
     this.poolService.poolByID.subscribe(poolData => {
       this.poolData = {...poolData};
+      this.buyIn();
     });
   }
 

@@ -3,6 +3,11 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors,
 import { ModalController } from '@ionic/angular';
 import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
+
 @Component({
   selector: 'app-buy-in-modal',
   templateUrl: './buy-in-modal.component.html',
@@ -15,6 +20,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   public assignments: number[] = [];
 
   public buyInFormControl: FormControl;
+  public buyInStep: number;
   public form: FormGroup;
   
   constructor(
@@ -23,7 +29,9 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     private _formBuilder: FormBuilder
   ) {
 
-    this.buyInFormControl = new FormControl(``, []);
+    this.buyInFormControl = new FormControl(this.minBuyIn, []);
+    const eligibleDenoms = this.denominations.filter(denom => denom >= 1);
+    this.buyInStep = eligibleDenoms.length ? eligibleDenoms[0] : 1;
 
     this.form = this._formBuilder.group({
       buyIn: this.buyInFormControl
@@ -45,7 +53,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
   confirmBuyIn() {
     const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
-      amount: +this.buyInFormControl.value!,
+      amount: this.buyInFormControl.value,
       denominations: this.assignments
     };
     this.modalCtrl.dismiss(deviceWithdrawalRequest);
@@ -111,10 +119,10 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
   getErrorMessage(): string {
     if (this.buyInFormControl.value > this.maxBuyIn) {
-      return `Maximum $${this.maxBuyIn}`;
+      return `Maximum ${currencyFormatter.format(this.maxBuyIn)}`;
     }
     if (this.buyInFormControl.value < this.minBuyIn) {
-      return `Minimum ${this.minBuyIn}`;
+      return `Minimum ${currencyFormatter.format(this.minBuyIn)}`;
     }
     return '';
   }
@@ -125,6 +133,16 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
  
     if (!reg.test(input)) {
         event.preventDefault();
+    }
+  }
+
+  getFormattedCurrency(value: number) {
+    return currencyFormatter.format(value);
+  }
+
+  onSliderChange(event: any) {
+    if (this.buyInFormControl.value !== event.detail.value) {
+      this.buyInFormControl.setValue(event.detail.value);
     }
   }
 }
