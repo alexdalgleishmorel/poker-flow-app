@@ -1,5 +1,6 @@
 export const POLLING_INTERVAL: number = 5000;
-export const DEFAULT_DENOMINATIONS: number[] = [1, 5, 10, 20, 25, 100, 500, 1000];
+export const DEFAULT_DENOMINATION_COUNT: number = 4;
+export const DEFAULT_DENOMINATIONS: number[] = [0.1, 0.5, 1, 5, 10, 25, 100, 500, 1000, 5000];
 export const DEFAULT_MIN_BUY_IN: number = 5;
 export const DEFAULT_MAX_BUY_IN: number = 100;
 export const POKERFLOW_GREEN: string = '#388E3C';

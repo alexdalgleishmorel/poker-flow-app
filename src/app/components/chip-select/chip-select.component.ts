@@ -29,12 +29,13 @@ export class ChipSelectComponent implements OnChanges {
   }
 
   chipSelect(index: number) {
+    index = index >= this.denominations.length ? this.denominations.length-1 : index;
     this.selectedSlot = index;
     this.chipDenominationControl.setValue(this.denominations[this.selectedSlot]);
   }
 
   decimalFilter(event: any) {
-    const reg = /^-?\d*(\.\d{0,1})?$/;
+    const reg = /^-?\d*(\.\d{0,2})?$/;
     let input = event.target.value + String.fromCharCode(event.charCode);
  
     if (!reg.test(input)) {
@@ -50,17 +51,15 @@ export class ChipSelectComponent implements OnChanges {
       if (value > 1000 && value % 1000 !== 0) {
         return {'badMultipleError': true};
       }
-
-      if (value > this.maxBuyIn) {
-        return {'maxBuyInError': true};
-      }
       
       return null;
     }
   }
 
   onFocusOut() {
-    if (!this.chipDenominationControl.value) this.chipDenominationControl.setValue(DEFAULT_DENOMINATIONS[this.selectedSlot]);
+    if (!this.chipDenominationControl.value) {
+      this.chipDenominationControl.setValue(DEFAULT_DENOMINATIONS[this.selectedSlot%DEFAULT_DENOMINATIONS.length]);
+    }
   }
 
   ngOnChanges() {
@@ -71,9 +70,16 @@ export class ChipSelectComponent implements OnChanges {
     if (this.chipDenominationControl.errors?.['badMultipleError']) {
       return 'Must be a multiple of $1000. Value reset to default.';
     }
-    if (this.chipDenominationControl.errors?.['maxBuyInError']) {
-      return 'Exceeds max buy-in. Value reset to default.';
-    }
     return 'Required';
+  }
+
+  removeChip(index: number) {
+    this.denominations.splice(index, 1);
+    this.chipSelect(this.selectedSlot);
+  }
+
+  addChip() {
+    this.denominations.push(DEFAULT_DENOMINATIONS[this.denominations.length%DEFAULT_DENOMINATIONS.length]);
+    this.chipSelect(this.denominations.length-1);
   }
 }

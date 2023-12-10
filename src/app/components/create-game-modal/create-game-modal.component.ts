@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
+import { DEFAULT_DENOMINATION_COUNT, DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
 import { ModalController } from '@ionic/angular';
 import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
 
@@ -33,7 +33,7 @@ export class CreateGameModalComponent {
   public poolSettings: PoolSettings = {
     min_buy_in: DEFAULT_MIN_BUY_IN,
     max_buy_in: DEFAULT_MAX_BUY_IN,
-    denominations: DEFAULT_DENOMINATIONS
+    denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT)
   };
 
   constructor(
@@ -58,7 +58,7 @@ export class CreateGameModalComponent {
     this.poolSettings = {
       min_buy_in: DEFAULT_MIN_BUY_IN,
       max_buy_in: DEFAULT_MAX_BUY_IN,
-      denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATIONS.length)
+      denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT)
     }
   }
 
