@@ -28,7 +28,6 @@ import { ChipViewComponent, ThousandSuffixesPipe } from './components/chip-view/
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 import { ChipSelectComponent } from './components/chip-select/chip-select.component';
 import { CreateGameModalComponent } from './components/create-game-modal/create-game-modal.component';
-import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
 import { PasswordModalComponent } from './components/common/password-modal/password-modal.component';
 import { BuyInModalComponent } from './components/buy-in-modal/buy-in-modal.component';
 import { TransactionCancelledModalComponent } from './components/common/transaction-cancelled-modal/transaction-cancelled-modal.component';
@@ -49,7 +48,6 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     ChipSelectComponent,
     CreateGameModalComponent,
     HubComponent,
-    JoinGameModalComponent,
     LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,

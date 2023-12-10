@@ -68,4 +68,10 @@ export class ChipDepositModalComponent implements OnInit {
   getMaximumChipCount() {
     return this.displayedDenomination ? Math.ceil(this.availablePot/this.displayedDenomination) : 0;
   }
+
+  onChipSelect(index: number) {
+    this.currentDenominationIndex = index;
+    this.displayedDenomination = this.denominations[this.currentDenominationIndex];
+    this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
+  }
 }

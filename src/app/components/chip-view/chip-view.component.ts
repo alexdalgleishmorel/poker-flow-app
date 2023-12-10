@@ -1,4 +1,4 @@
-import { Component, Input, Pipe, PipeTransform } from '@angular/core';
+import { Component, EventEmitter, Input, Output, Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'thousandSuff'
@@ -33,8 +33,13 @@ export class ChipViewComponent {
   @Input() denominations: number[] = [];
   @Input() assignments: number[] = [];
   @Input() viewOnly: boolean = false;
+  @Output() chipSelect: EventEmitter<number> = new EventEmitter<number>();
 
   hasAssignments(): boolean {
     return this.assignments.length !== 0;
+  }
+
+  onSelect(index: number) {
+    this.chipSelect.emit(index);
   }
 }

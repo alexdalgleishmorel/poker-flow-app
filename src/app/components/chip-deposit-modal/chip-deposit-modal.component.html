@@ -32,8 +32,10 @@
     </div>
 </ion-footer>
 
-<ion-content [scrollY]="false">
+<ion-content>
     <div class="content">
+        <div class="large-spacer"></div>
+        <div class="large-spacer"></div>
         <div class="total-cash-out-container">
             <ion-text color="medium">TOTAL CASH-OUT</ion-text>
             <ion-text class="cash-out-value" color="primary"><b>{{getDepositTotal()}}</b></ion-text>
@@ -62,7 +64,7 @@
             </ion-icon>
         </div>
         <div class="spacer"></div>
-        <app-chip-view [denominations]="denominations" [assignments]="denominationCounts"></app-chip-view>
+        <app-chip-view (chipSelect)="onChipSelect($event)" [denominations]="denominations" [assignments]="denominationCounts"></app-chip-view>
     </div>
 </ion-content>
 

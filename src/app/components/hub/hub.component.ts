@@ -32,9 +32,12 @@ export class HubComponent {
    */
   async createGame() {
     const modal = await this.modalCtrl.create({
-      component: CreateGameModalComponent
+      component: CreateGameModalComponent,
+      cssClass: 'modal-fullscreen'
     });
     modal.present();
+
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
   }
 
   /**
@@ -62,10 +65,10 @@ export class HubComponent {
 
     if (poolID) {
       this.poolService.getPoolByID(poolID).subscribe({
-        next: (response: any) => {
+        next: () => {
           this.router.navigate(['/', `pool`, poolID]);
         },
-        error: (response: any) => {}
+        error: () => {}
       });
     }
   }

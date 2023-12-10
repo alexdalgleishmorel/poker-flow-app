@@ -80,9 +80,12 @@ export class PoolComponent implements OnInit, AfterViewInit {
         minBuyIn: this.poolData.settings.min_buy_in,
         maxBuyIn: this.poolData.settings.max_buy_in,
         denominations: this.poolData.settings.denominations
-      }
+      },
+      cssClass: 'modal-fullscreen'
     });
     modal.present();
+
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
     const withdrawRequest = (await modal.onWillDismiss()).data;
 
@@ -119,9 +122,12 @@ export class PoolComponent implements OnInit, AfterViewInit {
       componentProps: {
         availablePot: this.poolData.available_pot,
         denominations: this.poolData.settings.denominations
-      }
+      },
+      cssClass: 'modal-fullscreen'
     });
     modal.present();
+
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
     const totalDepositValue = (await modal.onWillDismiss()).data;
 
