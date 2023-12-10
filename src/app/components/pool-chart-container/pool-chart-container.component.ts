@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { API_TIMEOUT_CONSTRAINT } from '@constants';
+import { currencyFormatter } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -48,5 +49,13 @@ export class PoolChartContainerComponent implements OnInit {
         event.target.complete();
       }
     }, API_TIMEOUT_CONSTRAINT);
+  }
+
+  getTotalPotRepresentation() {
+    return currencyFormatter.format(this.poolTotal);
+  }
+
+  getAvailablePotRepresentation() {
+    return currencyFormatter.format(this.poolData?.available_pot || 0);
   }
 }

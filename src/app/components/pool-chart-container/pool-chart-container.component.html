@@ -4,6 +4,16 @@
     </ion-refresher>
     <div class="content">
         <div *ngIf="poolTotal else loading">
+            <div class="chart-metadata-container">
+                <div class="total">
+                    <ion-text color="medium">TOTAL</ion-text>
+                    <ion-text class="chart-metadata-value" color="primary"><b>{{getTotalPotRepresentation()}}</b></ion-text>
+                </div>
+                <div class="available">
+                    <ion-text color="medium">AVAILABLE</ion-text>
+                    <ion-text class="chart-metadata-value" color="success"><b>{{getAvailablePotRepresentation()}}</b></ion-text>
+                </div>
+            </div>
             <div class="chart">
                 <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
             </div>

@@ -11,6 +11,10 @@
     padding: 5px;
 }
 
+.chip-content:hover {
+    cursor: pointer;
+}
+
 .input-container {
     display: flex;
     justify-content: flex-start;

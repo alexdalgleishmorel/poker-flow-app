@@ -42,7 +42,8 @@
         </div>
         <div class="spacer"></div>
         <div class="denomination-changer">
-            <ion-icon 
+            <ion-icon
+                class="navigation-arrow"
                 size="large" 
                 name="arrow-back-outline"
                 (click)="lastDenomination()"
@@ -51,11 +52,12 @@
             </ion-icon>
             <div class="chip-content">
                 <ion-fab-button size="large" color="tertiary">
-                    ${{ displayedDenomination | thousandSuff }}
+                    {{ displayedDenomination | thousandSuff }}
                 </ion-fab-button>
                 <ion-text color="primary"><h2><b>{{denominationCounts[currentDenominationIndex]}}</b></h2></ion-text>
             </div>
-            <ion-icon 
+            <ion-icon
+                class="navigation-arrow"
                 size="large"
                 name="arrow-forward-outline"
                 (click)="nextDenomination()"
