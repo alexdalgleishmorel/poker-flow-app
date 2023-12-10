@@ -14,7 +14,7 @@ export class PoolActivityTableComponent implements OnInit {
   @Output() onBuyIn = new EventEmitter<boolean>;
   @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
 
-  private unfilteredData?: PoolTransaction[];
+  public unfilteredData?: PoolTransaction[];
   private filteredData?: PoolTransaction[];
 
   ngOnInit() {
