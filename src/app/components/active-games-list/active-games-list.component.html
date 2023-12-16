@@ -1,9 +1,7 @@
 <div class="content" *ngIf="pools else loading">
     <app-user-pools-table 
         [dataSource]="pools"
-        [noNewData]="noNewData"
-        [registerUser]="registerUser" 
-        (onPoolSelect)="poolSelect($event)"
+        [noNewData]="noNewData" 
         (getMoreData)="onGetMoreData($event)"
         (refreshData)="onRefreshData($event)"
     >

@@ -12,7 +12,6 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 export class ActiveGamesListComponent implements OnInit, OnChanges {
   @Input() deviceID?: number;
   @Input() registerUser: boolean = false;
-  @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   public pools?: PoolData[];
 
   private byUserItemOffset: number = 0;
@@ -30,10 +29,6 @@ export class ActiveGamesListComponent implements OnInit, OnChanges {
     this.poolService.newDataRequest.subscribe(() => {
       this.onRefreshData();
     });
-  }
-
-  poolSelect(poolData: PoolData) {
-    this.onPoolSelect.emit(poolData);
   }
 
   onGetMoreData(event: InfiniteScrollCustomEvent) {

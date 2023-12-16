@@ -1,7 +1,4 @@
 <ion-content *ngIf="poolData else loading">
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-        <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-    </ion-refresher>
     <ion-accordion-group>
         <ion-accordion>
             <ion-item slot="header">
@@ -72,6 +69,6 @@
 
 <ng-template #loading>
     <div class="content">
-        <app-loading-spinner (requestRetry)="handleRefresh()"></app-loading-spinner>
+        <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>

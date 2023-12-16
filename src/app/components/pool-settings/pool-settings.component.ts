@@ -63,11 +63,6 @@ export class PoolSettingsComponent implements OnInit {
     });
   }
 
-  handleRefresh(event?: any) {
-    this.poolData = undefined;
-    this.getData(event);
-  }
-
   populateSettings(poolData: PoolData) {
     this.buyInEnabledFormControl.setValue(poolData.settings.buy_in_enabled);
     this.minBuyInFormControl.setValue(poolData.settings.min_buy_in);

@@ -1,9 +1,6 @@
 <div class="table-container">
+    <ion-searchbar (ionInput)="handleSearch($event)" *ngIf="unfilteredData?.length"></ion-searchbar>
     <ion-content>
-        <ion-searchbar (ionInput)="handleSearch($event)" *ngIf="unfilteredData?.length"></ion-searchbar>
-        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-        </ion-refresher>
         <div *ngIf="dataSource.length > 0 else emptyTable">
             <ion-list>
                 <ion-item *ngFor="let pool of dataSource; let index" (click)="openGame(pool)">
@@ -47,9 +44,6 @@
 
 <ng-template #emptyHistoryTableMessage>
     <ion-content [scrollY]="false">
-        <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
-        </ion-refresher>
         <div class="empty-message-container">
             <div class="empty-message">
                 No past games found.

@@ -13,8 +13,6 @@ export class UserPoolsTableComponent implements OnInit {
   @Input() disabled: boolean = false;
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
-  @Input() registerUser: boolean = false;
-  @Output() onPoolSelect: EventEmitter<PoolData> = new EventEmitter<PoolData>();
   @Output() getMoreData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   public displayedColumns: string[] = [];
@@ -22,27 +20,18 @@ export class UserPoolsTableComponent implements OnInit {
   public unfilteredData: PoolData[] = [];
   private filteredData: PoolData[] = [];
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   ngOnInit() {
     this.unfilteredData = this.dataSource;
   }
 
   openGame(poolData: PoolData) {
-    this.onPoolSelect.emit(poolData);
-    if (!this.registerUser) {
-      this.router.navigate(['/', `pool`, poolData.id]);
-    }
+    this.router.navigate(['/', `pool`, poolData.id]);
   }
 
   onInfiniteScroll(event: any) {
     this.getMoreData.emit(event as InfiniteScrollCustomEvent);
-  }
-
-  handleRefresh(event: any) {
-    this.refreshData.emit(event as InfiniteScrollCustomEvent);
   }
 
   handleSearch(event: any) {
