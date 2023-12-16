@@ -36,6 +36,7 @@ import { StatsComponent } from './components/stats/stats.component';
 import { SharePoolComponent } from './components/share-pool/share-pool.component';
 import { ChipService } from './services/chip/chip.service';
 import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-deposit-modal.component';
+import { JoinGameModalComponent } from './components/join-game-modal/join-game-modal.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { ChipDepositModalComponent } from './components/chip-deposit-modal/chip-
     ChipSelectComponent,
     CreateGameModalComponent,
     HubComponent,
+    JoinGameModalComponent,
     LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,

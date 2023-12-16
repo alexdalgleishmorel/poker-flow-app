@@ -64,7 +64,6 @@ export interface PoolUpdateRequest {
 export interface PoolJoinRequest {
   pool_id: string;
   profile_id: number;
-  password: string;
 }
 
 @Injectable({
@@ -124,11 +123,10 @@ export class PoolService {
     }));
   }
 
-  joinPool(poolID: string, password?: string) {
+  joinPool(poolID: string) {
     const poolJoinRequest: PoolJoinRequest = {
       pool_id: poolID,
-      profile_id: this.authService.getCurrentUser()?.id!,
-      password: password ? password : ''
+      profile_id: this.authService.getCurrentUser()?.id!
     };
 
     return this.apiService.post('/pool/join', poolJoinRequest);

@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { AlertController, IonModal, ModalController } from '@ionic/angular';
+import { IonModal, ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
 import { Router } from '@angular/router';
+import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
 
 @Component({
   selector: 'app-hub',
@@ -16,7 +17,6 @@ export class HubComponent {
   public poolData?: PoolData[];
 
   constructor(
-    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private poolService: PoolService,
     private router: Router
@@ -45,26 +45,18 @@ export class HubComponent {
    * with that device, and allows the user to join a game
    */
   async joinNewGame() {
-    const alert = await this.alertCtrl.create({
-      buttons: ['CANCEL', 'JOIN'],
-      backdropDismiss: false,
-      inputs: [
-        {
-          placeholder: 'Pool ID',
-          cssClass: 'centered-text',
-          attributes: {
-            maxlength: 8
-          },
-        },
-      ],
-      message: 'Please provide a pool ID',
+    const modal = await this.modalCtrl.create({
+      component: JoinGameModalComponent,
+      cssClass: 'modal-fullscreen'
     });
-    alert.present();
+    modal.present();
 
-    const poolID = (await alert.onWillDismiss()).data.values[0];
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
+
+    const poolID = (await modal.onWillDismiss()).data;
 
     if (poolID) {
-      this.poolService.getPoolByID(poolID).subscribe({
+      this.poolService.joinPool(poolID).subscribe({
         next: () => {
           this.router.navigate(['/', `pool`, poolID]);
         },
