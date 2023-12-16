@@ -1,5 +1,5 @@
 <ion-footer>
-  <div class="main-buttons-container">
+  <div *ngIf="!poolData?.settings?.expired else expiredMessage" class="main-buttons-container">
     <ion-button
         shape="round"
         expand="block"
@@ -45,3 +45,12 @@
     </ion-tab-bar>
   </ion-tabs>
 </ion-content>
+
+<ng-template #expiredMessage>
+  <div class="main-buttons-container centered">
+    <ion-text color="primary"><b>GAME EXPIRED</b></ion-text>
+    <div class="spacer"></div>
+    <ion-text color="medium">The available pot has been fully withdrawn</ion-text>
+    <div class="large-spacer"></div>
+  </div>
+</ng-template>
