@@ -11,7 +11,9 @@
                         <ion-text><b>{{ pool.name }}</b></ion-text>
                         <br/>
                         <sub>
-                            <ion-text color="secondary">{{pool.contributors.length}} contributors</ion-text>
+                            <ion-text color="secondary">
+                                {{pool.contributors.length}} {{pool.contributors.length === 1 ? 'player' : 'players'}}
+                            </ion-text>
                         </sub>
                         <br/>
                         <br/>
