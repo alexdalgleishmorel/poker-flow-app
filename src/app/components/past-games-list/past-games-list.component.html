@@ -3,13 +3,12 @@
         [dataSource]="pools" 
         [noNewData]="noNewData"
         [history]="true"
-        (getMoreData)="onGetMoreData($event)"
-        (refreshData)="onRefreshData($event)"
+        (getMoreData)="getData($event)"
     ></app-user-pools-table>
 </div>
 
 <ng-template #loading>
     <div class="content">
-        <app-loading-spinner (requestRetry)="onRefreshData()"></app-loading-spinner>
+        <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>

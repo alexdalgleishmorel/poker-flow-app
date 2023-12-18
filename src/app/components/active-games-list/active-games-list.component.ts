@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { map } from 'rxjs';
+
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 
@@ -9,45 +10,28 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
   templateUrl: './active-games-list.component.html',
   styleUrls: ['./active-games-list.component.scss'],
 })
-export class ActiveGamesListComponent implements OnInit, OnChanges {
-  @Input() deviceID?: number;
-  @Input() registerUser: boolean = false;
+export class ActiveGamesListComponent implements OnInit {
   public pools?: PoolData[];
-
-  private byUserItemOffset: number = 0;
-  private byDeviceItemOffset: number = 0;
-  private itemsPerPage: number = 15;
-
   public noNewData: boolean = false;
 
-  constructor(
-    private authService: AuthService,
-    private poolService: PoolService
-  ) {}
+  private itemOffset: number = 0;
+  private itemsPerPage: number = 15;
+
+  constructor(private authService: AuthService, private poolService: PoolService) {}
 
   ngOnInit() {
-    this.poolService.newDataRequest.subscribe(() => {
-      this.onRefreshData();
+    this.poolService.updateNotification.subscribe(() => {
+      this.pools = undefined;
+      this.itemOffset = 0;
+      this.getData();
     });
   }
 
-  onGetMoreData(event: InfiniteScrollCustomEvent) {
-    this.getData(event);
-  }
-
-  onRefreshData(event?: InfiniteScrollCustomEvent) {
-    this.byUserItemOffset = 0;
-    this.byDeviceItemOffset = 0;
-    this.pools = undefined;
-    this.noNewData = false;
-    this.getData(event);
-  }
-
-  private getData(event?: InfiniteScrollCustomEvent) {
-    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.byUserItemOffset, this.itemsPerPage)
+  public getData(event?: InfiniteScrollCustomEvent) {
+    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage)
     .pipe(
       map(pools => {
-        this.byUserItemOffset += pools.length;
+        this.itemOffset += pools.length;
         return pools.filter((pool: PoolData) => !pool.settings.expired);
       })
     ).subscribe(pools => {
@@ -59,11 +43,5 @@ export class ActiveGamesListComponent implements OnInit, OnChanges {
         event.target.complete();
       }
     });
-  }
-
-  ngOnChanges(): void {
-    if (!this.pools) {
-      this.onRefreshData();
-    }
   }
 }

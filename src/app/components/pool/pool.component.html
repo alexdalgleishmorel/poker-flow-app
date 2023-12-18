@@ -35,10 +35,10 @@
           <ion-icon name="analytics-outline"></ion-icon>
         </ion-segment-button>
         !-->
-        <ion-segment-button value="share" (click)="onTabChange('share')">
+        <ion-segment-button value="share" (click)="onTabChange('share')" *ngIf="!poolData?.settings?.expired">
           <ion-icon name="share-outline"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button value="settings" (click)="onTabChange('settings')">
+        <ion-segment-button value="settings" (click)="onTabChange('settings')" *ngIf="!poolData?.settings?.expired">
           <ion-icon name="settings-outline"></ion-icon>
         </ion-segment-button>
       </ion-segment>

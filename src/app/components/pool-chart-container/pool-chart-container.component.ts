@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { API_TIMEOUT_CONSTRAINT } from '@constants';
+
 import { currencyFormatter } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
@@ -9,16 +9,13 @@ import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.se
   styleUrls: ['./pool-chart-container.component.scss'],
 })
 export class PoolChartContainerComponent implements OnInit {
-
   public poolData?: PoolData;
   public poolTotal: number = 0;
 
-  constructor(
-    private poolService: PoolService
-  ) { }
+  constructor(private poolService: PoolService) {}
 
   ngOnInit() {
-    this.poolService.poolByID.subscribe(poolData => {
+    this.poolService.currentPoolSubject.subscribe(poolData => {
       if (poolData) {
         this.poolData = {...poolData};
         if (!this.poolService.poolViewActive.getValue()) {
@@ -30,25 +27,6 @@ export class PoolChartContainerComponent implements OnInit {
         this.poolTotal += contributor.contribution;
       });
     });
-
-    this.getChartData();
-  }
-
-  handleRefresh(event?: any) {
-    this.getChartData(event);
-  }
-
-  getChartData(event?: any) {
-    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {
-      if (event) {
-        event.target.complete();
-      }
-    });
-    setTimeout(() => {
-      if (event) {
-        event.target.complete();
-      }
-    }, API_TIMEOUT_CONSTRAINT);
   }
 
   getTotalPotRepresentation() {

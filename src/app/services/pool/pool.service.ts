@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, lastValueFrom, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom, map, of } from 'rxjs';
+import { Socket } from 'ngx-socket-io';
+
 import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
+import { EMPTY_POOL_DATA } from '@constants';
 
 export interface PoolData {
   name: string;
   date_created: string;
   id: string;
-  device_id: number;
   available_pot: number;
   member_ids: number[];
   contributors: PoolMember[];
@@ -70,19 +72,19 @@ export interface PoolJoinRequest {
   providedIn: 'root'
 })
 export class PoolService {
-
-  public poolByID: Subject<PoolData> = new Subject<PoolData>();
+  public updateNotification: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
   public poolViewActive: BehaviorSubject<string> = new BehaviorSubject<string>('');
   public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  public newDataRequest: Subject<boolean> = new Subject<boolean>();
-
   public currentPoolID: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(
-    private apiService: ApiService,
-    private authService: AuthService
-  ) {}
+  constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
+    this.socket.on('pool_updated', (data: any) => {
+      this.getPoolByID(this.currentPoolID.getValue()).subscribe(poolData => this.currentPoolSubject.next(poolData));
+      this.updateNotification.next(this.updateNotification.getValue()+1);
+    });
+  }
 
   getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
     if (!userID) {
@@ -100,7 +102,7 @@ export class PoolService {
     
     return this.apiService.get(`/pool/${poolID}`).pipe(
       map((response: any) => {
-        this.poolByID.next(response);
+        this.currentPoolSubject.next(response);
         return response;
       })
     );

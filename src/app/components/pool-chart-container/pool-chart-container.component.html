@@ -20,7 +20,7 @@
 
 <ng-template #loading>
     <div *ngIf="!poolData else emptyTable">
-        <app-loading-spinner (requestRetry)="handleRefresh()"></app-loading-spinner>
+        <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>
 

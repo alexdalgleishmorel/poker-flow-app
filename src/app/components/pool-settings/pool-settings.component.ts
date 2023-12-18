@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/pool.service';
 
@@ -9,7 +10,6 @@ import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/
   styleUrls: ['./pool-settings.component.scss']
 })
 export class PoolSettingsComponent implements OnInit {
-  private setup: boolean = false;
   public poolData?: PoolData;
 
   private formControlNameMappings: any = {
@@ -28,37 +28,18 @@ export class PoolSettingsComponent implements OnInit {
     maxBuyInFormControl: this.maxBuyInFormControl
   });
 
-  constructor(
-    private authService: AuthService,
-    private poolService: PoolService,
-    private _formBuilder: FormBuilder
-  ) {}
+  constructor(private authService: AuthService, private poolService: PoolService, private _formBuilder: FormBuilder) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.settingsFormGroup.disable();
 
-    this.poolService.poolByID.subscribe((poolData: PoolData) => {
-      this.poolData = poolData;
-
-      if (this.poolData) {
+    this.poolService.currentPoolSubject.subscribe(poolData => {
+      if (poolData.name) {
+        this.poolData = poolData;
         if (this.poolData.admin.id === this.authService.getCurrentUser()?.id) {
           this.settingsFormGroup.enable();
         }
-
-        if (!this.setup) {
-          this.setup = true;
-          this.populateSettings(this.poolData);
-        }
-      }
-    });
-
-    this.getData();
-  }
-
-  getData(event?: any) {
-    this.poolService.getPoolByID(this.poolService.currentPoolID.getValue()).subscribe(() => {
-      if (event) {
-        event.target.complete();
+        this.populateSettings(this.poolData);
       }
     });
   }
@@ -89,7 +70,6 @@ export class PoolSettingsComponent implements OnInit {
       this.poolService.updatePoolSettings(this.poolData.id, updateRequests)
         .then(() => {
           this.settingsFormGroup.markAsPristine();
-          this.getData();
         });
     }
   }

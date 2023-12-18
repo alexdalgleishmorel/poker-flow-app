@@ -6,6 +6,22 @@ export const DEFAULT_MAX_BUY_IN: number = 100;
 export const POKERFLOW_GREEN: string = '#388E3C';
 export const API_TIMEOUT_CONSTRAINT: number = 10000;
 
+export const EMPTY_POOL_DATA = {
+    name: '',
+    date_created: '',
+    id: '',
+    available_pot: 0,
+    member_ids: [],
+    contributors: [],
+    transactions: [],
+    admin: {},
+    settings: {
+      min_buy_in: 0,
+      max_buy_in: 0,
+      denominations: []
+    }
+};
+
 export const DEVICE_STATUS_SERVICE_ID: string = '0a32d408-0041-4f79-ae6d-628c1b84f033';
 export const DEVICE_STATUS_SERVICE_PUBLISH_ID: string = '32e4440c-bab3-41d8-8cfa-f6f106b7bbe8';
 export const DEVICE_STATUS_SERVICE_SUBSCRIBE_ID: string = '1840209c-5e12-41f7-aa10-3db3701c990c';

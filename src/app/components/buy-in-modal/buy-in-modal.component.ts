@@ -2,7 +2,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@ang
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { currencyFormatter } from 'src/app/app.component';
-import { DeviceWithdrawalRequest } from 'src/app/services/device/device.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -48,11 +47,10 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   }
 
   closeWithBuyInData() {
-    const deviceWithdrawalRequest: DeviceWithdrawalRequest = {
+    this.modalCtrl.dismiss({
       amount: this.buyInFormControl.value,
       denominations: this.assignments
-    };
-    this.modalCtrl.dismiss(deviceWithdrawalRequest);
+    });
   }
 
   confirmBuyIn() {

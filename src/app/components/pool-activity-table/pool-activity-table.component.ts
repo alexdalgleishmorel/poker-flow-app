@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { PoolTransaction, TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -12,7 +11,6 @@ export class PoolActivityTableComponent implements OnInit {
 
   @Input() transactions?: PoolTransaction[];
   @Output() onBuyIn = new EventEmitter<boolean>;
-  @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
 
   public unfilteredData?: PoolTransaction[];
   private filteredData?: PoolTransaction[];

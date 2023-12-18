@@ -14,7 +14,6 @@ export class UserPoolsTableComponent implements OnInit {
   @Input() history: boolean = false;
   @Input() dataSource: PoolData[] = [];
   @Output() getMoreData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
-  @Output() refreshData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
   public displayedColumns: string[] = [];
 
   public unfilteredData: PoolData[] = [];

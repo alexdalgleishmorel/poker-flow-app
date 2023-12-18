@@ -1,8 +1,8 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { catchError, of } from 'rxjs';
 import { IonSegment, IonTabs, ModalController, ToastController } from '@ionic/angular';
+
 import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
@@ -29,7 +29,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
     private toastController: ToastController,
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.poolID = this.activatedRoute.snapshot.params['id'];
     if (this.poolID) {
       this.poolService.currentPoolID.next(this.poolID);
@@ -37,7 +37,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
       this.poolService.getPoolByID(this.poolID).subscribe(() => {});
     }
 
-    this.poolService.poolByID.subscribe(poolData => {
+    this.poolService.currentPoolSubject.subscribe(poolData => {
       this.poolData = {...poolData};
       this.disabled = !!this.poolData.settings.expired;
     });
@@ -52,7 +52,6 @@ export class PoolComponent implements OnInit, AfterViewInit {
       this.poolService.currentPoolID.next(this.poolID);
       this.poolService.poolViewActive.next(this.poolID);
     }
-    this.poolService.newDataRequest.next(true);
   }
 
   ionViewWillLeave() {
@@ -66,9 +65,6 @@ export class PoolComponent implements OnInit, AfterViewInit {
     this.tabs?.select(tabName);
   }
 
-  /**
-   * Handles chip withdrawal
-   */
   async buyIn() {
     if (!this.poolData) {
       return;
@@ -100,18 +96,12 @@ export class PoolComponent implements OnInit, AfterViewInit {
       profile_id: this.authService.getCurrentUser()?.id,
       type: TransactionType.BUY_IN,
       amount: withdrawRequest.amount
-    }).subscribe(() => {
-      this.poolService.getPoolByID(this.poolID).pipe(catchError(() => of(null)))
-        .subscribe((poolData: PoolData) => { 
-          this.poolData = {...poolData};
-          this.displayTransactionSuccess('BUY-IN');
-        });
+    }).subscribe({
+      next: () => this.displayTransactionSuccess('BUY-IN'),
+      error: () => {}
     });
   }
 
-  /**
-   * Handles chip deposit
-   */
   async cashOut() {
     if (!this.poolData) {
       return;
@@ -142,12 +132,9 @@ export class PoolComponent implements OnInit, AfterViewInit {
       profile_id: this.authService.getCurrentUser()?.id,
       type: TransactionType.CASH_OUT,
       amount: totalDepositValue
-    }).subscribe(() => {
-      this.poolService.getPoolByID(this.poolID).pipe(catchError(() => of(null)))
-        .subscribe((poolData: PoolData) => { 
-          this.poolData = {...poolData};
-          this.displayTransactionSuccess('CASH-OUT');
-        });
+    }).subscribe({
+      next: () => this.displayTransactionSuccess('CASH-OUT'),
+      error: () => {}
     });
   }
 
@@ -175,13 +162,9 @@ export class PoolComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Returns the user back to the PokerFlow hub
+   * Returns the user back to the hub
    */
   goToHub() {
     this.router.navigate(['/', 'home']);
-  }
-
-  onSettingsChange(settingUpdateInProgress: boolean) {
-    this.disabled = settingUpdateInProgress;
   }
 }

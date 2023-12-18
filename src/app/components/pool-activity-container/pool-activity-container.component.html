@@ -1,9 +1,9 @@
 <div class="content" *ngIf="transactions else loading">
-    <app-pool-activity-table [transactions]="transactions" (refreshData)="handleRefresh($event)"></app-pool-activity-table>
+    <app-pool-activity-table [transactions]="transactions"></app-pool-activity-table>
 </div>
 
 <ng-template #loading>
     <div class="content">
-        <app-loading-spinner (requestRetry)="handleRefresh()"></app-loading-spinner>
+        <app-loading-spinner></app-loading-spinner>
     </div>
 </ng-template>
