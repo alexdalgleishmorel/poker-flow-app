@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@ang
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { currencyFormatter } from 'src/app/app.component';
+import { PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-buy-in-modal',
@@ -9,6 +10,8 @@ import { currencyFormatter } from 'src/app/app.component';
   styleUrls: ['./buy-in-modal.component.scss']
 })
 export class BuyInModalComponent implements OnInit, AfterViewInit {
+  @Input() poolID: string = '';
+  @Input() userID: number = 0;
   @Input() minBuyIn: number = 0;
   @Input() maxBuyIn: number = 0;
   @Input() denominations: number[] = [];
@@ -22,6 +25,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private modalCtrl: ModalController,
+    private poolService: PoolService,
     private _formBuilder: FormBuilder
   ) {
     this.form = this._formBuilder.group({
@@ -46,15 +50,20 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
     this.changeDetectorRef.detectChanges();
   }
 
-  closeWithBuyInData() {
-    this.modalCtrl.dismiss({
-      amount: this.buyInFormControl.value,
-      denominations: this.assignments
-    });
+  closeWithSuccess() {
+    this.modalCtrl.dismiss(true);
   }
 
   confirmBuyIn() {
-    this.buyInConfirmed = true;
+    this.poolService.postTransaction({
+      pool_id: this.poolID,
+      profile_id: this.userID,
+      type: TransactionType.BUY_IN,
+      amount: this.buyInFormControl.value
+    }).subscribe({
+      next: () => this.buyInConfirmed = true,
+      error: () => {}
+    });
   }
 
   cancelBuyIn() {

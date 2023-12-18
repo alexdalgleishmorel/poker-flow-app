@@ -74,6 +74,8 @@ export class PoolComponent implements OnInit, AfterViewInit {
     let modal = await this.modalCtrl.create({
       component: BuyInModalComponent,
       componentProps: {
+        poolID: this.poolID,
+        userID: this.authService.getCurrentUser()?.id,
         minBuyIn: this.poolData.settings.min_buy_in,
         maxBuyIn: this.poolData.settings.max_buy_in,
         denominations: this.poolData.settings.denominations
@@ -84,22 +86,11 @@ export class PoolComponent implements OnInit, AfterViewInit {
 
     document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
-    const withdrawRequest = (await modal.onWillDismiss()).data;
+    const success = (await modal.onWillDismiss()).data;
 
-    if (!withdrawRequest) {
-      return;
+    if (success) {
+      this.displayTransactionSuccess('BUY-IN');
     }
-
-    // Updating database with new transaction
-    this.poolService.postTransaction({
-      pool_id: this.poolData?.id,
-      profile_id: this.authService.getCurrentUser()?.id,
-      type: TransactionType.BUY_IN,
-      amount: withdrawRequest.amount
-    }).subscribe({
-      next: () => this.displayTransactionSuccess('BUY-IN'),
-      error: () => {}
-    });
   }
 
   async cashOut() {
