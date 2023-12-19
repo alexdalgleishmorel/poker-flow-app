@@ -28,16 +28,18 @@
         <div class="col">
           <ion-label position="stacked">First Name</ion-label>
           <ion-input
+            mode="md"
+            fill="outline"
             errorText="Required"
-            placeholder="First Name"
             [formControl]="firstNameFormControl"
           >
           </ion-input>
           <div class="spacer"></div>
           <ion-label position="stacked">Last Name</ion-label>
           <ion-input
+            mode="md"
+            fill="outline"
             errorText="Required"
-            placeholder="Last Name"
             [formControl]="lastNameFormControl"
           >
           </ion-input>
@@ -55,8 +57,9 @@
             </div>
           </ion-label>
           <ion-input
+            mode="md"
+            fill="outline"
             [errorText]="getEmailErrorMessage()"
-            placeholder="example@gmail.com"
             [formControl]="emailFormControl"
           >
           </ion-input>
