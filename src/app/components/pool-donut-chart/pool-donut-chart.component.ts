@@ -2,6 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 
 import { POKERFLOW_GREEN } from '@constants';
 import Chart from 'chart.js/auto';
+import { getPrefersDark } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 const emptyDoughnutPlugin = {
@@ -104,6 +105,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
               backgroundColor: POKERFLOW_GREEN,
               circumference: 360*availableRatio,
               weight: 0.4,
+              borderColor: getPrefersDark() ? '#000000' : '#FFFFFF'
             }
           ]
         },
