@@ -9,6 +9,8 @@
         <ion-input
             #poolNameInput
             label="Pool Name"
+            mode="md"
+            fill="outline"
             labelPlacement="stacked"
             [formControl]="poolNameFormControl"
             errorText="Required"
@@ -24,6 +26,8 @@
         <div class="vertical-spacer"></div>
         <ion-input
             label="Minimum Buy-In"
+            mode="md"
+            fill="outline"
             labelPlacement="stacked"
             type="number"
             [min]="0"
@@ -33,8 +37,11 @@
             errorText="Minimum and maximum values conflict"
         >
         </ion-input>
+        <div class="spacer"></div>
         <ion-input
             label="Maximum Buy-In"
+            mode="md"
+            fill="outline"
             labelPlacement="stacked"
             type="number"
             [min]="0"

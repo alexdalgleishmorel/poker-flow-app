@@ -13,58 +13,56 @@
             <ion-label><b>Buy-Ins</b></ion-label>
           </ion-item>
           <div class="ion-padding" slot="content">
-            <ion-list>
-                <ion-item>
-                    <ion-toggle [formControl]="buyInEnabledFormControl">Enabled</ion-toggle>
-                </ion-item>
-                <ion-item>
-                    <ion-input
-                        label="Minimum"
-                        labelPlacement="stacked"
-                        type="number"
-                        [min]="0"
-                        [formControl]="minBuyInFormControl"
-                        (focusout)="onMinBuyInFocusOut()"
-                    >
-                    </ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-input
-                        label="Maximum"
-                        labelPlacement="stacked"
-                        type="number"
-                        [min]="0" 
-                        [formControl]="maxBuyInFormControl"
-                        (focusout)="onMaxBuyInFocusOut()"
-                    >
-                    </ion-input>
-                </ion-item>
-            </ion-list>
+            <ion-toggle [formControl]="buyInEnabledFormControl">Enabled</ion-toggle>
+            <div class="spacer"></div>
+            <ion-input
+                label="Minimum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                type="number"
+                [min]="0"
+                [formControl]="minBuyInFormControl"
+                (focusout)="onMinBuyInFocusOut()"
+            >
+            </ion-input>
+            <div class="spacer"></div>
+            <ion-input
+                label="Maximum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                type="number"
+                [min]="0" 
+                [formControl]="maxBuyInFormControl"
+                (focusout)="onMaxBuyInFocusOut()"
+            >
+            </ion-input>
+            <div class="saveButtonContainer">
+                <ion-button
+                    *ngIf="isPoolAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="primary"
+                    (click)="saveSettings()"
+                    [disabled]="!settingsFormGroup.dirty"
+                >
+                    SAVE
+                </ion-button>
+                <ion-button
+                    *ngIf="isPoolAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="light"
+                    (click)="cancelChanges()"
+                    [disabled]="!settingsFormGroup.dirty"
+                >
+                    CANCEL
+                </ion-button>
+            </div>
           </div>
         </ion-accordion>
     </ion-accordion-group>
-    <div class="saveButtonContainer">
-        <ion-button
-            *ngIf="isPoolAdmin()"
-            shape="round"
-            expand="block"
-            color="primary"
-            (click)="saveSettings()"
-            [disabled]="!settingsFormGroup.dirty"
-        >
-            SAVE
-        </ion-button>
-        <ion-button
-            *ngIf="isPoolAdmin()"
-            shape="round"
-            expand="block"
-            color="light"
-            (click)="cancelChanges()"
-            [disabled]="!settingsFormGroup.dirty"
-        >
-            CANCEL
-        </ion-button>
-    </div>
 </ion-content>
 
 <ng-template #loading>

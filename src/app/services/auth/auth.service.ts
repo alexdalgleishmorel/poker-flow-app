@@ -9,16 +9,10 @@ import { BASE_URL } from '../api/api.service';
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(
-    private authService: AuthService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    if (this.authService.getToken()) {
-      request = this.addToken(request, this.authService.getToken());
-    }
-
+    request = this.addToken(request, this.authService.getToken());
     return next.handle(request).pipe(
       catchError(error => {
         return throwError(() => error);
@@ -37,23 +31,19 @@ export class AuthInterceptor implements HttpInterceptor {
   providedIn: 'root'
 })
 export class AuthService {
-
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {}
-
   private readonly JWT_TOKEN = 'JWT_TOKEN';
   private loggedIn$ = new BehaviorSubject<boolean>(!!localStorage.getItem(this.JWT_TOKEN));
 
   public isLoggedIn$ = this.loggedIn$.asObservable();
 
-  doLoginUser(token: any): void {
+  constructor(private http: HttpClient, private router: Router) {}
+
+  recordLogin(token: any): void {
     this.loggedIn$.next(true);
     localStorage.setItem(this.JWT_TOKEN, token.jwt);
   }
 
-  doLogoutUser(): void {
+  recordLogout(): void {
     this.loggedIn$.next(false);
     localStorage.removeItem(this.JWT_TOKEN);
   }
@@ -78,23 +68,16 @@ export class AuthService {
     return this.http.post<any>(`${BASE_URL}/signup`, user);
   }
 
-  confirm(email: string, code: string): Observable<void> {
-    return this.http.post<any>(`${BASE_URL}/confirm?`, {email, code});
-  }
-
   login(loginRequest: LoginRequest): Observable<Profile> {
-    return this.http.post<any>(`${BASE_URL}/login`, loginRequest)
-      .pipe(tap(data => this.doLoginUser(data)));
+    return this.http.post<any>(`${BASE_URL}/login`, loginRequest).pipe(tap(data => this.recordLogin(data)));
   }
 
   logout() {
-    return this.http.get<any>(`${BASE_URL}/logout`)
-      .pipe(tap(() => this.doLogoutUser()));
+    return this.http.get<any>(`${BASE_URL}/logout`).pipe(tap(() => this.recordLogout()));
   }
 
-  doLogoutAndRedirectToLogin() {
-    this.logout().subscribe(() => {});
-    this.router.navigate(['/', 'login']);
+  logoutAndRedirectToLogin() {
+    this.logout().subscribe(() => this.router.navigate(['/', 'login']));
   }
 
   verifyEmailUniqueness(email: string): Observable<boolean> {

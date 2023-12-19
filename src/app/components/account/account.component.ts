@@ -54,7 +54,7 @@ export class AccountComponent implements OnInit {
   }
 
   logout() {
-    this.authService.doLogoutAndRedirectToLogin();
+    this.authService.logoutAndRedirectToLogin();
   }
 
   initProfileInformation() {

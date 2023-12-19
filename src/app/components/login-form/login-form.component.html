@@ -1,7 +1,10 @@
 <ion-content>
   <form class="form-container" [formGroup]="loginFormGroup">
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Email"
       type="email" 
       [formControl]="emailFormControl"
@@ -9,7 +12,10 @@
     >
     </ion-input>
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Password" 
       type="password"
       [formControl]="passwordFormControl"

@@ -2,20 +2,29 @@
   <div class="form-container" [formGroup]="signUpFormGroup">
     <div class="spacer"></div>
     <ion-input 
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="First Name"
       [formControl]="firstNameFormControl"
       errorText="Required"
     >
     </ion-input>
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Last Name"
       [formControl]="lastNameFormControl"
       errorText="Required"
     >
     </ion-input>
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Email"
       type="email" 
       [formControl]="emailRegistrationFormControl"
@@ -23,7 +32,10 @@
     >
     </ion-input>
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Password" 
       type="password"
       [formControl]="firstPasswordFormControl"
@@ -31,7 +43,10 @@
     >
     </ion-input>
     <div class="spacer"></div>
-    <ion-input 
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
       label="Confirm password" 
       type="password"
       [formControl]="secondPasswordFormControl"
