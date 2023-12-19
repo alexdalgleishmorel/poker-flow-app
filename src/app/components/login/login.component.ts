@@ -1,13 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
 import { catchError, throwError } from 'rxjs';
+import { IonSegment } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {}
+export class LoginComponent {
+  @ViewChild('segmentBar') segmentBar?: IonSegment;
+  public currentForm: string = 'login';
+  
+  constructor() {}
+
+  updateForm(form: string) {
+    if (this.segmentBar) {
+      this.currentForm = form;
+      this.segmentBar.value = this.currentForm;
+    }
+  }
+}
 
 export function requestLogin(loginRequest: LoginRequest, authService: AuthService) {
   const loginErrorMessages: ErrorMessages = new ErrorMessages();
