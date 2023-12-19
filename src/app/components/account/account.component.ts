@@ -28,8 +28,6 @@ export class AccountComponent implements OnInit {
   });
 
   constructor(private authService: AuthService, private toastController: ToastController) {
-    this.profile = authService.getCurrentUser();
-
     this.darkModeFormControl = new FormControl(getPrefersDark());
     this.darkModeFormControl.valueChanges.subscribe(prefersDark => {
       toggleDarkTheme(!!prefersDark);
@@ -37,6 +35,9 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.profile) {
+      this.initProfileInformation();
+    }
     this.emailFormControl.valueChanges.subscribe(() => {
       if (this.emailFormControl.value !== this.profile?.email) {
         this.emailValidationInFlight = true;
@@ -58,6 +59,7 @@ export class AccountComponent implements OnInit {
   }
 
   initProfileInformation() {
+    this.profile = this.authService.getCurrentUser();
     this.firstNameFormControl.setValue(this.profile?.firstName);
     this.lastNameFormControl.setValue(this.profile?.lastName);
     this.emailFormControl.setValue(this.profile?.email);
@@ -80,8 +82,10 @@ export class AccountComponent implements OnInit {
       email: this.emailFormControl.value
     }).subscribe({
       next: async () => {
+        this.initProfileInformation();
         const toast = await this.toastController.create({
           message: `Profile Updated`,
+          cssClass: 'centered-text',
           duration: 1000,
           position: 'top',
           color: 'success'

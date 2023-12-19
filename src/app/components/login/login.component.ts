@@ -1,7 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
 import { catchError, throwError } from 'rxjs';
-import { IonSegment } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -9,16 +8,12 @@ import { IonSegment } from '@ionic/angular';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
-  @ViewChild('segmentBar') segmentBar?: IonSegment;
   public currentForm: string = 'login';
   
   constructor() {}
 
   updateForm(form: string) {
-    if (this.segmentBar) {
-      this.currentForm = form;
-      this.segmentBar.value = this.currentForm;
-    }
+    this.currentForm = form;
   }
 }
 

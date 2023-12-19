@@ -85,7 +85,9 @@ export class AuthService {
   }
 
   updateProfileInformation(profile: Profile) {
-    return this.http.post<any>(`${BASE_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id});
+    return this.http.post<any>(`${BASE_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id}).pipe(
+      tap(data => this.recordLogin(data))
+    );
   }
 }
 
