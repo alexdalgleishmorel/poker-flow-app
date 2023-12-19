@@ -2,9 +2,36 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, firstValueFrom, of, tap, throwError } from 'rxjs';
 
 import { BASE_URL } from '../api/api.service';
+
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+
+  constructor(
+    private authService: AuthService
+  ) {}
+
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    if (this.authService.getToken()) {
+      request = this.addToken(request, this.authService.getToken());
+    }
+
+    return next.handle(request).pipe(
+      catchError(error => {
+        return throwError(() => error);
+      })
+    );
+  }
+
+  private addToken(request: HttpRequest<any>, token: string | null) {
+    return request.clone({
+      setHeaders: { 'Authorization': `Bearer ${token}` }
+    });
+  }
+}
 
 @Injectable({
   providedIn: 'root'
@@ -69,34 +96,14 @@ export class AuthService {
     this.logout().subscribe(() => {});
     this.router.navigate(['/', 'login']);
   }
-}
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
-
-  constructor(
-    private authService: AuthService
-  ) {}
-
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
-    if (this.authService.getToken()) {
-      request = this.addToken(request, this.authService.getToken());
-    }
-
-    return next.handle(request).pipe(
-      catchError(error => {
-        return throwError(() => error);
-      })
-    );
+  verifyEmailUniqueness(email: string): Observable<boolean> {
+    return this.http.post<any>(`${BASE_URL}/verifyUniqueEmail`, { email: email });
   }
 
-  private addToken(request: HttpRequest<any>, token: string | null) {
-    return request.clone({
-      setHeaders: { 'Authorization': `Bearer ${token}` }
-    });
+  updateProfileInformation(profile: Profile) {
+    return this.http.post<any>(`${BASE_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id});
   }
-
 }
 
 export interface LoginRequest {
