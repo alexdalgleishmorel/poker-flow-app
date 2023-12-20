@@ -4,8 +4,8 @@ import { PreloadAllModules, Router, RouterModule, Routes } from '@angular/router
 import { LoginComponent } from './components/login/login.component';
 import { Observable, tap } from 'rxjs';
 import { AuthService } from './services/auth/auth.service';
-import { LoginFormComponent } from './components/login-form/login-form.component';
-import { SignupFormComponent } from './components/signup-form/signup-form.component';
+import { LoginFormComponent } from './components/login/login-form/login-form.component';
+import { SignupFormComponent } from './components/login/signup-form/signup-form.component';
 
 @Injectable({
   providedIn: 'root'

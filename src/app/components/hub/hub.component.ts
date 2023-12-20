@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
-import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
+import { CreateGameModalComponent } from './create-game-modal/create-game-modal.component';
+import { JoinGameModalComponent } from './join-game-modal/join-game-modal.component';
 
 @Component({
   selector: 'app-hub',

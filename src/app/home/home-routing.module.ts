@@ -4,11 +4,11 @@ import { HubComponent } from '../components/hub/hub.component';
 import { HomePage } from './home.page';
 import { AccountComponent } from '../components/account/account.component';
 import { PoolComponent } from '../components/pool/pool.component';
-import { PoolChartContainerComponent } from '../components/pool-chart-container/pool-chart-container.component';
-import { PoolActivityContainerComponent } from '../components/pool-activity-container/pool-activity-container.component';
-import { PoolSettingsComponent } from '../components/pool-settings/pool-settings.component';
-import { StatsComponent } from '../components/stats/stats.component';
-import { SharePoolComponent } from '../components/share-pool/share-pool.component';
+import { PoolChartContainerComponent } from '../components/pool/pool-chart-container/pool-chart-container.component';
+import { PoolActivityContainerComponent } from '../components/pool/pool-activity-container/pool-activity-container.component';
+import { PoolSettingsComponent } from '../components/pool/pool-settings/pool-settings.component';
+import { StatsComponent } from '../components/pool/stats/stats.component';
+import { SharePoolComponent } from '../components/pool/share-pool/share-pool.component';
 
 const routes: Routes = [
   {

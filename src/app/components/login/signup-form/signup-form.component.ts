@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { catchError, throwError } from 'rxjs';
 import { AuthService, SignUpRequest } from 'src/app/services/auth/auth.service';
-import { ErrorMessages, LoginErrorType, requestLogin } from '../login/login.component';
+import { ErrorMessages, LoginErrorType, requestLogin } from '../login.component';
 import { Router } from '@angular/router';
 
 @Component({

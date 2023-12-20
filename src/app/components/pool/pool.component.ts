@@ -3,9 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { IonSegment, IonTabs, ModalController, ToastController } from '@ionic/angular';
 
-import { BuyInModalComponent } from '../buy-in-modal/buy-in-modal.component';
+import { BuyInModalComponent } from './buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { ChipDepositModalComponent } from '../chip-deposit-modal/chip-deposit-modal.component';
+import { ChipDepositModalComponent } from './chip-deposit-modal/chip-deposit-modal.component';
 
 @Component({
   selector: 'app-pool',

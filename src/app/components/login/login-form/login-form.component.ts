@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
-import { ErrorMessages, requestLogin } from '../login/login.component';
+import { ErrorMessages, requestLogin } from '../login.component';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
