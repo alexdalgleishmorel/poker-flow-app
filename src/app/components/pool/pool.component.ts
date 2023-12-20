@@ -133,7 +133,12 @@ export class PoolComponent implements OnInit, AfterViewInit {
     const toastButtons = [
       {
         text: 'VIEW',
-        handler: () => { this.router.navigate(['/', `pool`, this.poolData?.id, 'activity']); }
+        handler: () => {
+          if (this.segmentBar) {
+            this.segmentBar.value = 'activity';
+            this.router.navigate(['/', `pool`, this.poolData?.id, 'activity']);
+          }
+        }
       },
       {
         text: 'DISMISS',

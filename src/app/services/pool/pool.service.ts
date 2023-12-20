@@ -86,11 +86,11 @@ export class PoolService {
     });
   }
 
-  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number): Observable<any> {
+  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Observable<any> {
     if (!userID) {
       return of([]);
     }
-    return this.apiService.get(`/pool/user/${userID}`, itemOffset, itemsPerPage).pipe(
+    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage).pipe(
       map((response: any) => {
         return response;
       })

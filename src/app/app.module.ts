@@ -16,8 +16,7 @@ import { LoginComponent } from './components/login/login.component';
 import { PoolService } from './services/pool/pool.service';
 import { LoginFormComponent } from './components/login-form/login-form.component';
 import { SignupFormComponent } from './components/signup-form/signup-form.component';
-import { ActiveGamesListComponent } from './components/active-games-list/active-games-list.component';
-import { PastGamesListComponent } from './components/past-games-list/past-games-list.component';
+import { GamesListComponent } from './components/games-list/games-list.component';
 import { UserPoolsTableComponent } from './components/user-pools-table/user-pools-table.component';
 import { PoolComponent } from './components/pool/pool.component';
 import { PoolChartContainerComponent } from './components/pool-chart-container/pool-chart-container.component';
@@ -45,7 +44,7 @@ const config: SocketIoConfig = { url: BASE_URL, options: {transports: ['websocke
   declarations: [
     AccountComponent,
     AppComponent,
-    ActiveGamesListComponent,
+    GamesListComponent,
     BuyInModalComponent,
     ChipDepositModalComponent,
     ChipViewComponent,
@@ -57,7 +56,6 @@ const config: SocketIoConfig = { url: BASE_URL, options: {transports: ['websocke
     LoginComponent,
     LoginFormComponent,
     PasswordModalComponent,
-    PastGamesListComponent,
     PoolActivityContainerComponent,
     PoolActivityTableComponent,
     PoolComponent,

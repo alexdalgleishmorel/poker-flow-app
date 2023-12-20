@@ -14,6 +14,7 @@ import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.compo
 export class HubComponent {
   public disabled: boolean = false;
   public poolData?: PoolData[];
+  public currentList: string = 'active';
 
   constructor(private modalCtrl: ModalController, private poolService: PoolService, private router: Router) {}
 
@@ -46,5 +47,9 @@ export class HubComponent {
         error: () => {}
       });
     }
+  }
+
+  updateList(listName: string) {
+    this.currentList = listName;
   }
 }

@@ -21,18 +21,22 @@
         </ion-button>
     </div>
   </ion-footer>
-<ion-content class="hub-table-container" [scrollY]="false">
-    <ion-tabs>
-
-        <ion-tab-bar slot="top">
-            <ion-tab-button tab="active-games">
-            <ion-label>ACTIVE GAMES</ion-label>
-            </ion-tab-button>
-        
-            <ion-tab-button tab="past-games">
-            <ion-label>PAST GAMES</ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-        
-    </ion-tabs>
+<ion-content [scrollY]="false">
+    <div class="content">
+        <ion-segment #segmentBar [scrollable]="true" value="active">
+            <ion-segment-button value="active" (click)="updateList('active')">
+                ACTIVE GAMES
+            </ion-segment-button>
+            <ion-segment-button value="past" (click)="updateList('past')">
+                PAST GAMES
+            </ion-segment-button>
+        </ion-segment>
+        <ion-content [scrollY]="false">
+            <app-games-list *ngIf="currentList == 'active' else pastGames" [activeGames]="true"></app-games-list>
+        </ion-content>
+    </div>
 </ion-content>
+
+<ng-template #pastGames>
+    <app-games-list [activeGames]="false"></app-games-list>
+</ng-template>
