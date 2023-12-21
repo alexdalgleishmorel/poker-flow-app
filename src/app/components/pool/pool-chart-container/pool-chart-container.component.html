@@ -1,19 +1,18 @@
 <ion-content [scrollY]="false">
-    <div class="content">
-        <div *ngIf="poolTotal else loading">
-            <div class="chart-metadata-container">
-                <div class="total">
-                    <ion-text color="medium">TOTAL</ion-text>
-                    <ion-text class="chart-metadata-value" color="primary"><b>{{getTotalPotRepresentation()}}</b></ion-text>
-                </div>
-                <div class="available">
-                    <ion-text color="medium">AVAILABLE</ion-text>
-                    <ion-text class="chart-metadata-value" color="success"><b>{{getAvailablePotRepresentation()}}</b></ion-text>
-                </div>
+    <div class="content" *ngIf="poolTotal else loading">
+        <div class="dynamic-spacer"></div>
+        <div class="chart-metadata-container">
+            <div class="total">
+                <ion-text color="medium">TOTAL</ion-text>
+                <ion-text class="chart-metadata-value" color="primary"><b>{{getTotalPotRepresentation()}}</b></ion-text>
             </div>
-            <div class="chart">
-                <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
+            <div class="available">
+                <ion-text color="medium">AVAILABLE</ion-text>
+                <ion-text class="chart-metadata-value" color="success"><b>{{getAvailablePotRepresentation()}}</b></ion-text>
             </div>
+        </div>
+        <div class="chart">
+            <app-pool-donut-chart [poolData]="poolData"></app-pool-donut-chart>
         </div>
     </div>
 </ion-content>
@@ -25,13 +24,15 @@
 </ng-template>
 
 <ng-template #emptyTable>
-    <div class="empty-table-text">
-        No pool activity found.
-        <br/><br/>
-        <span class="buy-in-text">
-            <ion-text color="primary"><b>BUY-IN</b></ion-text>
-        </span>
-        <br/>
-        to get started. 
+    <div class="content">
+        <div class="empty-table-text">
+            No pool activity found.
+            <br/><br/>
+            <span class="buy-in-text">
+                <ion-text color="primary"><b>BUY-IN</b></ion-text>
+            </span>
+            <br/>
+            to get started. 
+        </div>
     </div>
 </ng-template>

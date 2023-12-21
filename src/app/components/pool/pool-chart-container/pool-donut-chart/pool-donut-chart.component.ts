@@ -114,6 +114,7 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
         ],
         options: {
           responsive: true,
+          devicePixelRatio: 4,
           plugins: {
             emptyDoughnut: {
               color: '#58595b',

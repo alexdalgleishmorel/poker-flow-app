@@ -2,13 +2,24 @@
 @import '../../../../mixins.scss';
 
 .content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
 }
 
 .chart {
-    @include laptop {
-        width: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50vh;
+    height: 50vh;
+}
+
+.dynamic-spacer {
+    @media (max-height: 700px) {
+        padding: 10px;
     }
 }
 
