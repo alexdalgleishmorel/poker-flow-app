@@ -22,7 +22,7 @@
 </ion-footer>
 <ion-content [scrollY]="false">
   <div class="content">
-    <ion-segment #segmentBar [scrollable]="true" value="pot">
+    <ion-segment #segmentBar [scrollable]="true" [value]="POT">
       <ion-segment-button [value]="POT" (click)="onPoolViewChange(POT)">
         <ion-icon name="pie-chart-outline"></ion-icon>
       </ion-segment-button>
