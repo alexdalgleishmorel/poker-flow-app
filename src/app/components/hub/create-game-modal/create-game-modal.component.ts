@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DEFAULT_DENOMINATION_COUNT, DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
-import { IonInput, ModalController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
 
 @Component({
@@ -10,9 +10,7 @@ import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
   templateUrl: './create-game-modal.component.html',
   styleUrls: ['./create-game-modal.component.scss']
 })
-export class CreateGameModalComponent implements AfterViewInit {
-  @ViewChild('poolNameInput') poolNameInput?: IonInput;
-
+export class CreateGameModalComponent {
   public poolNameFormControl = new FormControl('', [Validators.required]);
 
   public poolNameFormGroup: FormGroup = this._formBuilder.group({
@@ -62,12 +60,6 @@ export class CreateGameModalComponent implements AfterViewInit {
       max_buy_in: DEFAULT_MAX_BUY_IN,
       denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT)
     }
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.poolNameInput?.setFocus();
-    }, 500);
   }
 
   validateMinBuyIn(value: number|null) {
