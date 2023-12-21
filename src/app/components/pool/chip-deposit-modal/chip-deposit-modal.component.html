@@ -17,6 +17,7 @@
             (click)="completeDeposit()"
             shape="round"
             expand="block"
+            [disabled]="!this.getRawDepositTotal()"
         >
             DONE
         </ion-button>
@@ -38,7 +39,7 @@
         <div class="large-spacer"></div>
         <div class="total-cash-out-container">
             <ion-text color="medium">TOTAL CASH-OUT</ion-text>
-            <ion-text class="cash-out-value" color="primary"><b>{{getDepositTotal()}}</b></ion-text>
+            <ion-text class="cash-out-value" color="primary"><b>{{getFormattedDepositTotal()}}</b></ion-text>
         </div>
         <div class="spacer"></div>
         <div class="denomination-changer">

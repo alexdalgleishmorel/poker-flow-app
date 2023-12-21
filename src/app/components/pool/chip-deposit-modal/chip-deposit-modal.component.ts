@@ -35,13 +35,21 @@ export class ChipDepositModalComponent implements OnInit {
     this.modalCtrl.dismiss(null);
   }
 
-  getDepositTotal() {
+  getFormattedDepositTotal() {
     let total: number = 0;
     this.denominations.forEach((denomination, index) => {
       total += (denomination * this.denominationCounts[index]);
     });
     this.depositTotal = total;
     return currencyFormatter.format(this.depositTotal);
+  }
+
+  getRawDepositTotal() {
+    let total: number = 0;
+    this.denominations.forEach((denomination, index) => {
+      total += (denomination * this.denominationCounts[index]);
+    });
+    return total;
   }
 
   onSliderChange(event: any) {
