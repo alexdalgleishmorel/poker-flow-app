@@ -40,6 +40,8 @@ export class PoolComponent implements OnInit {
       this.poolData = {...poolData};
       this.disabled = !!this.poolData.settings.expired;
     });
+
+    this.poolService.updateNotification.subscribe(() => this.poolService.getPoolByID(this.poolID).subscribe(() => {}));
   }
 
   onPoolViewChange(viewName: PoolView) {
