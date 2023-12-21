@@ -74,8 +74,6 @@ export interface PoolJoinRequest {
 export class PoolService {
   public updateNotification: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
-  public poolViewActive: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  public poolChartViewActive: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   public currentPoolID: BehaviorSubject<string> = new BehaviorSubject<string>('');
 

@@ -21,29 +21,28 @@
   </div>
 </ion-footer>
 <ion-content [scrollY]="false">
-  <ion-tabs #tabs>
-    <ion-tab-bar slot="top">
-      <ion-segment #segmentBar [scrollable]="true" value="pot">
-        <ion-segment-button value="pot" (click)="onTabChange('pot')">
-          <ion-icon name="pie-chart-outline"></ion-icon>
-        </ion-segment-button>
-        <ion-segment-button value="activity" (click)="onTabChange('activity')">
-          <ion-icon name="swap-horizontal-outline"></ion-icon>
-        </ion-segment-button>
-        <!--
-        <ion-segment-button value="stats" (click)="onTabChange('stats')">
-          <ion-icon name="analytics-outline"></ion-icon>
-        </ion-segment-button>
-        !-->
-        <ion-segment-button value="share" (click)="onTabChange('share')" *ngIf="!poolData?.settings?.expired">
-          <ion-icon name="share-outline"></ion-icon>
-        </ion-segment-button>
-        <ion-segment-button value="settings" (click)="onTabChange('settings')" *ngIf="!poolData?.settings?.expired">
-          <ion-icon name="settings-outline"></ion-icon>
-        </ion-segment-button>
-      </ion-segment>
-    </ion-tab-bar>
-  </ion-tabs>
+  <div class="content">
+    <ion-segment #segmentBar [scrollable]="true" value="pot">
+      <ion-segment-button [value]="POT" (click)="onPoolViewChange(POT)">
+        <ion-icon name="pie-chart-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="TRANSACTIONS" (click)="onPoolViewChange(TRANSACTIONS)">
+        <ion-icon name="swap-horizontal-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="SHARE" (click)="onPoolViewChange(SHARE)" *ngIf="!poolData?.settings?.expired">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="SETTINGS" (click)="onPoolViewChange(SETTINGS)" *ngIf="!poolData?.settings?.expired">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+    <ion-content [scrollY]="false">
+      <app-pool-chart-container *ngIf="currentPoolView === POT"></app-pool-chart-container>
+      <app-pool-activity-container *ngIf="currentPoolView === TRANSACTIONS"></app-pool-activity-container>
+      <app-share-pool *ngIf="currentPoolView === SHARE"></app-share-pool>
+      <app-pool-settings *ngIf="currentPoolView === SETTINGS"></app-pool-settings>
+    </ion-content>
+  </div>
 </ion-content>
 
 <ng-template #expiredMessage>

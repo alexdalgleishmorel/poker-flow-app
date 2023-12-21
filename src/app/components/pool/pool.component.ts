@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
-import { IonSegment, IonTabs, ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 import { BuyInModalComponent } from './buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
@@ -12,13 +12,16 @@ import { ChipDepositModalComponent } from './chip-deposit-modal/chip-deposit-mod
   templateUrl: './pool.component.html',
   styleUrls: ['./pool.component.scss']
 })
-export class PoolComponent implements OnInit, AfterViewInit {
+export class PoolComponent implements OnInit {
   public poolData?: PoolData;
   public disabled: boolean = false;
   public poolID: string = '';
+  public currentPoolView: PoolView = PoolView.EMPTY;
 
-  @ViewChild('tabs') tabs?: IonTabs;
-  @ViewChild('segmentBar') segmentBar?: IonSegment;
+  readonly POT: PoolView = PoolView.POT;
+  readonly TRANSACTIONS: PoolView = PoolView.TRANSACTIONS;
+  readonly SHARE: PoolView = PoolView.SHARE;
+  readonly SETTINGS: PoolView = PoolView.SETTINGS;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,11 +34,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.poolID = this.activatedRoute.snapshot.params['id'];
-    if (this.poolID) {
-      this.poolService.currentPoolID.next(this.poolID);
-      this.poolService.poolViewActive.next(this.poolID);
-      this.poolService.getPoolByID(this.poolID).subscribe(() => {});
-    }
+    this.poolService.getPoolByID(this.poolID).subscribe(() => this.currentPoolView = this.POT);
 
     this.poolService.currentPoolSubject.subscribe(poolData => {
       this.poolData = {...poolData};
@@ -43,26 +42,8 @@ export class PoolComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.tabs?.select('pot');
-  }
-
-  ionViewWillEnter() {
-    if (this.poolID) {
-      this.poolService.currentPoolID.next(this.poolID);
-      this.poolService.poolViewActive.next(this.poolID);
-    }
-  }
-
-  ionViewWillLeave() {
-    this.poolService.poolViewActive.next('');
-    if (this.segmentBar) {
-      this.segmentBar.value = 'pot';
-    }
-  }
-
-  onTabChange(tabName: string) {
-    this.tabs?.select(tabName);
+  onPoolViewChange(viewName: PoolView) {
+    this.currentPoolView = viewName;
   }
 
   async buyIn() {
@@ -133,12 +114,7 @@ export class PoolComponent implements OnInit, AfterViewInit {
     const toastButtons = [
       {
         text: 'VIEW',
-        handler: () => {
-          if (this.segmentBar) {
-            this.segmentBar.value = 'activity';
-            this.router.navigate(['/', `pool`, this.poolData?.id, 'activity']);
-          }
-        }
+        handler: () => {}
       },
       {
         text: 'DISMISS',
@@ -163,4 +139,12 @@ export class PoolComponent implements OnInit, AfterViewInit {
   goToHub() {
     this.router.navigate(['/', 'home']);
   }
+}
+
+enum PoolView {
+  EMPTY = 'EMPTY',
+  POT = 'POT',
+  TRANSACTIONS = 'TRANSACTIONS',
+  SHARE = 'SHARE',
+  SETTINGS = 'SETTINGS'
 }

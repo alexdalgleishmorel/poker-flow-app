@@ -11,15 +11,12 @@ export class SharePoolComponent implements OnInit {
 
   public copied: boolean = false;
 
-  constructor(private poolService: PoolService) {
-  }
+  constructor(private poolService: PoolService) {}
 
   ngOnInit() {}
   
   writePoolIDToClipboard = async () => {
-    await Clipboard.write({
-      string: this.poolService.currentPoolID.getValue()
-    });
+    await Clipboard.write({ string: this.poolService.currentPoolSubject.getValue().id });
     this.copied = true;
     setTimeout(() => {
       this.copied = false;

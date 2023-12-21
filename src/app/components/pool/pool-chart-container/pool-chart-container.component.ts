@@ -16,12 +16,7 @@ export class PoolChartContainerComponent implements OnInit {
 
   ngOnInit() {
     this.poolService.currentPoolSubject.subscribe(poolData => {
-      if (poolData) {
-        this.poolData = {...poolData};
-        if (!this.poolService.poolViewActive.getValue()) {
-          this.poolService.poolViewActive.next(poolData.id);
-        }
-      }
+      this.poolData = poolData ? {...poolData} : this.poolData;
       this.poolTotal = 0;
       this.poolData?.contributors.forEach((contributor: PoolMember) => {
         this.poolTotal += contributor.contribution;

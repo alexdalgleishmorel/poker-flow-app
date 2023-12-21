@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
 
 import { POKERFLOW_GREEN } from '@constants';
 import Chart from 'chart.js/auto';
 import { getPrefersDark } from 'src/app/app.component';
-import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolMember } from 'src/app/services/pool/pool.service';
 
 const emptyDoughnutPlugin = {
   id: 'emptyDoughnut',
@@ -37,7 +37,7 @@ const emptyDoughnutPlugin = {
   templateUrl: './pool-donut-chart.component.html',
   styleUrls: ['./pool-donut-chart.component.scss']
 })
-export class PoolDonutChartComponent implements OnInit, OnChanges {
+export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() poolData?: PoolData;
   public chart: any = null;
   private colors: string[] = [
@@ -50,29 +50,15 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     '#8549ba'
   ];
 
-  constructor(
-    private poolService: PoolService
-  ) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.poolService.poolViewActive.subscribe(active => {
-      this.initializeChart(active);
-    });
+  ngAfterViewInit(): void {
+    setTimeout(() => this.createChart(), 1000);
   }
 
-  initializeChart(activePoolView: string) {
-    if (!activePoolView && this.chart) {
-      this.chart.destroy();
-      this.chart = null;
-      this.poolService.poolChartViewActive.next(false);
-    } else if (activePoolView && this.canCreateChart()) {
-      this.createChart();
-      this.poolService.poolChartViewActive.next(true);
-    }
-  }
-
-  canCreateChart(): boolean {
-    return !this.chart && !this.poolService.poolChartViewActive.getValue() && this.poolData?.id === this.poolService.poolViewActive.getValue();
+  ngOnDestroy() {
+    this.chart?.destroy();
+    this.chart = null;
   }
 
   createChart() {
@@ -88,69 +74,67 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
     });
     let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
 
-    setTimeout(() => {
-      this.chart = new Chart('pool-donut-chart', {
-        type: 'doughnut',
-        data: {
-          labels: ['Available Pot'].concat(names),
-          datasets: [
-            {
-              label: 'Buy In',
-              data: contributions.length > 0 ? [0].concat(contributions) : [],
-              backgroundColor: Object.values(this.colors),
-              borderColor: 'transparent'
-            },
-            {
-              data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
-              backgroundColor: POKERFLOW_GREEN,
-              circumference: 360*availableRatio,
-              weight: 0.4,
-              borderColor: getPrefersDark() ? '#000000' : '#FFFFFF'
+    this.chart = new Chart('pool-donut-chart', {
+      type: 'doughnut',
+      data: {
+        labels: ['Available Pot'].concat(names),
+        datasets: [
+          {
+            label: 'Buy In',
+            data: contributions.length > 0 ? [0].concat(contributions) : [],
+            backgroundColor: Object.values(this.colors),
+            borderColor: 'transparent'
+          },
+          {
+            data: contributions.length > 0 ? [this.poolData?.available_pot] : [],
+            backgroundColor: POKERFLOW_GREEN,
+            circumference: 360*availableRatio,
+            weight: 0.4,
+            borderColor: getPrefersDark() ? '#000000' : '#FFFFFF'
+          }
+        ]
+      },
+      plugins: [
+        emptyDoughnutPlugin,
+      ],
+      options: {
+        responsive: true,
+        devicePixelRatio: 4,
+        plugins: {
+          emptyDoughnut: {
+            color: '#58595b',
+            width: 20,
+            radiusDecrease: 20,
+            availablePot: this.poolData?.available_pot
+          },
+          legend: {
+            position: 'top',
+            labels: {
+              filter: function(item, chart) {
+                return !item.text.includes('Available Pot');
+              }
             }
-          ]
+          },
+          tooltip: {
+            callbacks: {
+              label: (data) => ' $'.concat(data.parsed.toFixed(2))
+            }
+          }
         },
-        plugins: [
-          emptyDoughnutPlugin,
-        ],
-        options: {
-          responsive: true,
-          devicePixelRatio: 4,
-          plugins: {
-            emptyDoughnut: {
-              color: '#58595b',
-              width: 20,
-              radiusDecrease: 20,
-              availablePot: this.poolData?.available_pot
-            },
-            legend: {
-              position: 'top',
-              labels: {
-                filter: function(item, chart) {
-                  return !item.text.includes('Available Pot');
-                }
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: (data) => ' $'.concat(data.parsed.toFixed(2))
-              }
+        animation: {
+          onComplete: () => {
+            delayed = true;
+          },
+          delay: (context) => {
+            let delay = 0;
+            if (context.type === 'data' && context.mode === 'default' && !delayed) {
+              delay = context.dataIndex * 300 + context.datasetIndex * 100;
             }
+            return delay;
           },
-          animation: {
-            onComplete: () => {
-              delayed = true;
-            },
-            delay: (context) => {
-              let delay = 0;
-              if (context.type === 'data' && context.mode === 'default' && !delayed) {
-                delay = context.dataIndex * 300 + context.datasetIndex * 100;
-              }
-              return delay;
-            },
-          },
-        }
-      });
-    }, 1000);
+        },
+      }
+    });
   }
 
   /**
@@ -173,8 +157,6 @@ export class PoolDonutChartComponent implements OnInit, OnChanges {
       this.chart.data.datasets[1].circumference = 360*availableRatio;
 
       this.chart.update();
-    } else {
-      this.initializeChart(this.poolService.poolViewActive.getValue());
     }
   }
 }
