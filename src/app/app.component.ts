@@ -1,5 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 
+import { PoolService } from './services/pool/pool.service';
+
 export const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
   currency: 'USD',
@@ -11,7 +13,7 @@ export const currencyFormatter = new Intl.NumberFormat('en-US', {
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor() {
+  constructor(private poolService: PoolService) {
     toggleDarkTheme(getPrefersDark());
   }
 
@@ -25,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private handleVisibilityChange = () => {
     if (document.visibilityState === 'visible') {
-      window.location.reload();
+      this.poolService.updateNotification.next(this.poolService.updateNotification.getValue()+1);
     }
   }
 }
