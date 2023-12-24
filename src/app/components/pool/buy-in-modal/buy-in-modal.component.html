@@ -1,9 +1,5 @@
 <ion-footer>
     <div *ngIf="!buyInConfirmed">
-        <div class="range-container">
-            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
-            <ion-text color="medium">Slide to adjust buy-in</ion-text>
-        </div>
         <div class="modal-buttons-container">
             <ion-button
                 color="primary"
@@ -34,7 +30,10 @@
             </ion-text>
         </div>
         <div class="spacer"></div>
-        <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
+        <div class="range-container">
+            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
+            <ion-text color="medium">Slide to adjust buy-in</ion-text>
+        </div>
     </div>
 </ion-content>
 
