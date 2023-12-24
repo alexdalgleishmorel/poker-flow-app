@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -10,9 +10,23 @@ export const currencyFormatter = new Intl.NumberFormat('en-US', {
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   constructor() {
     toggleDarkTheme(getPrefersDark());
+  }
+
+  ngOnInit() {
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  ngOnDestroy() {
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
+  }
+
+  private handleVisibilityChange = () => {
+    if (document.visibilityState === 'visible') {
+      window.location.reload();
+    }
   }
 }
 
