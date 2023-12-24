@@ -138,25 +138,33 @@ export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChan
   }
 
   /**
-   * Updates the chart when the input data receives updates
+   * Updates the chart data to be aligned with the most recently provided pool data
+   */
+  updateChart() {
+    let names: string[] = [];
+    let contributions: number[] = [];
+    let total: number = 0;
+    this.poolData?.contributors.map((member: PoolMember) => {
+      names.push(`${member.profile.firstName} ${member.profile.lastName}`);
+      contributions.push(member.contribution);
+      total += member.contribution;
+    });
+    let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
+    this.chart.data.labels = ['Available Pot'].concat(names);
+    this.chart.data.datasets[0].data = contributions.length > 0 ? [0].concat(contributions) : [];
+    this.chart.data.datasets[1].data = contributions.length > 0 ? [this.poolData?.available_pot] : [];
+    this.chart.data.datasets[1].circumference = 360*availableRatio;
+    this.chart.data.datasets[1].borderColor = getPrefersDark() ? '#000000' : '#FFFFFF';
+
+    this.chart.update();
+  }
+
+  /**
+   * Actions to perform when the input data has changed
    */
   ngOnChanges() {
     if (this.chart) {
-      let names: string[] = [];
-      let contributions: number[] = [];
-      let total: number = 0;
-      this.poolData?.contributors.map((member: PoolMember) => {
-        names.push(`${member.profile.firstName} ${member.profile.lastName}`);
-        contributions.push(member.contribution);
-        total += member.contribution;
-      });
-      let availableRatio: number = this.poolData?.available_pot ? this.poolData?.available_pot/total : 1;
-      this.chart.data.labels = ['Available Pot'].concat(names);
-      this.chart.data.datasets[0].data = contributions.length > 0 ? [0].concat(contributions) : [];
-      this.chart.data.datasets[1].data = contributions.length > 0 ? [this.poolData?.available_pot] : [];
-      this.chart.data.datasets[1].circumference = 360*availableRatio;
-
-      this.chart.update();
+      this.updateChart();
     }
   }
 }

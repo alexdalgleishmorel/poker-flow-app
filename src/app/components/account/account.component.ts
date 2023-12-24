@@ -5,6 +5,7 @@ import { catchError, map, debounceTime, of } from 'rxjs';
 
 import { getPrefersDark, toggleDarkTheme } from 'src/app/app.component';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
+import { PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-account',
@@ -27,10 +28,11 @@ export class AccountComponent implements OnInit {
     emailFormControl: this.emailFormControl
   });
 
-  constructor(private authService: AuthService, private toastController: ToastController) {
+  constructor(private authService: AuthService, private poolService: PoolService, private toastController: ToastController) {
     this.darkModeFormControl = new FormControl(getPrefersDark());
     this.darkModeFormControl.valueChanges.subscribe(prefersDark => {
       toggleDarkTheme(!!prefersDark);
+      this.poolService.updateNotification.next(this.poolService.updateNotification.getValue()+1);
     });
   }
 
