@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { currencyFormatter } from 'src/app/app.component';
+import { PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-chip-deposit-modal',
@@ -9,7 +10,6 @@ import { currencyFormatter } from 'src/app/app.component';
   styleUrls: ['./chip-deposit-modal.component.scss']
 })
 export class ChipDepositModalComponent implements OnInit {
-  @Input() availablePot: number = 0;
   @Input() denominations: number[] = [];
 
   public currentDenominationIndex: number = 0;
@@ -20,7 +20,7 @@ export class ChipDepositModalComponent implements OnInit {
   public displayedCount: number = 0;
   public depositTotal: number = 0;
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(private poolService: PoolService, private modalCtrl: ModalController) {}
 
   ngOnInit(): void {
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
@@ -73,13 +73,13 @@ export class ChipDepositModalComponent implements OnInit {
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
   }
 
-  getMaximumChipCount() {
-    return this.displayedDenomination ? Math.ceil(this.availablePot/this.displayedDenomination) : 0;
-  }
-
   onChipSelect(index: number) {
     this.currentDenominationIndex = index;
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
+  }
+
+  getMaximumChipCount() {
+    return this.displayedDenomination ? Math.ceil(this.poolService.currentPoolSubject.getValue().available_pot/this.displayedDenomination) : 0;
   }
 }
