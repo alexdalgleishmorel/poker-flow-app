@@ -6,6 +6,7 @@ import { ModalController, ToastController } from '@ionic/angular';
 import { BuyInModalComponent } from './buy-in-modal/buy-in-modal.component';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChipDepositModalComponent } from './chip-deposit-modal/chip-deposit-modal.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-pool',
@@ -17,6 +18,8 @@ export class PoolComponent implements OnInit {
   public disabled: boolean = false;
   public poolID: string = '';
   public currentPoolView: PoolView = PoolView.EMPTY;
+
+  private updateSubscription?: Subscription;
 
   readonly POT: PoolView = PoolView.POT;
   readonly TRANSACTIONS: PoolView = PoolView.TRANSACTIONS;
@@ -44,10 +47,16 @@ export class PoolComponent implements OnInit {
       this.poolService.currentPoolSubject.next(poolData);
       this.currentPoolView = this.POT;
     });
+  }
 
-    this.poolService.updateNotification.subscribe(() => {
+  ionViewWillEnter() {
+    this.updateSubscription = this.poolService.updateNotification.subscribe(() => {
       this.poolService.getPoolByID(this.poolID).then(poolData => this.poolService.currentPoolSubject.next(poolData));
     });
+  }
+
+  ionViewWillLeave() {
+    this.updateSubscription?.unsubscribe();
   }
 
   onPoolViewChange(viewName: PoolView) {

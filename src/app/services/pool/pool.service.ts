@@ -76,9 +76,7 @@ export class PoolService {
   public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
 
   constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
-    this.socket.on('pool_updated', () => {
-      this.updateNotification.next(this.updateNotification.getValue()+1);
-    });
+    this.socket.on('pool_updated', () => this.updateNotification.next(this.updateNotification.getValue()+1));
   }
 
   getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Promise<any> {
