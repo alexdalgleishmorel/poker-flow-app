@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, lastValueFrom, map, of } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 
 import { ApiService } from '../api/api.service';
@@ -77,34 +77,26 @@ export class PoolService {
 
   constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
     this.socket.on('pool_updated', () => {
-      this.getPoolByID(this.currentPoolSubject.getValue().id).subscribe(poolData => this.currentPoolSubject.next(poolData));
       this.updateNotification.next(this.updateNotification.getValue()+1);
     });
   }
 
-  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Observable<any> {
+  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Promise<any> {
     if (!userID) {
-      return of([]);
+      return Promise.resolve();
     }
-    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage).pipe(
-      map((response: any) => {
-        return response;
-      })
-    );
+    return lastValueFrom(this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage));
   }
 
-  getPoolByID(poolID: string): Observable<any> {
-    if (!poolID) return of();
+  getPoolByID(poolID: string): Promise<any> {
+    if (!poolID) {
+      return Promise.resolve();
+    };
     
-    return this.apiService.get(`/pool/${poolID}`).pipe(
-      map((response: any) => {
-        this.currentPoolSubject.next(response);
-        return response;
-      })
-    );
+    return lastValueFrom(this.apiService.get(`/pool/${poolID}`));
   }
 
-  createPool(name: string, settings: PoolSettings) {
+  createPool(name: string, settings: PoolSettings): Promise<any> {
     const poolCreationRequest: PoolCreationRequest = {
       pool_name: name,
       settings: settings,
@@ -114,23 +106,23 @@ export class PoolService {
     return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
   }
 
-  updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]) {
+  updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]): Promise<any> {
     return lastValueFrom(this.apiService.post('/pool/settings/update', {
       pool_id: poolID,
       update_requests: updateRequests
     }));
   }
 
-  joinPool(poolID: string) {
+  joinPool(poolID: string): Promise<any> {
     const poolJoinRequest: PoolJoinRequest = {
       pool_id: poolID,
       profile_id: this.authService.getCurrentUser()?.id!
     };
 
-    return this.apiService.post('/pool/join', poolJoinRequest);
+    return lastValueFrom(this.apiService.post('/pool/join', poolJoinRequest));
   }
 
-  postTransaction(poolTransactionRequest: PoolTransactionRequest) {
-    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
+  postTransaction(poolTransactionRequest: PoolTransactionRequest): Promise<any> {
+    return lastValueFrom(this.apiService.post(`/pool/transaction/create`, poolTransactionRequest));
   }
 }

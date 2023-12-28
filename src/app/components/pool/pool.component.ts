@@ -34,14 +34,20 @@ export class PoolComponent implements OnInit {
 
   ngOnInit() {
     this.poolID = this.activatedRoute.snapshot.params['id'];
-    this.poolService.getPoolByID(this.poolID).subscribe(() => this.currentPoolView = this.POT);
 
     this.poolService.currentPoolSubject.subscribe(poolData => {
-      this.poolData = {...poolData};
+      this.poolData = poolData;
       this.disabled = !!this.poolData.settings.expired;
     });
 
-    this.poolService.updateNotification.subscribe(() => this.poolService.getPoolByID(this.poolID).subscribe(() => {}));
+    this.poolService.getPoolByID(this.poolID).then(poolData => {
+      this.poolService.currentPoolSubject.next(poolData);
+      this.currentPoolView = this.POT;
+    });
+
+    this.poolService.updateNotification.subscribe(() => {
+      this.poolService.getPoolByID(this.poolID).then(poolData => this.poolService.currentPoolSubject.next(poolData));
+    });
   }
 
   onPoolViewChange(viewName: PoolView) {
@@ -105,10 +111,7 @@ export class PoolComponent implements OnInit {
       profile_id: this.authService.getCurrentUser()?.id,
       type: TransactionType.CASH_OUT,
       amount: totalDepositValue
-    }).subscribe({
-      next: () => this.displayTransactionSuccess('CASH-OUT'),
-      error: () => {}
-    });
+    }).then(() => this.displayTransactionSuccess('CASH-OUT'));
   }
 
   async displayTransactionSuccess(transactionType: string) {

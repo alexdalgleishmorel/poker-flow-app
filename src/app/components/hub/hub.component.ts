@@ -40,12 +40,7 @@ export class HubComponent {
     const poolID = (await modal.onWillDismiss()).data;
 
     if (poolID) {
-      this.poolService.joinPool(poolID).subscribe({
-        next: () => {
-          this.router.navigate(['/', `pool`, poolID]);
-        },
-        error: () => {}
-      });
+      this.poolService.joinPool(poolID).then(() => this.router.navigate(['/', `pool`, poolID]));
     }
   }
 

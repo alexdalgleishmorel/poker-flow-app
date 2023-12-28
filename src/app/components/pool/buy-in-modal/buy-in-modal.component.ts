@@ -60,10 +60,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
       profile_id: this.userID,
       type: TransactionType.BUY_IN,
       amount: this.buyInFormControl.value
-    }).subscribe({
-      next: () => this.buyInConfirmed = true,
-      error: () => {}
-    });
+    }).then(() => this.buyInConfirmed = true);
   }
 
   cancelBuyIn() {

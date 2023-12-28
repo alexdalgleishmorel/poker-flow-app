@@ -30,7 +30,7 @@ export class GamesListComponent implements OnInit {
 
   public getData(event?: InfiniteScrollCustomEvent) {
     this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage, this.activeGames)
-      .subscribe(pools => {
+      .then(pools => {
         this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
         this.itemOffset += pools.length;
         if (!pools.length) {
