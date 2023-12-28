@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Subject, lastValueFrom } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 
 import { ApiService } from '../api/api.service';
@@ -72,11 +72,12 @@ export interface PoolJoinRequest {
   providedIn: 'root'
 })
 export class PoolService {
-  public updateNotification: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  public updateNotification: Subject<number> = new Subject<number>();
   public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
+  public colorThemeSubject: Subject<number> = new Subject<number>();
 
   constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
-    this.socket.on('pool_updated', () => this.updateNotification.next(this.updateNotification.getValue()+1));
+    this.socket.on('pool_updated', () => this.updateNotification.next(1));
   }
 
   getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Promise<any> {

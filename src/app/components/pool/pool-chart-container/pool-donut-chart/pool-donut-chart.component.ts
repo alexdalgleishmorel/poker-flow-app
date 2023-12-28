@@ -3,7 +3,7 @@ import { Component, Input, OnChanges, OnDestroy, AfterViewInit } from '@angular/
 import { POKERFLOW_GREEN } from '@constants';
 import Chart from 'chart.js/auto';
 import { getPrefersDark } from 'src/app/app.component';
-import { PoolData, PoolMember } from 'src/app/services/pool/pool.service';
+import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 const emptyDoughnutPlugin = {
   id: 'emptyDoughnut',
@@ -50,10 +50,18 @@ export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChan
     '#8549ba'
   ];
 
-  constructor() {}
+  constructor(private poolService: PoolService) {}
 
   ngAfterViewInit(): void {
-    setTimeout(() => this.createChart(), 1000);
+    setTimeout(() => {
+      this.createChart();
+      this.poolService.colorThemeSubject.subscribe(() => {
+        if (this.chart) {
+          this.chart.data.datasets[1].borderColor = getPrefersDark() ? '#000000' : '#FFFFFF';
+          this.chart.update();
+        }
+      });
+    }, 1000);
   }
 
   ngOnDestroy() {

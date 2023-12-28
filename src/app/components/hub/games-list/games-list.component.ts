@@ -21,11 +21,14 @@ export class GamesListComponent implements OnInit {
   constructor(private authService: AuthService, private poolService: PoolService) {}
 
   ngOnInit() {
-    this.poolService.updateNotification.subscribe(() => {
-      this.pools = undefined;
-      this.itemOffset = 0;
-      this.getData();
-    });
+    this.initializeData();
+    this.poolService.updateNotification.subscribe(() => this.initializeData());
+  }
+
+  initializeData() {
+    this.pools = undefined;
+    this.itemOffset = 0;
+    this.getData();
   }
 
   public getData(event?: InfiniteScrollCustomEvent) {

@@ -32,7 +32,7 @@ export class AccountComponent implements OnInit {
     this.darkModeFormControl = new FormControl(getPrefersDark());
     this.darkModeFormControl.valueChanges.subscribe(prefersDark => {
       toggleDarkTheme(!!prefersDark);
-      this.poolService.updateNotification.next(this.poolService.updateNotification.getValue()+1);
+      this.poolService.colorThemeSubject.next(1);
     });
   }
 

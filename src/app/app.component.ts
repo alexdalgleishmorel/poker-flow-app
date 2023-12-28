@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private handleVisibilityChange = () => {
     if (document.visibilityState === 'visible') {
-      this.poolService.updateNotification.next(this.poolService.updateNotification.getValue()+1);
+      this.poolService.updateNotification.next(1);
     }
   }
 }
