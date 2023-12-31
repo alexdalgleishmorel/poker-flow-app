@@ -1,7 +1,19 @@
 <div class="chip-container">
     <ng-container *ngFor="let denomination of denominations; let i = index;">
-        <div class="chip-content" (click)="onSelect(i)">
-            <ion-fab-button size="large" [disabled]="!assignments[i] && !viewOnly" color="tertiary">
+        <div class="chip-content">
+            <ion-icon
+                [name]="isChipLocked(i) ? 'lock-closed-outline' : 'lock-open-outline'"
+                [color]="isChipLocked(i) ? 'success' : 'primary'"
+                (click)="toggleChipLocked(i)"
+                *ngIf="distributionView"
+            >
+            </ion-icon>
+            <div class="spacer"></div>
+            <ion-fab-button 
+                (click)="onSelect(i)"
+                size="large" 
+                [color]="selectedSlot === i ? 'tertiary' : (!assignments[i] && !viewOnly ? 'medium' : 'primary')"
+            >
                 {{ denomination | thousandSuff }}
             </ion-fab-button>
             <div class="spacer" *ngIf="hasAssignments()"></div>

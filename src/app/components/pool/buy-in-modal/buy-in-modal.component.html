@@ -1,5 +1,5 @@
 <ion-footer>
-    <div *ngIf="!buyInConfirmed">
+    <div *ngIf="!buyInConfirmed else confirmedFooter">
         <div class="modal-buttons-container">
             <ion-button
                 color="primary"
@@ -31,7 +31,7 @@
         </div>
         <div class="spacer"></div>
         <div class="range-container">
-            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onSliderChange($event)"></ion-range>
+            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onBuyInSliderChange($event)"></ion-range>
             <ion-text color="medium">Slide to adjust buy-in</ion-text>
         </div>
     </div>
@@ -39,16 +39,47 @@
 
 <ng-template #confirmed>
     <div class="content">
-        <ion-text class="confirmed-text" color="primary">
+        <ion-text *ngIf="!distributionView" class="confirmed-text" color="primary">
             <b>COLLECT YOUR CHIPS</b>
         </ion-text>
         <div class="spacer"></div>
-        <ion-text color="medium">
-            Try using the number of chips described below
+        <ion-text *ngIf="!distributionView" color="medium">
+            Below are the suggested chip counts
         </ion-text>
+        <div *ngIf="distributionView" color="medium">
+            <ion-text color="medium" class="centered-row" *ngIf="selectedSlot >= 0">
+                Use
+                <div class="tiny-spacer"></div>
+                <ion-icon name="lock-open-outline" color="primary"></ion-icon>
+                <div class="tiny-spacer"></div>
+                to lock in a chip count
+            </ion-text>
+            <ion-text *ngIf="selectedSlot < 0" color="medium">Select a chip to get started</ion-text>
+        </div>
         <div class="spacer"></div>
-        <app-chip-view [denominations]="buyInFormControl.value ? denominations : []" [assignments]="assignments"></app-chip-view>
-        <div class="spacer"></div>
+        <app-chip-view 
+            [denominations]="buyInFormControl.value ? denominations : []"
+            [assignments]="assignments"
+            [distributionView]="distributionView && selectedSlot >= 0"
+            [chipLockStatuses]="chipLockStatuses"
+            (chipLockStatusesChange)="onChipLockStatusesChange($event)"
+            (chipSelect)="onChipSelect($event)"
+        >
+        </app-chip-view>
+        <div class="range-container" *ngIf="distributionView && selectedSlot >= 0">
+            <ion-range 
+                (ionInput)="onDistributionSliderChange($event)"
+                [min]="0"
+                [max]="chipDistributionMax"
+                [formControl]="chipDistributionFormControl">
+            </ion-range>
+            <ion-text color="medium">Slide to adjust chip count</ion-text>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #confirmedFooter>
+    <div class="modal-buttons-container">
         <ion-button
             color="primary"
             (click)="closeWithSuccess()"
@@ -56,7 +87,16 @@
             shape="round"
             expand="block"
         >
-            DONE
+            CHIPS COLLECTED
+        </ion-button>
+        <ion-button
+            *ngIf="!distributionView"
+            color="light"
+            (click)="enableDistributionView()"
+            shape="round"
+            expand="block"
+        >
+            ADJUST
         </ion-button>
     </div>
 </ng-template>

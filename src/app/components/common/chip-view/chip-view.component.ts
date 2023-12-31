@@ -36,13 +36,30 @@ export class ChipViewComponent {
   @Input() denominations: number[] = [];
   @Input() assignments: number[] = [];
   @Input() viewOnly: boolean = false;
+  @Input() distributionView: boolean = false;
+  @Input() chipDistributions: number[] = [];
   @Output() chipSelect: EventEmitter<number> = new EventEmitter<number>();
+
+  @Input() chipLockStatuses: boolean[] = [];
+  @Output() chipLockStatusesChange = new EventEmitter<boolean[]>();
+
+  public selectedSlot: number = -1;
 
   hasAssignments(): boolean {
     return this.assignments.length !== 0;
   }
 
   onSelect(index: number) {
+    this.selectedSlot = index;
     this.chipSelect.emit(index);
+  }
+
+  toggleChipLocked(index: number) {
+    this.chipLockStatuses[index] = !this.chipLockStatuses[index];
+    this.chipLockStatusesChange.emit(this.chipLockStatuses);
+  }
+
+  isChipLocked(index: number): boolean {
+    return this.chipLockStatuses[index];
   }
 }
