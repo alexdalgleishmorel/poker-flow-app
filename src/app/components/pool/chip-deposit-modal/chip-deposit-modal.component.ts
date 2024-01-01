@@ -12,7 +12,7 @@ import { PoolService } from 'src/app/services/pool/pool.service';
 export class ChipDepositModalComponent implements OnInit {
   @Input() denominations: number[] = [];
 
-  public currentDenominationIndex: number = 0;
+  public currentDenominationIndex: number = -1;
   public denominationCounts: number[] = [];
   public denominationCountControl: FormControl = new FormControl(0);
 
@@ -20,10 +20,12 @@ export class ChipDepositModalComponent implements OnInit {
   public displayedCount: number = 0;
   public depositTotal: number = 0;
 
+  public manualInputFormControl: FormControl = new FormControl(0);
+  private lastValidInput: number = 0;
+
   constructor(private poolService: PoolService, private modalCtrl: ModalController) {}
 
   ngOnInit(): void {
-    this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominations.forEach(() => this.denominationCounts.push(0));
   }
 
@@ -63,6 +65,7 @@ export class ChipDepositModalComponent implements OnInit {
     }
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
+    this.manualInputFormControl.reset();
   }
 
   nextDenomination() {
@@ -71,15 +74,30 @@ export class ChipDepositModalComponent implements OnInit {
     }
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
+    this.manualInputFormControl.reset();
   }
 
   onChipSelect(index: number) {
     this.currentDenominationIndex = index;
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
+    this.manualInputFormControl.reset();
   }
 
   getMaximumChipCount() {
     return this.displayedDenomination ? Math.ceil(this.poolService.currentPoolSubject.getValue().available_pot/this.displayedDenomination) : 0;
+  }
+
+  handleManualInput(event: any) {
+    const value = event.target.value;
+    const filteredValue = +value.replace(/[^0-9]/g, '');
+
+    if (filteredValue <= this.getMaximumChipCount()) {
+      this.denominationCountControl.setValue(filteredValue);
+      this.lastValidInput = filteredValue;
+    }
+
+    this.manualInputFormControl.setValue(this.lastValidInput ? this.lastValidInput : this.denominationCountControl.value);
+    this.denominationCounts[this.currentDenominationIndex] = this.manualInputFormControl.value;
   }
 }

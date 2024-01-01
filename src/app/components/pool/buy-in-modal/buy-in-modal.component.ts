@@ -19,7 +19,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
   public assignments: number[] = [];
   public buyInFormControl: FormControl = new FormControl(0);
-  public manualBuyInFormControl: FormControl = new FormControl(0);
+  public manualInputFormControl: FormControl = new FormControl(0);
   public buyInStep: number = 1;
   public form: FormGroup;
 
@@ -225,7 +225,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
       this.lastValidBuyIn = filteredValue;
     }
 
-    this.manualBuyInFormControl.setValue(this.lastValidBuyIn ? this.lastValidBuyIn : this.buyInFormControl.value);
+    this.manualInputFormControl.setValue(this.lastValidBuyIn ? this.lastValidBuyIn : this.buyInFormControl.value);
   }
 }
 

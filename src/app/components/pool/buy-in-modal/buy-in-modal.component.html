@@ -29,7 +29,7 @@
                 <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
             </ion-text>
             <ion-text *ngIf="getErrorMessage()" color="danger">{{getErrorMessage()}}</ion-text>
-            <ion-input class="hidden-input" #hiddenInput (input)="handleManualBuyIn($event)" [formControl]="manualBuyInFormControl"></ion-input>
+            <ion-input class="hidden-input" #hiddenInput (input)="handleManualBuyIn($event)" [formControl]="manualInputFormControl"></ion-input>
         </div>
         <div class="spacer"></div>
         <div class="range-container">

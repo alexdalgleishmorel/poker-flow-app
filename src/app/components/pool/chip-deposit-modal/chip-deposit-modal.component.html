@@ -1,6 +1,6 @@
 <ion-footer>
     <div class="modal-buttons-container">
-        <div class="range-container">
+        <div class="range-container" *ngIf="currentDenominationIndex >= 0">
             <ion-range 
                 [min]="0"
                 [max]="getMaximumChipCount()"
@@ -42,7 +42,7 @@
             <ion-text class="cash-out-value" color="primary"><b>{{getFormattedDepositTotal()}}</b></ion-text>
         </div>
         <div class="spacer"></div>
-        <div class="denomination-changer">
+        <div class="denomination-changer" *ngIf="currentDenominationIndex >= 0 else selectDenominationMessage">
             <ion-icon
                 class="navigation-arrow"
                 size="large" 
@@ -51,11 +51,18 @@
                 *ngIf="currentDenominationIndex !== 0 else emptyIcon"
             >
             </ion-icon>
-            <div class="chip-content">
+            <div class="chip-content" (click)="hiddenInput.setFocus()">
                 <ion-fab-button size="large" color="tertiary">
                     {{ displayedDenomination | thousandSuff }}
                 </ion-fab-button>
                 <ion-text color="primary"><h2><b>{{denominationCounts[currentDenominationIndex]}}</b></h2></ion-text>
+                <ion-input
+                    class="hidden-input"
+                    #hiddenInput
+                    (input)="handleManualInput($event)"
+                    [formControl]="manualInputFormControl"
+                >
+                </ion-input>
             </div>
             <ion-icon
                 class="navigation-arrow"
@@ -73,4 +80,8 @@
 
 <ng-template #emptyIcon>
     <ion-icon size="large"></ion-icon>
+</ng-template>
+
+<ng-template #selectDenominationMessage>
+    <ion-text color="medium">Select a denomination to get started</ion-text>
 </ng-template>
