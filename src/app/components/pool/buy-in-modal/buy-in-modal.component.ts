@@ -227,6 +227,10 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
     this.manualInputFormControl.setValue(this.lastValidBuyIn ? this.lastValidBuyIn : this.buyInFormControl.value);
   }
+
+  handleManualFocus() {
+    this.manualInputFormControl.setValue(this.buyInFormControl.value);
+  }
 }
 
 function canSumToTarget(denominations: number[], quantities: number[], target: number): { achievable: boolean, distribution?: number[] } {
