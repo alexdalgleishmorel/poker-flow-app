@@ -23,15 +23,17 @@
 </ion-footer>
 <ion-content [scrollY]="false">
     <div class="content" *ngIf="!buyInConfirmed else confirmed">
-        <div class="buy-in-container">
+        <div class="buy-in-container" (click)="hiddenInput.setFocus()">
             <ion-text color="medium">TOTAL BUY-IN</ion-text>
             <ion-text class="buy-in-value" color="primary">
                 <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
             </ion-text>
+            <ion-text *ngIf="getErrorMessage()" color="danger">{{getErrorMessage()}}</ion-text>
+            <ion-input class="hidden-input" #hiddenInput (input)="handleManualBuyIn($event)" [formControl]="manualBuyInFormControl"></ion-input>
         </div>
         <div class="spacer"></div>
         <div class="range-container">
-            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onBuyInSliderChange($event)"></ion-range>
+            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onBuyInSliderChange($event)" [formControl]="buyInFormControl"></ion-range>
             <ion-text color="medium">Slide to adjust buy-in</ion-text>
         </div>
     </div>

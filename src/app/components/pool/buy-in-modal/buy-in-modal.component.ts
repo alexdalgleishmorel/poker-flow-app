@@ -19,6 +19,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
   public assignments: number[] = [];
   public buyInFormControl: FormControl = new FormControl(0);
+  public manualBuyInFormControl: FormControl = new FormControl(0);
   public buyInStep: number = 1;
   public form: FormGroup;
 
@@ -28,6 +29,8 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   public chipDistributionMax: number = 0;
 
   public selectedSlot: number = -1;
+
+  private lastValidBuyIn: number = 0;
   
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -211,6 +214,18 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
         });
       }
     }
+  }
+
+  handleManualBuyIn(event: any) {
+    const value = event.target.value;
+    const filteredValue = +value.replace(/[^0-9]/g, '');
+
+    if (filteredValue <= this.maxBuyIn) {
+      this.buyInFormControl.setValue(filteredValue);
+      this.lastValidBuyIn = filteredValue;
+    }
+
+    this.manualBuyInFormControl.setValue(this.lastValidBuyIn ? this.lastValidBuyIn : this.buyInFormControl.value);
   }
 }
 
