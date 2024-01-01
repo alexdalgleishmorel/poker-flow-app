@@ -35,8 +35,6 @@
 
 <ion-content>
     <div class="content">
-        <div class="large-spacer"></div>
-        <div class="large-spacer"></div>
         <div class="total-cash-out-container">
             <ion-text color="medium">TOTAL CASH-OUT</ion-text>
             <ion-text class="cash-out-value" color="primary"><b>{{getFormattedDepositTotal()}}</b></ion-text>
@@ -60,6 +58,7 @@
                     class="hidden-input"
                     #hiddenInput
                     (input)="handleManualInput($event)"
+                    (ionFocus)="handleManualFocus()"
                     [formControl]="manualInputFormControl"
                 >
                 </ion-input>
@@ -73,7 +72,6 @@
             >
             </ion-icon>
         </div>
-        <div class="spacer"></div>
         <app-chip-view (chipSelect)="onChipSelect($event)" [denominations]="denominations" [assignments]="denominationCounts"></app-chip-view>
     </div>
 </ion-content>

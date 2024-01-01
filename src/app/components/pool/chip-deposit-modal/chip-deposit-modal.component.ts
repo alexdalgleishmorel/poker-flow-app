@@ -65,7 +65,6 @@ export class ChipDepositModalComponent implements OnInit {
     }
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
-    this.manualInputFormControl.reset();
   }
 
   nextDenomination() {
@@ -74,14 +73,12 @@ export class ChipDepositModalComponent implements OnInit {
     }
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
-    this.manualInputFormControl.reset();
   }
 
   onChipSelect(index: number) {
     this.currentDenominationIndex = index;
     this.displayedDenomination = this.denominations[this.currentDenominationIndex];
     this.denominationCountControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
-    this.manualInputFormControl.reset();
   }
 
   getMaximumChipCount() {
@@ -99,5 +96,9 @@ export class ChipDepositModalComponent implements OnInit {
 
     this.manualInputFormControl.setValue(this.lastValidInput ? this.lastValidInput : this.denominationCountControl.value);
     this.denominationCounts[this.currentDenominationIndex] = this.manualInputFormControl.value;
+  }
+
+  handleManualFocus() {
+    this.manualInputFormControl.setValue(this.denominationCounts[this.currentDenominationIndex]);
   }
 }
