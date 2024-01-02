@@ -13,15 +13,14 @@ import { PoolService } from 'src/app/services/pool/pool.service';
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  public profile?: Profile;
+  public canEditProfileInformation: boolean = false;
   public darkModeFormControl: FormControl;
   public emailValidationInFlight: boolean = false;
+  public profile?: Profile;
 
   public firstNameFormControl: FormControl = new FormControl('', [Validators.required]);
   public lastNameFormControl: FormControl = new FormControl('', [Validators.required]);
   public emailFormControl: FormControl = new FormControl('', [Validators.required, Validators.email]);
-  public canEditProfileInformation: boolean = false;
-
   public formGroup: FormGroup = new FormGroup({
     firstNameFormControl: this.firstNameFormControl,
     lastNameFormControl: this.lastNameFormControl,
@@ -30,16 +29,31 @@ export class AccountComponent implements OnInit {
 
   constructor(private authService: AuthService, private poolService: PoolService, private toastController: ToastController) {
     this.darkModeFormControl = new FormControl(getPrefersDark());
+    this.subscribeToThemeChanges();
+  }
+
+  /**
+   * Initializes profile information, subscribes to email changes
+   */
+  ngOnInit() {
+    this.initProfileInformation();
+    this.subscribeToEmailChanges();
+  }
+
+  /**
+   * Toggles theme, updates theme subject to notify other components
+   */
+  subscribeToThemeChanges() {
     this.darkModeFormControl.valueChanges.subscribe(prefersDark => {
       toggleDarkTheme(!!prefersDark);
       this.poolService.colorThemeSubject.next(1);
     });
   }
 
-  ngOnInit() {
-    if (!this.profile) {
-      this.initProfileInformation();
-    }
+  /**
+   * Subscribes to email changes, validating the new email
+   */
+  subscribeToEmailChanges() {
     this.emailFormControl.valueChanges.subscribe(() => {
       if (this.emailFormControl.value !== this.profile?.email) {
         this.emailValidationInFlight = true;
@@ -52,14 +66,23 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Profile information is re-initialized when returning to the account page
+   */
   ionViewWillEnter() {
     this.initProfileInformation();
   }
 
+  /**
+   * Logs the user out, and redirects them to the login page
+   */
   logout() {
     this.authService.logoutAndRedirectToLogin();
   }
 
+  /**
+   * Initializes the profile information in a view-only mode
+   */
   initProfileInformation() {
     this.profile = this.authService.getCurrentUser();
     this.firstNameFormControl.setValue(this.profile?.firstName);
@@ -70,6 +93,9 @@ export class AccountComponent implements OnInit {
     this.canEditProfileInformation = false;
   }
 
+  /**
+   * @returns {boolean} Whether the current profile information is new and is allowed to be saved
+   */
   canSaveProfileInformation(): boolean {
     const newValues = (this.firstNameFormControl.value !== this.profile?.firstName) ||
       (this.lastNameFormControl.value !== this.profile?.lastName) ||
@@ -77,6 +103,9 @@ export class AccountComponent implements OnInit {
     return this.formGroup.valid && !this.formGroup.pristine && !this.emailValidationInFlight && newValues;
   }
 
+  /**
+   * Saves the profile information, showing a success toast if successful. Resets account page to a view-only state.
+   */
   saveProfileInformation() {
     this.authService.updateProfileInformation({
       firstName: this.firstNameFormControl.value,
@@ -100,6 +129,9 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * @returns {string} An error message corresponding to the most recent email validation
+   */
   getEmailErrorMessage(): string {
     if (this.emailFormControl.getError('email')) {
       return 'Invalid email';
@@ -113,6 +145,11 @@ export class AccountComponent implements OnInit {
     return '';
   }
 
+  /**
+   * Verifies whether the given email is eligible for the user to use for their account
+   * 
+   * @param {string} email The email to verify
+   */
   verifyEmailUniqueness(email: string) {
     if (email === this.profile?.email) {
       this.emailFormControl.setErrors(null);
@@ -134,11 +171,17 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  /**
+   * Allows the account information to be editable
+   */
   enableEdit() {
     this.canEditProfileInformation = true;
     this.formGroup.enable();
   }
 
+  /**
+   * Returns the account information to a view-only state
+   */
   cancelEdit() {
     this.initProfileInformation();
   }
