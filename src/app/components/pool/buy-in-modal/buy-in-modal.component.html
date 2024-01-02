@@ -53,7 +53,7 @@
         </ion-text>
         <div class="spacer"></div>
         <ion-text *ngIf="!distributionView" color="medium">
-            Below are the suggested chip counts
+            Below are the suggested chip amounts
         </ion-text>
         <div *ngIf="distributionView" color="medium">
             <ion-text color="medium" class="centered-row" *ngIf="selectedSlot >= 0">
@@ -61,7 +61,7 @@
                 <div class="tiny-spacer"></div>
                 <ion-icon name="lock-open-outline" color="primary"></ion-icon>
                 <div class="tiny-spacer"></div>
-                to lock in a chip count
+                to lock in a chip amount
             </ion-text>
             <ion-text *ngIf="selectedSlot < 0" color="medium">Select a chip to get started</ion-text>
         </div>
@@ -82,7 +82,7 @@
                 [max]="chipDistributionMax"
                 [formControl]="chipDistributionFormControl">
             </ion-range>
-            <ion-text color="medium">Slide to adjust chip count</ion-text>
+            <ion-text color="medium">Slide to adjust chip amount</ion-text>
         </div>
     </div>
 </ng-template>
@@ -105,7 +105,7 @@
             shape="round"
             expand="block"
         >
-            ADJUST
+            ADJUST AMOUNTS
         </ion-button>
     </div>
 </ng-template>
