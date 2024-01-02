@@ -75,6 +75,16 @@
             (chipSelect)="onChipSelect($event)"
         >
         </app-chip-view>
+        <div class="spacer"></div>
+        <ion-button
+            *ngIf="!distributionView"
+            color="light"
+            (click)="enableDistributionView()"
+            shape="round"
+            expand="block"
+        >
+            ADJUST AMOUNTS
+        </ion-button>
         <div class="range-container" *ngIf="distributionView && selectedSlot >= 0">
             <ion-range 
                 (ionInput)="onDistributionSliderChange($event)"
@@ -97,15 +107,6 @@
             expand="block"
         >
             CHIPS COLLECTED
-        </ion-button>
-        <ion-button
-            *ngIf="!distributionView"
-            color="light"
-            (click)="enableDistributionView()"
-            shape="round"
-            expand="block"
-        >
-            ADJUST AMOUNTS
         </ion-button>
     </div>
 </ng-template>
