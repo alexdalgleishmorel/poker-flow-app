@@ -26,6 +26,7 @@ export class ChipSelectComponent implements OnChanges {
    */
   subscribeToDenominationChanges() {
     this.chipDenominationControl.valueChanges.subscribe((value) => {
+      value = Number(value);
       if (this.chipDenominationControl.errors) {
         this.denominations[this.selectedSlot] = DEFAULT_DENOMINATIONS[this.selectedSlot];
       } else {
@@ -68,7 +69,7 @@ export class ChipSelectComponent implements OnChanges {
   denominationValidator(): ValidatorFn {
     return (control:AbstractControl) : ValidationErrors | null => {
       
-      const value = control.value;
+      const value = Number(control.value);
       if (!value) {
         // Denominations are required
         return {'required': true};
