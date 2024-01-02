@@ -55,10 +55,3 @@ export class ErrorMessages {
     this.currentMessage = '';
   }
 }
-
-export enum LoginErrorType {
-  emailAlreadyExistsError = 'emailAlreadyExistsError',
-  emailNotFoundError = 'emailNotFoundError',
-  genericError = 'genericError',
-  invalidCredentialError = 'invalidCredentialError'
-}

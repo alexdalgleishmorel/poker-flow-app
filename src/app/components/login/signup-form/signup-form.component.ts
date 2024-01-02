@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { catchError, throwError } from 'rxjs';
 import { AuthService, SignUpRequest } from 'src/app/services/auth/auth.service';
-import { ErrorMessages, LoginErrorType, requestLogin } from '../login.component';
+import { ErrorMessages, requestLogin } from '../login.component';
 import { Router } from '@angular/router';
 
 @Component({
@@ -44,14 +44,16 @@ export class SignupFormComponent {
       password: this.firstPasswordFormControl.value!
     };
 
+    const signUpErrorMessages: ErrorMessages = new ErrorMessages();
+
     this.authService.signup(signUpRequest)
       .pipe(
         catchError((error) => {
           if (error.status === 401) {
-            this.signUpErrorMessages.setMessage(LoginErrorType.emailAlreadyExistsError);
+            this.signUpErrorMessages.setMessage(signUpErrorMessages.emailAlreadyExistsError);
             this.emailRegistrationFormControl.setErrors({'email': true});
           } else {
-            this.signUpErrorMessages.setMessage(LoginErrorType.genericError);
+            this.signUpErrorMessages.setMessage(signUpErrorMessages.genericError);
           }
           return throwError(() => new Error(error));
         })
@@ -71,6 +73,7 @@ export class SignupFormComponent {
             })
           )
           .subscribe(() => {
+            this.signUpFormGroup.reset();
             this.router.navigate(['']);
           });
       });
