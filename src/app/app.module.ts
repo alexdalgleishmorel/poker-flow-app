@@ -24,7 +24,8 @@ import { PoolDonutChartComponent } from './components/pool/pool-chart-container/
 import { PoolActivityTableComponent } from './components/pool/pool-activity-container/pool-activity-table/pool-activity-table.component';
 import { PoolActivityContainerComponent } from './components/pool/pool-activity-container/pool-activity-container.component';
 import { PoolSettingsComponent } from './components/pool/pool-settings/pool-settings.component';
-import { ChipViewComponent, ThousandSuffixesPipe } from './components/common/chip-view/chip-view.component';
+import { ChipViewComponent } from './components/common/chip-view/chip-view.component';
+import { ThousandSuffixesPipe } from './app.component';
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 import { ChipSelectComponent } from './components/common/chip-select/chip-select.component';
 import { CreateGameModalComponent } from './components/hub/create-game-modal/create-game-modal.component';

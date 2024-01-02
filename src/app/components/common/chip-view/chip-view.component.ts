@@ -1,31 +1,4 @@
-import { Component, EventEmitter, Input, Output, Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({
-  name: 'thousandSuff'
-})
-export class ThousandSuffixesPipe implements PipeTransform {
-
-  transform(input: any, args?: any): any {
-    var exp, suffixes = ['K', 'M', 'B', 'T', 'P', 'E'];
-
-    if (Number.isNaN(input) || input < 0) {
-      return null;
-    }
-
-    if (input < 1) {
-      return '¢' + (input*100).toFixed(args);
-    }
-
-    if (input < 1000) {
-      return '$' + input;
-    }
-
-    exp = Math.floor(Math.log(input) / Math.log(1000));
-
-    return '$' + (input / Math.pow(1000, exp)).toFixed(args) + suffixes[exp - 1];
-  }
-
-}
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-chip-view',
@@ -33,32 +6,51 @@ export class ThousandSuffixesPipe implements PipeTransform {
   styleUrls: ['./chip-view.component.scss']
 })
 export class ChipViewComponent {
-  @Input() denominations: number[] = [];
+  // Inputs/outputs relating to core functionality
   @Input() assignments: number[] = [];
+  @Input() denominations: number[] = [];
   @Input() viewOnly: boolean = false;
-  @Input() distributionView: boolean = false;
-  @Input() chipDistributions: number[] = [];
   @Output() chipSelect: EventEmitter<number> = new EventEmitter<number>();
 
+  // Inputs/outputs relating to distribution view functionality
+  @Input() chipDistributions: number[] = [];
   @Input() chipLockStatuses: boolean[] = [];
+  @Input() distributionView: boolean = false;
   @Output() chipLockStatusesChange = new EventEmitter<boolean[]>();
 
   public selectedSlot: number = -1;
 
+  /**
+   * @returns {boolean} Whether the component currently has chip assignments to display
+   */
   hasAssignments(): boolean {
     return this.assignments.length !== 0;
   }
 
+  /**
+   * Handles chip selection
+   * 
+   * @param {number} index The index of the selected chip 
+   */
   onSelect(index: number) {
     this.selectedSlot = index;
     this.chipSelect.emit(index);
   }
 
+  /**
+   * Toggles whether a chip amount is locked in for the distribution view, emits the new lock statuses
+   * 
+   * @param {number} index The index of the selected lock 
+   */
   toggleChipLocked(index: number) {
     this.chipLockStatuses[index] = !this.chipLockStatuses[index];
     this.chipLockStatusesChange.emit(this.chipLockStatuses);
   }
 
+  /**
+   * @param {number} index The index of the chip
+   * @returns {boolean} Whether the given chip amount is locked
+   */
   isChipLocked(index: number): boolean {
     return this.chipLockStatuses[index];
   }

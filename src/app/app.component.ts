@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 
 import { PoolService } from './services/pool/pool.service';
 
@@ -45,4 +45,29 @@ export function toggleDarkTheme(enable: boolean) {
 
 export function getPrefersDark(): boolean {
   return localStorage.getItem(PREFERS_DARK_COLOR_SCHEME) ? getPrefersDarkFromStorage() : window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+
+@Pipe({
+  name: 'thousandSuff'
+})
+export class ThousandSuffixesPipe implements PipeTransform {
+  transform(input: any, args?: any): any {
+    var exp, suffixes = ['K', 'M', 'B', 'T', 'P', 'E'];
+
+    if (Number.isNaN(input) || input < 0) {
+      return null;
+    }
+
+    if (input < 1) {
+      return '¢' + (input*100).toFixed(args);
+    }
+
+    if (input < 1000) {
+      return '$' + input;
+    }
+
+    exp = Math.floor(Math.log(input) / Math.log(1000));
+
+    return '$' + (input / Math.pow(1000, exp)).toFixed(args) + suffixes[exp - 1];
+  }
 }
