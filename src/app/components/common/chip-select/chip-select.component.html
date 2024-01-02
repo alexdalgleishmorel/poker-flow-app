@@ -28,6 +28,7 @@
     [formControl]="chipDenominationControl"
     (keypress)="decimalFilter($event)"
     (focusout)="onFocusOut()"
+    (ionFocus)="onFocus()"
     [errorText]="getErrorMessage()"
 >
 </ion-input>

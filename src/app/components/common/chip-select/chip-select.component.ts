@@ -47,14 +47,24 @@ export class ChipSelectComponent implements OnChanges {
     return (control:AbstractControl) : ValidationErrors | null => {
       
       const value = control.value;
-
+      if (!value) {
+        return {'required': true};
+      }
       if (value > 1000 && value % 1000 !== 0) {
-        return {'badMultipleError': true};
+        return {'badLargeMultipleError': true};
+      }
+      if (value < 1 && !Number.isInteger(1/value)) {
+        return {'badFractionalMultipleError': true};
+      }
+      if (value > 1 && !Number.isInteger(value)) {
+        return {'notMultipleOfOneError': true};
       }
       
       return null;
     }
   }
+
+  onFocus = () => this.chipDenominationControl.markAsTouched();
 
   onFocusOut() {
     if (!this.chipDenominationControl.value) {
@@ -67,8 +77,14 @@ export class ChipSelectComponent implements OnChanges {
   }
 
   getErrorMessage(): string {
-    if (this.chipDenominationControl.errors?.['badMultipleError']) {
-      return 'Must be a multiple of $1000. Value reset to default.';
+    if (this.chipDenominationControl.errors?.['badLargeMultipleError']) {
+      return 'Must be a multiple of $1000';
+    }
+    if (this.chipDenominationControl.errors?.['badFractionalMultipleError']) {
+      return 'Must sum to $1';
+    }
+    if (this.chipDenominationControl.errors?.['notMultipleOfOneError']) {
+      return 'Must be a multiple of $1';
     }
     return 'Required';
   }

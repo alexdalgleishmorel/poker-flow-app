@@ -17,3 +17,14 @@ ion-title {
 .spacer {
     padding: 5px;
 }
+
+.centered-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.tiny-spacer {
+    padding: 2px;
+}

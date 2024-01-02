@@ -1,13 +1,8 @@
-<ion-header>
-    <ion-toolbar>
-      <ion-title>Create a game</ion-title>
-    </ion-toolbar>
-</ion-header>
 <ion-content>
     <div class="form-container">
-        <ion-text color="primary"><h3>Name Your Pool</h3></ion-text>
+        <ion-text color="primary"><h3>Name Your Game</h3></ion-text>
         <ion-input
-            label="Pool Name"
+            label="Name"
             mode="md"
             fill="outline"
             labelPlacement="stacked"
@@ -31,6 +26,7 @@
             type="number"
             [min]="0"
             [formControl]="minBuyInFormControl"
+            (ionFocus)="onFocus(minBuyInFormControl)"
             (focusout)="onMinBuyInFocusOut()"
             (keypress)="decimalFilter($event)"
             errorText="Minimum and maximum values conflict"
@@ -45,6 +41,7 @@
             type="number"
             [min]="0"
             [formControl]="maxBuyInFormControl"
+            (ionFocus)="onFocus(maxBuyInFormControl)"
             (focusout)="onMaxBuyInFocusOut()"
             (keypress)="decimalFilter($event)"
             errorText="Minimum and maximum values conflict"
@@ -53,6 +50,7 @@
     </div>
     <div class="modal-buttons-container">
         <ion-button
+            *ngIf="poolNameFormControl.value else missingPoolNameMessage"
             class="create-button"
             color="primary"
             (click)="createGame()"
@@ -73,3 +71,12 @@
         </ion-button>
     </div>
 </ion-content>
+
+<ng-template #missingPoolNameMessage>
+    <ion-text color="warning" class="centered-row">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <div class="tiny-spacer"></div>
+        Missing a name for the game
+    </ion-text>
+    <div class="spacer"></div>
+</ng-template>

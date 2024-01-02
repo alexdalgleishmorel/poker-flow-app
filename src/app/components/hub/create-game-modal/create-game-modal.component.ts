@@ -107,6 +107,8 @@ export class CreateGameModalComponent {
     return index;  
   }
 
+  onFocus = (control: FormControl) => control.markAsTouched();
+
   onMinBuyInFocusOut() {
     if (!this.minBuyInFormControl.value) this.minBuyInFormControl.setValue(DEFAULT_MIN_BUY_IN);
   }
