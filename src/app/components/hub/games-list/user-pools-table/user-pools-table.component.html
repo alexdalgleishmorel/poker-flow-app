@@ -29,7 +29,7 @@
 </div>
 
 <ng-template #emptyTable>
-    <div *ngIf="!history else emptyHistoryTableMessage" class="empty-message-container">
+    <div class="empty-message-container">
         <div class="empty-message">
             No games found. 
             <br/><br/>
@@ -43,14 +43,4 @@
             a game to get started.
         </div>
     </div>
-</ng-template>
-
-<ng-template #emptyHistoryTableMessage>
-    <ion-content [scrollY]="false">
-        <div class="empty-message-container">
-            <div class="empty-message">
-                No past games found.
-            </div>
-        </div>
-    </ion-content>
 </ng-template>
