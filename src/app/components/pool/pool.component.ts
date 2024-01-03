@@ -100,7 +100,8 @@ export class PoolComponent implements OnInit {
     let modal = await this.modalCtrl.create({
       component: ChipDepositModalComponent,
       componentProps: {
-        denominations: this.poolData.settings.denominations
+        denominations: this.poolData.settings.denominations,
+        maximumCashout: this.poolData.available_pot
       },
       cssClass: 'modal-fullscreen'
     });

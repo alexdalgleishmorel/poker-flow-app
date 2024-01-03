@@ -17,7 +17,7 @@
             (click)="completeDeposit()"
             shape="round"
             expand="block"
-            [disabled]="!this.getRawDepositTotal()"
+            [disabled]="!totalCashout"
         >
             DONE
         </ion-button>
@@ -37,7 +37,7 @@
     <div class="content">
         <div class="total-cash-out-container">
             <ion-text color="medium">TOTAL CASH-OUT</ion-text>
-            <ion-text class="cash-out-value" color="primary"><b>{{getFormattedDepositTotal()}}</b></ion-text>
+            <ion-text class="cash-out-value" color="primary"><b>{{getFormattedCurrency(totalCashout)}}</b></ion-text>
         </div>
         <div class="spacer"></div>
         <div class="denomination-changer" *ngIf="currentDenominationIndex >= 0 else selectDenominationMessage">
