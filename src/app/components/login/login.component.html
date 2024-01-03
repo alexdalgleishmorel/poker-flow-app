@@ -4,16 +4,16 @@
     <ion-card-subtitle color="medium">WELCOME TO</ion-card-subtitle>
     <ion-card-title color="primary">PokerFlow</ion-card-title>
     <div class="spacer"></div>
-    <ion-segment #segmentBar [scrollable]="true" value="login">
-      <ion-segment-button value="login" (click)="updateForm('login')">
+    <ion-segment #segmentBar [scrollable]="true" [value]="LOGIN">
+      <ion-segment-button [value]="LOGIN" (click)="updateForm(LOGIN)">
         LOGIN
       </ion-segment-button>
-      <ion-segment-button value="signup" (click)="updateForm('signup')">
+      <ion-segment-button [value]="SIGNUP" (click)="updateForm(SIGNUP)">
         SIGNUP
       </ion-segment-button>
     </ion-segment>
     <div class="spacer"></div>
-    <ion-content><app-login-form *ngIf="currentForm === 'login' else signup"></app-login-form></ion-content>
+    <ion-content><app-login-form *ngIf="currentForm === LOGIN else signup"></app-login-form></ion-content>
   </div>
 </ion-content>
 
