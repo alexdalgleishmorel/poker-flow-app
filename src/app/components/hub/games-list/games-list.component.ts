@@ -20,17 +20,28 @@ export class GamesListComponent implements OnInit {
 
   constructor(private authService: AuthService, private poolService: PoolService) {}
 
+  /**
+   * Initializes the list data, subscribes to data updates and re-initializes the list in those cases
+   */
   ngOnInit() {
     this.initializeData();
     this.poolService.updateNotification.subscribe(() => this.initializeData());
   }
 
+  /**
+   * Removes existing data and resets the item offset, then requests new data
+   */
   initializeData() {
     this.pools = undefined;
     this.itemOffset = 0;
     this.getData();
   }
 
+  /**
+   * Gets data to populate the list
+   * 
+   * @param {any} event An optional infinite scroll event, if it is the source of the data request 
+   */
   public getData(event?: InfiniteScrollCustomEvent) {
     this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage, this.activeGames)
       .then(pools => {
