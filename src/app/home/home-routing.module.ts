@@ -7,7 +7,6 @@ import { PoolComponent } from '../components/pool/pool.component';
 import { PoolChartContainerComponent } from '../components/pool/pool-chart-container/pool-chart-container.component';
 import { PoolActivityContainerComponent } from '../components/pool/pool-activity-container/pool-activity-container.component';
 import { PoolSettingsComponent } from '../components/pool/pool-settings/pool-settings.component';
-import { StatsComponent } from '../components/pool/stats/stats.component';
 import { SharePoolComponent } from '../components/pool/share-pool/share-pool.component';
 
 const routes: Routes = [
@@ -49,12 +48,6 @@ const routes: Routes = [
             path: 'settings',
             component: PoolSettingsComponent
           },
-          /*
-          {
-            path: 'stats',
-            component: StatsComponent
-          },
-          */
           {
             path: 'share',
             component: SharePoolComponent

@@ -31,7 +31,6 @@ import { ChipSelectComponent } from './components/common/chip-select/chip-select
 import { CreateGameModalComponent } from './components/hub/create-game-modal/create-game-modal.component';
 import { BuyInModalComponent } from './components/pool/buy-in-modal/buy-in-modal.component';
 import { AccountComponent } from './components/account/account.component';
-import { StatsComponent } from './components/pool/stats/stats.component';
 import { SharePoolComponent } from './components/pool/share-pool/share-pool.component';
 import { ChipDepositModalComponent } from './components/pool/chip-deposit-modal/chip-deposit-modal.component';
 import { JoinGameModalComponent } from './components/hub/join-game-modal/join-game-modal.component';
@@ -62,7 +61,6 @@ const config: SocketIoConfig = { url: BASE_URL, options: {transports: ['websocke
     PoolSettingsComponent,
     SharePoolComponent,
     SignupFormComponent,
-    StatsComponent,
     ThousandSuffixesPipe,
     UserPoolsTableComponent
   ],
