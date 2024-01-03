@@ -25,7 +25,7 @@ export class LoginFormComponent {
   constructor (private authService: AuthService, private router: Router, private _formBuilder: FormBuilder) {}
 
   /**
-   * Attempts a user login based on the username and password contained in the form
+   * Attempts a user login based on the username and password provided in the form. Navigates to home page if successful.
    */
   login() {
     if (!this.emailFormControl.value || !this.passwordFormControl.value) {
@@ -47,6 +47,7 @@ export class LoginFormComponent {
         })
       )
       .subscribe(() => {
+        this.loginFormGroup.reset();
         this.router.navigate(['']);
       });
   }
