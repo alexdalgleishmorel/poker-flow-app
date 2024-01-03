@@ -21,6 +21,7 @@ export class ChipDepositModalComponent implements OnInit {
   public displayedDenomination: number = 0;
   public manualInputFormControl: FormControl = new FormControl(0);
   public totalCashout: number = 0;
+  public totalCashoutExceededValue: number = 0;
   private lastValidInput: number = 0;
 
   constructor(private poolService: PoolService, private modalCtrl: ModalController) {}
@@ -65,7 +66,8 @@ export class ChipDepositModalComponent implements OnInit {
   updateTotalCashout() {
     let total: number = 0;
     this.denominations.forEach((denom, index) => total += denom*this.denominationCounts[index]);
-    this.totalCashout = total;
+    this.totalCashout = total <= this.maximumCashout ? total : this.maximumCashout;
+    this.totalCashoutExceededValue = total <= this.maximumCashout ? 0 : total;
   }
 
   /**
