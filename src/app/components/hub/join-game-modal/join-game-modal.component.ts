@@ -8,16 +8,21 @@ import { ModalController } from '@ionic/angular';
   styleUrls: ['./join-game-modal.component.scss'],
 })
 export class JoinGameModalComponent {
-
   public poolIDFormControl: FormControl = new FormControl('');
 
   constructor(private modalCtrl: ModalController) {}
 
+  /**
+   * Closes the modal with no data
+   */
   cancel() {
     this.modalCtrl.dismiss();
   }
 
-  joinGame() {
+  /**
+   * Closes the modal with the poolID value
+   */
+  closeWithPoolID() {
     this.modalCtrl.dismiss(this.poolIDFormControl.getRawValue());
   }
 }
