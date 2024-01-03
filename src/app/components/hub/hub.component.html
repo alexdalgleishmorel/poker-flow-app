@@ -23,16 +23,16 @@
   </ion-footer>
 <ion-content [scrollY]="false">
     <div class="content">
-        <ion-segment #segmentBar [scrollable]="true" value="active">
-            <ion-segment-button value="active" (click)="updateList('active')">
+        <ion-segment #segmentBar [scrollable]="true" [value]="ACTIVE">
+            <ion-segment-button [value]="ACTIVE" (click)="updateList(ACTIVE)">
                 ACTIVE GAMES
             </ion-segment-button>
-            <ion-segment-button value="past" (click)="updateList('past')">
+            <ion-segment-button [value]="PAST" (click)="updateList(PAST)">
                 PAST GAMES
             </ion-segment-button>
         </ion-segment>
         <ion-content [scrollY]="false">
-            <app-games-list *ngIf="currentList == 'active' else pastGames" [activeGames]="true"></app-games-list>
+            <app-games-list *ngIf="currentList == ACTIVE else pastGames" [activeGames]="true"></app-games-list>
         </ion-content>
     </div>
 </ion-content>
