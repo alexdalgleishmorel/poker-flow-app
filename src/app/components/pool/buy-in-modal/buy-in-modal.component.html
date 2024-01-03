@@ -28,7 +28,7 @@
             <ion-text class="buy-in-value" color="primary">
                 <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
             </ion-text>
-            <ion-text *ngIf="getErrorMessage()" color="danger">{{getErrorMessage()}}</ion-text>
+            <ion-text *ngIf="getErrorMessage()" [class.invisible]="getErrorMessage() === 'EMPTY'" color="danger">{{getErrorMessage()}}</ion-text>
             <ion-input
                 class="hidden-input"
                 #hiddenInput

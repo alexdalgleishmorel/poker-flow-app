@@ -6,13 +6,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./chip-view.component.scss']
 })
 export class ChipViewComponent {
-  // Inputs/outputs relating to core functionality
+  /* Inputs/outputs relating to core functionality */
   @Input() assignments: number[] = [];
   @Input() denominations: number[] = [];
   @Input() viewOnly: boolean = false;
   @Output() chipSelect: EventEmitter<number> = new EventEmitter<number>();
 
-  // Inputs/outputs relating to distribution view functionality
+  /* Inputs/outputs relating to distribution view functionality */
   @Input() chipDistributions: number[] = [];
   @Input() chipLockStatuses: boolean[] = [];
   @Input() distributionView: boolean = false;
