@@ -1,36 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, AfterViewInit } from '@angular/core';
+import Chart from 'chart.js/auto';
 
 import { POKERFLOW_GREEN } from '@constants';
-import Chart from 'chart.js/auto';
 import { getPrefersDark } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
-
-const emptyDoughnutPlugin = {
-  id: 'emptyDoughnut',
-  afterDraw(chart: any, args: any, options: any) {
-    const {datasets} = chart.data;
-    const {color, width, radiusDecrease} = options;
-    let hasData = false;
-
-    for (let i = 0; i < datasets.length; i += 1) {
-      const dataset = datasets[i];
-      hasData = hasData || dataset.data.length > 0;
-    }
-
-    if (!hasData) {
-      const {chartArea: {left, top, right, bottom}, ctx} = chart;
-      const centerX = (left + right) / 2;
-      const centerY = (top + bottom) / 2;
-      const r = Math.min(right - left, bottom - top) / 2;
-
-      ctx.beginPath();
-      ctx.lineWidth = width || 2;
-      ctx.strokeStyle = color || '#58595b';
-      ctx.arc(centerX, centerY, (r - radiusDecrease || 0), 0, 2 * Math.PI);
-      ctx.stroke();
-    }
-  }
-};
 
 @Component({
   selector: 'app-pool-donut-chart',
@@ -41,34 +14,55 @@ export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChan
   @Input() poolData?: PoolData;
   public chart: any = null;
   private colors: string[] = [
-    '#f67019',
-    '#4dc9f6',
-    '#f53794',
-    '#537bc4',
-    '#166a8f',
-    '#58595b',
-    '#8549ba'
+    '#f67019', // orange
+    '#4dc9f6', // light blue
+    '#f53794', // pink
+    '#537bc4', // blue
+    '#166a8f', // dark blue
+    '#d62728', // vibrant red
+    '#8549ba', // purple
+    '#ffb300', // darker yellow
+    '#008080', // vibrant teal
+    '#E6E6FA', // lavender
+    '#FF00FF', // magenta
+    '#40E0D0'  // turquoise
   ];
 
   constructor(private poolService: PoolService) {}
 
+  /**
+   * Renders chart and subscribes to theme changes after view initialization
+   */
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.createChart();
-      this.poolService.colorThemeSubject.subscribe(() => {
-        if (this.chart) {
-          this.chart.data.datasets[1].borderColor = getPrefersDark() ? '#000000' : '#FFFFFF';
-          this.chart.update();
-        }
-      });
+      this.subscribeToThemeChanges();
     }, 1000);
   }
 
+  /**
+   * Ensures the chart instance is destroyed when the component is destroyed
+   */
   ngOnDestroy() {
     this.chart?.destroy();
     this.chart = null;
   }
 
+  /**
+   * Subscribes to theme changes, ensuring the chart colour is updated accordingly
+   */
+  subscribeToThemeChanges() {
+    this.poolService.colorThemeSubject.subscribe(() => {
+      if (this.chart) {
+        this.chart.data.datasets[1].borderColor = getPrefersDark() ? '#000000' : '#FFFFFF';
+        this.chart.update();
+      }
+    });
+  }
+
+  /**
+   * Creates an instance of a chart.js pie chart, representing the buy-ins and available cashout of the current pool data
+   */
   createChart() {
     let delayed: boolean;
 
@@ -102,9 +96,6 @@ export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChan
           }
         ]
       },
-      plugins: [
-        emptyDoughnutPlugin,
-      ],
       options: {
         responsive: true,
         devicePixelRatio: 4,
@@ -168,7 +159,7 @@ export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChan
   }
 
   /**
-   * Actions to perform when the input data has changed
+   * Updates the chart instance when the input data has changed
    */
   ngOnChanges() {
     if (this.chart) {
