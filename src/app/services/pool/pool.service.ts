@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 
 import { ApiService } from '../api/api.service';
@@ -84,7 +84,7 @@ export class PoolService {
     if (!userID) {
       return Promise.resolve();
     }
-    return lastValueFrom(this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage));
+    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage);
   }
 
   getPoolByID(poolID: string): Promise<any> {
@@ -92,7 +92,7 @@ export class PoolService {
       return Promise.resolve();
     };
     
-    return lastValueFrom(this.apiService.get(`/pool/${poolID}`));
+    return this.apiService.get(`/pool/${poolID}`);
   }
 
   createPool(name: string, settings: PoolSettings): Promise<any> {
@@ -102,14 +102,14 @@ export class PoolService {
       admin_id: this.authService.getCurrentUser()?.id
     };
 
-    return lastValueFrom(this.apiService.post('/pool/create', poolCreationRequest));
+    return this.apiService.post('/pool/create', poolCreationRequest);
   }
 
   updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]): Promise<any> {
-    return lastValueFrom(this.apiService.post('/pool/settings/update', {
+    return this.apiService.post('/pool/settings/update', {
       pool_id: poolID,
       update_requests: updateRequests
-    }));
+    });
   }
 
   joinPool(poolID: string): Promise<any> {
@@ -118,10 +118,10 @@ export class PoolService {
       profile_id: this.authService.getCurrentUser()?.id!
     };
 
-    return lastValueFrom(this.apiService.post('/pool/join', poolJoinRequest));
+    return this.apiService.post('/pool/join', poolJoinRequest);
   }
 
   postTransaction(poolTransactionRequest: PoolTransactionRequest): Promise<any> {
-    return lastValueFrom(this.apiService.post(`/pool/transaction/create`, poolTransactionRequest));
+    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
   }
 }

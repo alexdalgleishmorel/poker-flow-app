@@ -2,9 +2,9 @@ import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { BehaviorSubject, Observable, catchError, firstValueFrom, of, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 
-import { BASE_URL } from '../api/api.service';
+import { BASE_API_URL } from '../api/api.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -65,15 +65,15 @@ export class AuthService {
   }
 
   signup(user: SignUpRequest): Observable<void> {
-    return this.http.post<any>(`${BASE_URL}/signup`, user);
+    return this.http.post<any>(`${BASE_API_URL}/signup`, user);
   }
 
   login(loginRequest: LoginRequest): Observable<Profile> {
-    return this.http.post<any>(`${BASE_URL}/login`, loginRequest).pipe(tap(data => this.recordLogin(data)));
+    return this.http.post<any>(`${BASE_API_URL}/login`, loginRequest).pipe(tap(data => this.recordLogin(data)));
   }
 
   logout() {
-    return this.http.get<any>(`${BASE_URL}/logout`).pipe(tap(() => this.recordLogout()));
+    return this.http.get<any>(`${BASE_API_URL}/logout`).pipe(tap(() => this.recordLogout()));
   }
 
   logoutAndRedirectToLogin() {
@@ -81,11 +81,11 @@ export class AuthService {
   }
 
   verifyEmailUniqueness(email: string): Observable<boolean> {
-    return this.http.post<any>(`${BASE_URL}/verifyUniqueEmail`, { email: email });
+    return this.http.post<any>(`${BASE_API_URL}/verifyUniqueEmail`, { email: email });
   }
 
   updateProfileInformation(profile: Profile) {
-    return this.http.post<any>(`${BASE_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id}).pipe(
+    return this.http.post<any>(`${BASE_API_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id}).pipe(
       tap(data => this.recordLogin(data))
     );
   }

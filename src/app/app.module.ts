@@ -34,9 +34,9 @@ import { AccountComponent } from './components/account/account.component';
 import { ShareGameComponent } from './components/pool/share/share.component';
 import { ChipDepositModalComponent } from './components/pool/chip-deposit-modal/chip-deposit-modal.component';
 import { JoinGameModalComponent } from './components/hub/join-game-modal/join-game-modal.component';
-import { BASE_URL } from './services/api/api.service';
+import { BASE_API_URL } from './services/api/api.service';
 
-const config: SocketIoConfig = { url: BASE_URL, options: {transports: ['websocket'], reconnection: true}};
+const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['websocket'], reconnection: true}};
 
 @NgModule({
   declarations: [
