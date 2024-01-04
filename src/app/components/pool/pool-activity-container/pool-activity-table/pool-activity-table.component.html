@@ -9,7 +9,7 @@
                             <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
                             <br/>
                             <sub>
-                                <ion-text color="primary">{{getDate(transaction.date)}}</ion-text>
+                                <ion-text color="primary">{{getLocaleDateString(transaction.date)}}</ion-text>
                             </sub>
                         </ion-text>
                     </ion-label>
@@ -17,10 +17,10 @@
                         <ion-text 
                             [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
                         >
-                            <b>{{ isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT' }}</b>
+                            <b>{{isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT'}}</b>
                         </ion-text>
                         <br/>
-                        ${{ transaction.amount.toFixed(2) }}
+                        {{getFormattedCurrency(transaction.amount)}}
                     </ion-text>
                     <br/>
                 </ion-item>
@@ -35,7 +35,7 @@
         <div class="empty-table-text">
             No pool activity found.
             <br/><br/>
-            <span class="buy-in-text" (click)="buyIn()">
+            <span class="buy-in-text">
                 <ion-text color="primary"><b>BUY-IN</b></ion-text>
             </span>
             <br/>
