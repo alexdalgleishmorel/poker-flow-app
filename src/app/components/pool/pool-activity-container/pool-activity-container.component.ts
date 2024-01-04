@@ -12,6 +12,9 @@ export class PoolActivityContainerComponent  implements OnInit {
 
   constructor(private poolService: PoolService) {}
 
+  /**
+   * Subscribes to the currently displayed pool as a data source for the pool activity list
+   */
   ngOnInit() {
     this.poolService.currentPoolSubject.subscribe(poolData => {
       this.transactions = [...poolData.transactions].reverse();
