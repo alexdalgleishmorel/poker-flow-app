@@ -14,7 +14,17 @@ export class PoolChartContainerComponent implements OnInit {
 
   constructor(private poolService: PoolService) {}
 
+  /**
+   * Subscribes to pool data and any updates it may receive
+   */
   ngOnInit() {
+    this.subscribeToPoolData();
+  }
+
+  /**
+   * Subscribes to the current pool data being displayed, adjusting the pool total and available cashout accordingly
+   */
+  subscribeToPoolData() {
     this.poolService.currentPoolSubject.subscribe(poolData => {
       this.poolData = poolData ? {...poolData} : this.poolData;
       this.poolTotal = 0;
@@ -24,11 +34,17 @@ export class PoolChartContainerComponent implements OnInit {
     });
   }
 
-  getTotalPotRepresentation() {
+  /**
+   * @returns {string} A currency representation of the total pot
+   */
+  getTotalPotRepresentation(): string {
     return currencyFormatter.format(this.poolTotal);
   }
 
-  getAvailablePotRepresentation() {
+  /**
+   * @returns {string} A currency representation of the available cashout
+   */
+  getAvailableCashoutRepresentation(): string {
     return currencyFormatter.format(this.poolData?.available_pot || 0);
   }
 }
