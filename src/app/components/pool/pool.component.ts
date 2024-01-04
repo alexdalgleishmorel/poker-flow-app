@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 import { ModalController, ToastController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 import { BuyInModalComponent } from './buy-in-modal/buy-in-modal.component';
-import { AuthService } from 'src/app/services/auth/auth.service';
 import { ChipDepositModalComponent } from './chip-deposit-modal/chip-deposit-modal.component';
-import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { PoolData, PoolService, TransactionType } from 'src/app/services/pool/pool.service';
 
 @Component({
   selector: 'app-pool',
@@ -14,17 +14,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./pool.component.scss']
 })
 export class PoolComponent implements OnInit {
-  public poolData?: PoolData;
+  public currentView: View = View.EMPTY;
   public disabled: boolean = false;
-  public poolID: string = '';
-  public currentPoolView: PoolView = PoolView.EMPTY;
+  public poolData?: PoolData;
 
   private updateSubscription?: Subscription;
 
-  readonly POT: PoolView = PoolView.POT;
-  readonly TRANSACTIONS: PoolView = PoolView.TRANSACTIONS;
-  readonly SHARE: PoolView = PoolView.SHARE;
-  readonly SETTINGS: PoolView = PoolView.SETTINGS;
+  readonly POT: View = View.POT;
+  readonly TRANSACTIONS: View = View.TRANSACTIONS;
+  readonly SHARE: View = View.SHARE;
+  readonly SETTINGS: View = View.SETTINGS;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -35,34 +34,64 @@ export class PoolComponent implements OnInit {
     private toastController: ToastController,
   ) {}
 
+  /**
+   * Initializes data using the ID provided in the URL
+   */
   ngOnInit() {
-    this.poolID = this.activatedRoute.snapshot.params['id'];
+    this.initPoolDataAndSubscribeToChanges(this.getID());
+  }
 
+  /**
+   * @returns {string} The ID from the URL
+   */
+  getID(): string {
+    return this.activatedRoute.snapshot.params['id'];
+  }
+
+  /**
+   * Retrieves the pool data related to the given ID, and subscribes to updates to this data
+   * 
+   * @param {string} id The pool ID used for data retrieval
+   */
+  initPoolDataAndSubscribeToChanges(id: string) {
     this.poolService.currentPoolSubject.subscribe(poolData => {
       this.poolData = poolData;
       this.disabled = !!this.poolData.settings.expired;
     });
-
-    this.poolService.getPoolByID(this.poolID).then(poolData => {
+    this.poolService.getPoolByID(id).then(poolData => {
       this.poolService.currentPoolSubject.next(poolData);
-      this.currentPoolView = this.POT;
+      this.currentView = this.POT;
     });
   }
 
+  /**
+   * Subscribes to update notifications, which trigger a new data request for the current pool data
+   */
   ionViewWillEnter() {
     this.updateSubscription = this.poolService.updateNotification.subscribe(() => {
-      this.poolService.getPoolByID(this.poolID).then(poolData => this.poolService.currentPoolSubject.next(poolData));
+      this.poolService.getPoolByID(this.getID()).then(poolData => this.poolService.currentPoolSubject.next(poolData));
     });
   }
 
+  /**
+   * Unsubscribes from update notifications when the view is left
+   */
   ionViewWillLeave() {
     this.updateSubscription?.unsubscribe();
   }
 
-  onPoolViewChange(viewName: PoolView) {
-    this.currentPoolView = viewName;
+  /**
+   * Handles changing the current view
+   * 
+   * @param {View} viewName The view to update to
+   */
+  onPoolViewChange(viewName: View) {
+    this.currentView = viewName;
   }
 
+  /**
+   * Opens the buy-in modal in fullscreen
+   */
   async buyIn() {
     if (!this.poolData) {
       return;
@@ -72,7 +101,7 @@ export class PoolComponent implements OnInit {
     let modal = await this.modalCtrl.create({
       component: BuyInModalComponent,
       componentProps: {
-        poolID: this.poolID,
+        poolID: this.poolData.id,
         userID: this.authService.getCurrentUser()?.id,
         minBuyIn: this.poolData.settings.min_buy_in,
         maxBuyIn: this.poolData.settings.max_buy_in,
@@ -91,6 +120,9 @@ export class PoolComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens the cashout modal in fullscreen, posting a new transaction if the modal returns a cashout value
+   */
   async cashOut() {
     if (!this.poolData) {
       return;
@@ -124,38 +156,32 @@ export class PoolComponent implements OnInit {
     }).then(() => this.displayTransactionSuccess('CASH-OUT'));
   }
 
+  /**
+   * Displays a success message for the given transaction type
+   * 
+   * @param {string} transactionType The type of the transaction to display
+   */
   async displayTransactionSuccess(transactionType: string) {
-    const toastButtons = [
-      {
-        text: 'VIEW',
-        handler: () => {}
-      },
-      {
-        text: 'DISMISS',
-        role: 'cancel',
-      }
-    ];
     const toast = await this.toastController.create({
-      cssClass: 'transaction-toast',
+      cssClass: 'centered-text',
       message: `${transactionType} CONFIRMED`,
-      duration: 3000,
+      duration: 1000,
       position: 'top',
-      color: 'success',
-      buttons: toastButtons
+      color: 'success'
     });
 
     await toast.present();
   }
 
   /**
-   * Returns the user back to the hub
+   * Navigates the user to the hub
    */
   goToHub() {
     this.router.navigate(['/', 'home']);
   }
 }
 
-enum PoolView {
+enum View {
   EMPTY = 'EMPTY',
   POT = 'POT',
   TRANSACTIONS = 'TRANSACTIONS',

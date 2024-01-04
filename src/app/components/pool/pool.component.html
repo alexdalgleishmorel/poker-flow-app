@@ -37,10 +37,10 @@
       </ion-segment-button>
     </ion-segment>
     <ion-content [scrollY]="false">
-      <app-pool-chart-container *ngIf="currentPoolView === POT"></app-pool-chart-container>
-      <app-pool-activity-container *ngIf="currentPoolView === TRANSACTIONS"></app-pool-activity-container>
-      <app-share-pool *ngIf="currentPoolView === SHARE"></app-share-pool>
-      <app-pool-settings *ngIf="currentPoolView === SETTINGS"></app-pool-settings>
+      <app-pool-chart-container *ngIf="currentView === POT"></app-pool-chart-container>
+      <app-pool-activity-container *ngIf="currentView === TRANSACTIONS"></app-pool-activity-container>
+      <app-share-pool *ngIf="currentView === SHARE"></app-share-pool>
+      <app-pool-settings *ngIf="currentView === SETTINGS"></app-pool-settings>
     </ion-content>
   </div>
 </ion-content>
