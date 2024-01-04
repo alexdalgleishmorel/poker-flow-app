@@ -4,11 +4,11 @@ import { currencyFormatter } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
-  selector: 'app-pool-chart-container',
-  templateUrl: './pool-chart-container.component.html',
-  styleUrls: ['./pool-chart-container.component.scss'],
+  selector: 'app-chart-container',
+  templateUrl: './chart-container.component.html',
+  styleUrls: ['./chart-container.component.scss'],
 })
-export class PoolChartContainerComponent implements OnInit {
+export class ChartContainerComponent implements OnInit {
   public poolData?: PoolData;
   public poolTotal: number = 0;
 

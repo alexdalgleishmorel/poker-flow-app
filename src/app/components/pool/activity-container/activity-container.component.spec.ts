@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SharePoolComponent } from './share-pool.component';
+import { ActivityContainerComponent } from './activity-container.component';
 
-describe('SharePoolComponent', () => {
-  let component: SharePoolComponent;
-  let fixture: ComponentFixture<SharePoolComponent>;
+describe('ActivityContainerComponent', () => {
+  let component: ActivityContainerComponent;
+  let fixture: ComponentFixture<ActivityContainerComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SharePoolComponent ],
+      declarations: [ ActivityContainerComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SharePoolComponent);
+    fixture = TestBed.createComponent(ActivityContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

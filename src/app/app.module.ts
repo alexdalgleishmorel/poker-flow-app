@@ -19,11 +19,11 @@ import { SignupFormComponent } from './components/login/signup-form/signup-form.
 import { GamesListComponent } from './components/hub/games-list/games-list.component';
 import { UserPoolsTableComponent } from './components/hub/games-list/user-pools-table/user-pools-table.component';
 import { PoolComponent } from './components/pool/pool.component';
-import { PoolChartContainerComponent } from './components/pool/pool-chart-container/pool-chart-container.component';
-import { PoolDonutChartComponent } from './components/pool/pool-chart-container/pool-donut-chart/pool-donut-chart.component';
-import { PoolActivityTableComponent } from './components/pool/pool-activity-container/pool-activity-table/pool-activity-table.component';
-import { PoolActivityContainerComponent } from './components/pool/pool-activity-container/pool-activity-container.component';
-import { PoolSettingsComponent } from './components/pool/pool-settings/pool-settings.component';
+import { ChartContainerComponent } from './components/pool/chart-container/chart-container.component';
+import { DonutChartComponent } from './components/pool/chart-container/donut-chart/donut-chart.component';
+import { ActivityTableComponent } from './components/pool/activity-container/activity-table/activity-table.component';
+import { ActivityContainerComponent } from './components/pool/activity-container/activity-container.component';
+import { GameSettingsComponent } from './components/pool/settings/settings.component';
 import { ChipViewComponent } from './components/common/chip-view/chip-view.component';
 import { ThousandSuffixesPipe } from './app.component';
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
@@ -31,7 +31,7 @@ import { ChipSelectComponent } from './components/common/chip-select/chip-select
 import { CreateGameModalComponent } from './components/hub/create-game-modal/create-game-modal.component';
 import { BuyInModalComponent } from './components/pool/buy-in-modal/buy-in-modal.component';
 import { AccountComponent } from './components/account/account.component';
-import { SharePoolComponent } from './components/pool/share-pool/share-pool.component';
+import { ShareGameComponent } from './components/pool/share/share.component';
 import { ChipDepositModalComponent } from './components/pool/chip-deposit-modal/chip-deposit-modal.component';
 import { JoinGameModalComponent } from './components/hub/join-game-modal/join-game-modal.component';
 import { BASE_URL } from './services/api/api.service';
@@ -53,13 +53,13 @@ const config: SocketIoConfig = { url: BASE_URL, options: {transports: ['websocke
     LoadingSpinnerComponent,
     LoginComponent,
     LoginFormComponent,
-    PoolActivityContainerComponent,
-    PoolActivityTableComponent,
+    ActivityContainerComponent,
+    ActivityTableComponent,
     PoolComponent,
-    PoolChartContainerComponent,
-    PoolDonutChartComponent,
-    PoolSettingsComponent,
-    SharePoolComponent,
+    ChartContainerComponent,
+    DonutChartComponent,
+    GameSettingsComponent,
+    ShareGameComponent,
     SignupFormComponent,
     ThousandSuffixesPipe,
     UserPoolsTableComponent

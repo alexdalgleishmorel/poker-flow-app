@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { PoolService, PoolTransaction } from 'src/app/services/pool/pool.service';
 
 @Component({
-  selector: 'app-pool-activity-container',
-  templateUrl: './pool-activity-container.component.html',
-  styleUrls: ['./pool-activity-container.component.scss'],
+  selector: 'app-activity-container',
+  templateUrl: './activity-container.component.html',
+  styleUrls: ['./activity-container.component.scss'],
 })
-export class PoolActivityContainerComponent  implements OnInit {
+export class ActivityContainerComponent  implements OnInit {
   public transactions?: PoolTransaction[];
 
   constructor(private poolService: PoolService) {}

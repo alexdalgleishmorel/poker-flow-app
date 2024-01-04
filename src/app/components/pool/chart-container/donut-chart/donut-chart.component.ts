@@ -6,11 +6,11 @@ import { getPrefersDark } from 'src/app/app.component';
 import { PoolData, PoolMember, PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
-  selector: 'app-pool-donut-chart',
-  templateUrl: './pool-donut-chart.component.html',
-  styleUrls: ['./pool-donut-chart.component.scss']
+  selector: 'app-donut-chart',
+  templateUrl: './donut-chart.component.html',
+  styleUrls: ['./donut-chart.component.scss']
 })
-export class PoolDonutChartComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class DonutChartComponent implements AfterViewInit, OnDestroy, OnChanges {
   @Input() poolData?: PoolData;
   public chart: any = null;
   private colors: string[] = [

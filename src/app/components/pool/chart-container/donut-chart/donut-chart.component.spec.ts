@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PoolSettingsComponent } from './pool-settings.component';
+import { DonutChartComponent } from './donut-chart.component';
 
-describe('PoolSettingsComponent', () => {
-  let component: PoolSettingsComponent;
-  let fixture: ComponentFixture<PoolSettingsComponent>;
+describe('DonutChartComponent', () => {
+  let component: DonutChartComponent;
+  let fixture: ComponentFixture<DonutChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PoolSettingsComponent ]
+      declarations: [ DonutChartComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PoolSettingsComponent);
+    fixture = TestBed.createComponent(DonutChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

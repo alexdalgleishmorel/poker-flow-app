@@ -6,11 +6,11 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { PoolData, PoolService, PoolUpdateRequest } from 'src/app/services/pool/pool.service';
 
 @Component({
-  selector: 'app-pool-settings',
-  templateUrl: './pool-settings.component.html',
-  styleUrls: ['./pool-settings.component.scss']
+  selector: 'app-game-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss']
 })
-export class PoolSettingsComponent implements OnInit {
+export class GameSettingsComponent implements OnInit {
   public poolData?: PoolData;
 
   public buyInEnabledFormControl = new FormControl();

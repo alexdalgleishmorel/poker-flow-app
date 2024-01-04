@@ -1,5 +1,5 @@
 <div class="content" *ngIf="transactions else loading">
-    <app-pool-activity-table [transactions]="transactions"></app-pool-activity-table>
+    <app-activity-table [transactions]="transactions"></app-activity-table>
 </div>
 
 <ng-template #loading>

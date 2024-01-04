@@ -4,11 +4,11 @@ import { Clipboard } from '@capacitor/clipboard';
 import { PoolService } from 'src/app/services/pool/pool.service';
 
 @Component({
-  selector: 'app-share-pool',
-  templateUrl: './share-pool.component.html',
-  styleUrls: ['./share-pool.component.scss'],
+  selector: 'app-share-game',
+  templateUrl: './share.component.html',
+  styleUrls: ['./share.component.scss'],
 })
-export class SharePoolComponent {
+export class ShareGameComponent {
   public copied: boolean = false;
 
   constructor(private poolService: PoolService) {}
