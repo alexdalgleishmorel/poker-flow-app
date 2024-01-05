@@ -48,13 +48,13 @@ export class CreateGameModalComponent {
    * Subscribes to changes in the min and max buy-in values, cross-checking them against each-other as well
    */
   subscribeToMinMaxBuyInChanges() {
-    this.minBuyInFormControl.valueChanges.subscribe((value) => {
+    this.minBuyInFormControl.valueChanges.subscribe(value => {
       value = Number(value);
       this.validateMinBuyIn(value);
       this.validateMaxBuyIn(this.maxBuyInFormControl.value);
       this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
     });
-    this.maxBuyInFormControl.valueChanges.subscribe((value) => {
+    this.maxBuyInFormControl.valueChanges.subscribe(value => {
       value = Number(value);
       this.validateMaxBuyIn(value);
       this.validateMinBuyIn(this.minBuyInFormControl.value);
@@ -70,10 +70,11 @@ export class CreateGameModalComponent {
   validateMinBuyIn(value: number|null) {
     value = Number(value);
     if (!value) {
+      this.minBuyInFormControl.setErrors({'required': true});
       return;
     }
     if (this.maxBuyInFormControl.value && value > this.maxBuyInFormControl.value) {
-      this.minBuyInFormControl.setErrors({'error': true});
+      this.minBuyInFormControl.setErrors({'conflict': true});
     } else {
       this.minBuyInFormControl.setErrors(null);
     }
@@ -87,13 +88,30 @@ export class CreateGameModalComponent {
   validateMaxBuyIn(value: number|null) {
     value = Number(value);
     if (!value) {
+      this.minBuyInFormControl.setErrors({'required': true});
       return;
     }
     if (this.minBuyInFormControl.value && value < this.minBuyInFormControl.value) {
-      this.maxBuyInFormControl.setErrors({'error': true});
+      this.maxBuyInFormControl.setErrors({'conflict': true});
     } else {
       this.maxBuyInFormControl.setErrors(null);
     }
+  }
+
+  /**
+   * @param {number} index Describes whether it is the minimum or maximum buy-in control
+   * 
+   * @returns {string} The relevant error message relating to the minimum or maximum buy-in controls
+   */
+  getErrorMessage(index: number): string {
+    const control = !index ? this.minBuyInFormControl : this.maxBuyInFormControl;
+    if (control.errors?.['conflict']) {
+      return `Conflicts with ${!index ? 'maximum' : 'minimum'} buy-in`;
+    }
+    if (control.errors?.['required']) {
+      return 'Required';
+    }
+    return '';
   }
 
   /**

@@ -20,10 +20,12 @@
                 mode="md"
                 fill="outline"
                 labelPlacement="stacked"
-                type="number"
-                [min]="0"
+                [maxlength]="15"
                 [formControl]="minBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
                 (focusout)="onMinBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(0)"
             >
             </ion-input>
             <div class="spacer"></div>
@@ -32,10 +34,12 @@
                 mode="md"
                 fill="outline"
                 labelPlacement="stacked"
-                type="number"
-                [min]="0" 
+                [maxlength]="15"
                 [formControl]="maxBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
                 (focusout)="onMaxBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(1)"
             >
             </ion-input>
             <div class="saveButtonContainer">
@@ -45,7 +49,7 @@
                     expand="block"
                     color="primary"
                     (click)="saveSettings()"
-                    [disabled]="!settingsFormGroup.dirty"
+                    [disabled]="!settingsFormGroup.dirty || settingsFormGroup.invalid"
                 >
                     SAVE
                 </ion-button>

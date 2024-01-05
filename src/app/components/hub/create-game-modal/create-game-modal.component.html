@@ -23,13 +23,12 @@
             mode="md"
             fill="outline"
             labelPlacement="stacked"
-            [min]="0"
             [maxlength]="15"
             [formControl]="minBuyInFormControl"
             (ionFocus)="onFocus(minBuyInFormControl)"
             (focusout)="onMinBuyInFocusOut()"
             (keypress)="decimalFilter($event)"
-            errorText="Minimum and maximum values conflict"
+            [errorText]="getErrorMessage(0)"
         >
         </ion-input>
         <div class="spacer"></div>
@@ -38,13 +37,12 @@
             mode="md"
             fill="outline"
             labelPlacement="stacked"
-            [min]="0"
             [maxlength]="15"
             [formControl]="maxBuyInFormControl"
             (ionFocus)="onFocus(maxBuyInFormControl)"
             (focusout)="onMaxBuyInFocusOut()"
             (keypress)="decimalFilter($event)"
-            errorText="Minimum and maximum values conflict"
+            [errorText]="getErrorMessage(1)"
         >
         </ion-input>
     </div>

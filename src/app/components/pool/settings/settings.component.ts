@@ -67,7 +67,84 @@ export class GameSettingsComponent implements OnInit {
     this.buyInEnabledFormControl.setValue(poolData.settings.buy_in_enabled);
     this.minBuyInFormControl.setValue(poolData.settings.min_buy_in);
     this.maxBuyInFormControl.setValue(poolData.settings.max_buy_in);
+    this.subscribeToMinMaxBuyInChanges();
   }
+
+  /**
+   * Subscribes to changes in the min and max buy-in values, cross-checking them against each-other as well
+   */
+  subscribeToMinMaxBuyInChanges() {
+    this.minBuyInFormControl.valueChanges.subscribe(value => {
+      value = Number(value);
+      this.validateMinBuyIn(value);
+      this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+    });
+    this.maxBuyInFormControl.valueChanges.subscribe(value => {
+      value = Number(value);
+      this.validateMaxBuyIn(value);
+      this.validateMinBuyIn(this.minBuyInFormControl.value);
+    });
+  }
+
+  /**
+   * Validates the minimum buy-in value
+   * 
+   * @param {number|null} value The value to validate
+   */
+  validateMinBuyIn(value: number|null) {
+    value = Number(value);
+    if (!value) {
+      this.minBuyInFormControl.setErrors({'required': true});
+      return;
+    }
+    if (this.maxBuyInFormControl.value && value > this.maxBuyInFormControl.value) {
+      this.minBuyInFormControl.setErrors({'conflict': true});
+    } else {
+      this.minBuyInFormControl.setErrors(null);
+    }
+  }
+
+  /**
+   * Validates the maximum buy-in value
+   * 
+   * @param {number|null} value The value to validate
+   */
+  validateMaxBuyIn(value: number|null) {
+    value = Number(value);
+    if (!value) {
+      this.minBuyInFormControl.setErrors({'required': true});
+      return;
+    }
+    if (this.minBuyInFormControl.value && value < this.minBuyInFormControl.value) {
+      this.maxBuyInFormControl.setErrors({'conflict': true});
+    } else {
+      this.maxBuyInFormControl.setErrors(null);
+    }
+  }
+
+  /**
+   * @param {number} index Describes whether it is the minimum or maximum buy-in control
+   * 
+   * @returns {string} The relevant error message relating to the minimum or maximum buy-in controls
+   */
+  getErrorMessage(index: number): string {
+    const control = !index ? this.minBuyInFormControl : this.maxBuyInFormControl;
+    if (control.errors?.['conflict']) {
+      return `Conflicts with ${!index ? 'maximum' : 'minimum'} buy-in`;
+    }
+    if (control.errors?.['required']) {
+      return 'Required';
+    }
+    return '';
+  }
+
+  /**
+   * Ensures that validation messages appear as soon as user input is detected
+   * 
+   * @param {FormControl} control The formControl assocaited with the input
+   */
+  onFocus = (control: FormControl) => control.markAsTouched();
+
   /**
    * Ensures the minimum buy in always has a value after focus out
    */
@@ -127,4 +204,18 @@ export class GameSettingsComponent implements OnInit {
    * @returns {boolean} Whether the current user is the pool admin
    */
   isPoolAdmin = (): boolean => this.authService.getCurrentUser()?.id === this.poolData?.admin.id;
+
+  /**
+   * A filter that ensures the user can only provide positive integers (no decimals)
+   * 
+   * @param event The event containing the input to filter
+   */
+  decimalFilter(event: any) {
+    const reg = /^\d*$/;
+    let input = event.target.value + String.fromCharCode(event.charCode);
+
+    if (!reg.test(input)) {
+      event.preventDefault();
+    }
+  }
 }
