@@ -143,7 +143,7 @@ export class DonutChartComponent implements AfterViewInit, OnDestroy, OnChanges 
       total += member.contribution;
     });
     let availableRatio: number = this.gameData?.availableCashout ? this.gameData?.availableCashout/total : 1;
-    this.chart.data.labels = ['Available Pot'].concat(names);
+    this.chart.data.labels = ['Available Cashout'].concat(names);
     this.chart.data.datasets[0].data = contributions.length > 0 ? [0].concat(contributions) : [];
     this.chart.data.datasets[1].data = contributions.length > 0 ? [this.gameData?.availableCashout] : [];
     this.chart.data.datasets[1].circumference = 360*availableRatio;

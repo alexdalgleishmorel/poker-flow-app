@@ -34,7 +34,7 @@ export class UserGamesTableComponent implements OnInit {
    * @param {GameData} gameData The game data associated with the selected game
    */
   openGame(gameData: GameData) {
-    this.router.navigate(['/', `pool`, gameData.id]);
+    this.router.navigate(['/', `game`, gameData.id]);
   }
 
   /**

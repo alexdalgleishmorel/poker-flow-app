@@ -28,13 +28,6 @@ export class HubComponent {
   ) {}
 
   /**
-   * Sends an update notification when the view is entered, to ensure proper data is displayed
-   */
-  ionViewWillEnter() {
-    this.gameService.updateNotification.next(1);
-  }
-
-  /**
    * Opens a create game modal
    */
   async createGame() {
