@@ -101,6 +101,13 @@ export class AuthService {
    */
   signup = (user: SignUpRequest): Promise<void> => this.apiService.post(`/signup`, user);
 
+  /**
+   * Attempts to login the user given the provided credentials
+   * 
+   * @param {LoginRequest} loginRequest The user credentials for the login attempt
+   * 
+   * @returns {Promise<Profile>}
+   */
   async login(loginRequest: LoginRequest): Promise<Profile> {
     const data = await this.apiService.post(`/login`, loginRequest);
     this.recordLogin(data);
