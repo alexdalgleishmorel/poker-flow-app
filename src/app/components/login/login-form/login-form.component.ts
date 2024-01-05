@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { ErrorMessages, requestLogin } from '../login.component';
 import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
+import { GameService } from 'src/app/services/game/game.service';
 
 @Component({
   selector: 'app-login-form',
@@ -21,7 +22,12 @@ export class LoginFormComponent {
   public hidePassword: boolean = true;
   public loginErrorMessages: ErrorMessages = new ErrorMessages();
 
-  constructor (private authService: AuthService, private router: Router, private _formBuilder: FormBuilder) {}
+  constructor (
+    private authService: AuthService, 
+    private gameService: GameService, 
+    private router: Router, 
+    private _formBuilder: FormBuilder
+  ) {}
 
   /**
    * Attempts a user login based on the username and password provided in the form. Navigates to home page if successful.
@@ -41,6 +47,7 @@ export class LoginFormComponent {
     requestLogin(loginRequest, this.authService)
       .then(() => {
         this.loginFormGroup.reset();
+        this.gameService.updateNotification.next(1);
         this.router.navigate(['']);
       })
       .catch(error => {
