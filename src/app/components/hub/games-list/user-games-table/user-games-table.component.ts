@@ -59,8 +59,7 @@ export class UserGamesTableComponent implements OnInit {
       return;
     }
 
-    this.filteredData = this.dataSource.filter(gameData => gameData.name.toLowerCase().includes(searchValue)
-    );
+    this.filteredData = this.dataSource.filter(gameData => gameData.name.toLowerCase().includes(searchValue));
     this.dataSource = this.filteredData;
   }
 }
