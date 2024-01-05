@@ -64,6 +64,7 @@
             fill="outline"
             [errorText]="getEmailErrorMessage()"
             [formControl]="emailFormControl"
+            (ionFocus)="onFocus()"
           >
           </ion-input>
           <div class="spacer"></div>

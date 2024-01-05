@@ -183,4 +183,9 @@ export class AccountComponent implements OnInit {
   cancelEdit() {
     this.initProfileInformation();
   }
+
+  /**
+   * Ensures that validation messages appear as soon as user input is detected
+   */
+  onFocus = () => this.emailFormControl.markAsTouched();
 }
