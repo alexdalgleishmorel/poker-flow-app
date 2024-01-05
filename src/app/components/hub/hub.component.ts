@@ -22,6 +22,13 @@ export class HubComponent {
   constructor(private modalCtrl: ModalController, private poolService: PoolService, private router: Router) {}
 
   /**
+   * Sends an update notification when the view is entered, to ensure proper data is displayed
+   */
+  ionViewWillEnter() {
+    this.poolService.updateNotification.next(1);
+  }
+
+  /**
    * Opens a create game modal
    */
   async createGame() {
