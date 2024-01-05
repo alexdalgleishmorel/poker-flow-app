@@ -53,7 +53,7 @@ export async function requestLogin(loginRequest: LoginRequest, authService: Auth
  * Handles error message logic for the login and signup form
  */
 export class ErrorMessages {
-  public emailAlreadyExistsError: string = 'Invalid email/password';
+  public emailAlreadyExistsError: string = 'Email is already registered';
   public emailNotFoundError: string = 'Invalid email/password';
   public genericError: string = 'Something went wrong, please try again later';
   public invalidCredentialError: string = 'Invalid email/password';

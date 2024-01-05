@@ -8,6 +8,7 @@
       type="email" 
       [formControl]="emailFormControl"
       errorText="Invalid email"
+      (keyup.enter)="login()"
     >
     </ion-input>
     <div class="spacer"></div>
@@ -19,6 +20,7 @@
       type="password"
       [formControl]="passwordFormControl"
       errorText="Password is required"
+      (keyup.enter)="login()"
     >
     </ion-input>
     <div class="loginFailureMessage" *ngIf="loginErrorMessages.getMessage()">

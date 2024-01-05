@@ -31,8 +31,9 @@ export class SignupFormComponent {
   /**
    * Attempts a user signup and login based on the information provided in the form. Navigates to home page if successful.
    */
-  signUp() {
-    if (!this.emailRegistrationFormControl.value || 
+  signup() {
+    if ( this.signUpFormGroup.invalid ||
+      !this.emailRegistrationFormControl.value || 
       !this.firstNameFormControl.value || 
       !this.lastNameFormControl.value || 
       !this.firstPasswordFormControl.value || 
