@@ -6,6 +6,109 @@ import { ApiService } from '../api/api.service';
 import { AuthService, Profile } from '../auth/auth.service';
 import { EMPTY_POOL_DATA } from '@constants';
 
+@Injectable({
+  providedIn: 'root'
+})
+export class PoolService {
+  public colorThemeSubject: Subject<number> = new Subject<number>();
+  public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
+  public updateNotification: Subject<number> = new Subject<number>();
+
+  constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
+    this.socket.on('pool_updated', () => this.updateNotification.next(1));
+  }
+
+  /**
+   * @param {number} userID The user ID used to search for games
+   * @param {number} itemOffset The starting index to retrieve found games from
+   * @param {number} itemsPerPage The maximum number of games to retrieve at once
+   * @param {boolean} active Whether to retrieve active games or expired games
+   * 
+   * @returns {Promise<any>} Promise containing a list of games
+   */
+  getPoolsByUserID(userID: number, itemOffset: number, itemsPerPage: number, active: boolean): Promise<any> {
+    if (!userID) {
+      return Promise.resolve();
+    }
+    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, {
+      params: { itemOffset: itemOffset, itemsPerPage: itemsPerPage }
+    });
+  }
+
+  /**
+   * @param {string} poolID The ID of the game data to retrieve
+   * 
+   * @returns {Promise<any>} Promise containing game data
+   */
+  getPoolByID(poolID: string): Promise<any> {
+    if (!poolID) {
+      return Promise.resolve();
+    };
+    
+    return this.apiService.get(`/pool/${poolID}`);
+  }
+
+  /**
+   * Creates a new game based on the provided configurations
+   * 
+   * @param {string} name The name of the game to create 
+   * @param {PoolSettings} settings The settings associated with the game
+   *  
+   * @returns {Promise<any>} Promise containing the game data
+   */
+  createPool(name: string, settings: PoolSettings): Promise<any> {
+    const poolCreationRequest: PoolCreationRequest = {
+      pool_name: name,
+      settings: settings,
+      admin_id: this.authService.getCurrentUser()?.id
+    };
+
+    return this.apiService.post('/pool/create', poolCreationRequest);
+  }
+
+  /**
+   * Updates the game data based on the provided key-pair values, using the provided game ID
+   * 
+   * @param {string} poolID The ID of the game being updated
+   * @param {PoolUpdateRequest[]} updateRequests An array of key-pair values of game attributes to update
+   * 
+   * @returns {Promise<any>}
+   */
+  updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]): Promise<any> {
+    return this.apiService.post('/pool/settings/update', {
+      pool_id: poolID,
+      update_requests: updateRequests
+    });
+  }
+
+  /**
+   * Adds the provided user to the provided game
+   * 
+   * @param {string} poolID The ID of the game being joined
+   * @param {number} userID The ID of the user
+   *  
+   * @returns {Promise<any>}
+   */
+  joinPool(poolID: string, userID: number): Promise<any> {
+    const poolJoinRequest: PoolJoinRequest = {
+      pool_id: poolID,
+      profile_id: userID
+    };
+    return this.apiService.post('/pool/join', poolJoinRequest);
+  }
+
+  /**
+   * Posts the provided transaction
+   * 
+   * @param {PoolTransactionRequest} poolTransactionRequest The game transaction data
+   * 
+   * @returns {Promise<any>}
+   */
+  postTransaction(poolTransactionRequest: PoolTransactionRequest): Promise<any> {
+    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
+  }
+}
+
 export interface PoolData {
   name: string;
   date_created: string;
@@ -66,64 +169,4 @@ export interface PoolUpdateRequest {
 export interface PoolJoinRequest {
   pool_id: string;
   profile_id: number;
-}
-
-@Injectable({
-  providedIn: 'root'
-})
-export class PoolService {
-  public updateNotification: Subject<number> = new Subject<number>();
-  public currentPoolSubject: BehaviorSubject<PoolData> = new BehaviorSubject<PoolData>(EMPTY_POOL_DATA);
-  public colorThemeSubject: Subject<number> = new Subject<number>();
-
-  constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
-    this.socket.on('pool_updated', () => this.updateNotification.next(1));
-  }
-
-  getPoolsByUserID(userID: number | undefined, itemOffset: number, itemsPerPage: number, active: boolean): Promise<any> {
-    if (!userID) {
-      return Promise.resolve();
-    }
-    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, {
-      params: { itemOffset: itemOffset, itemsPerPage: itemsPerPage }
-    });
-  }
-
-  getPoolByID(poolID: string): Promise<any> {
-    if (!poolID) {
-      return Promise.resolve();
-    };
-    
-    return this.apiService.get(`/pool/${poolID}`);
-  }
-
-  createPool(name: string, settings: PoolSettings): Promise<any> {
-    const poolCreationRequest: PoolCreationRequest = {
-      pool_name: name,
-      settings: settings,
-      admin_id: this.authService.getCurrentUser()?.id
-    };
-
-    return this.apiService.post('/pool/create', poolCreationRequest);
-  }
-
-  updatePoolSettings(poolID: string, updateRequests: PoolUpdateRequest[]): Promise<any> {
-    return this.apiService.post('/pool/settings/update', {
-      pool_id: poolID,
-      update_requests: updateRequests
-    });
-  }
-
-  joinPool(poolID: string): Promise<any> {
-    const poolJoinRequest: PoolJoinRequest = {
-      pool_id: poolID,
-      profile_id: this.authService.getCurrentUser()?.id!
-    };
-
-    return this.apiService.post('/pool/join', poolJoinRequest);
-  }
-
-  postTransaction(poolTransactionRequest: PoolTransactionRequest): Promise<any> {
-    return this.apiService.post(`/pool/transaction/create`, poolTransactionRequest);
-  }
 }

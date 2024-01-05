@@ -43,7 +43,11 @@ export class GamesListComponent implements OnInit {
    * @param {any} event An optional infinite scroll event, if it is the source of the data request 
    */
   public getData(event?: InfiniteScrollCustomEvent) {
-    this.poolService.getPoolsByUserID(this.authService.getCurrentUser()?.id, this.itemOffset, this.itemsPerPage, this.activeGames)
+    const userID = this.authService.getCurrentUser()?.id;
+    if (!userID) {
+      return;
+    }
+    this.poolService.getPoolsByUserID(userID, this.itemOffset, this.itemsPerPage, this.activeGames)
       .then(pools => {
         this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
         this.itemOffset += pools.length;

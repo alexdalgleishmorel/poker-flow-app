@@ -5,6 +5,7 @@ import { ModalController } from '@ionic/angular';
 import { CreateGameModalComponent } from './create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from './join-game-modal/join-game-modal.component';
 import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-hub',
@@ -19,7 +20,12 @@ export class HubComponent {
   readonly ACTIVE: ListState = ListState.ACTIVE;
   readonly PAST: ListState = ListState.PAST;
 
-  constructor(private modalCtrl: ModalController, private poolService: PoolService, private router: Router) {}
+  constructor(
+    private authService: AuthService, 
+    private modalCtrl: ModalController, 
+    private poolService: PoolService, 
+    private router: Router
+  ) {}
 
   /**
    * Sends an update notification when the view is entered, to ensure proper data is displayed
@@ -54,9 +60,10 @@ export class HubComponent {
     document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
     const poolID = (await modal.onWillDismiss()).data;
+    const userID = this.authService.getCurrentUser()?.id;
 
-    if (poolID) {
-      this.poolService.joinPool(poolID).then(() => this.router.navigate(['/', `pool`, poolID]));
+    if (poolID && userID) {
+      this.poolService.joinPool(poolID, userID).then(() => this.router.navigate(['/', `pool`, poolID]));
     }
   }
 
