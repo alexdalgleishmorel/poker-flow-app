@@ -76,7 +76,7 @@ export class GameService {
    */
   updateGameSettings(gameID: string, updateRequests: GameUpdateRequest[]): Promise<any> {
     return this.apiService.post('/game/settings/update', {
-      game_id: gameID,
+      gameID: gameID,
       update_requests: updateRequests
     });
   }
