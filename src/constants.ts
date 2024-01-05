@@ -6,18 +6,20 @@ export const DEFAULT_MAX_BUY_IN: number = 100;
 export const POKERFLOW_GREEN: string = '#388E3C';
 export const API_TIMEOUT_CONSTRAINT: number = 10000;
 
-export const EMPTY_POOL_DATA = {
+export const EMPTY_GAME_DATA = {
     name: '',
-    date_created: '',
+    dateCreated: '',
     id: '',
-    available_pot: 0,
-    member_ids: [],
+    availableCashout: 0,
+    memberIDs: [],
     contributors: [],
     transactions: [],
     admin: {id: -1, email: '', firstName: '', lastName: ''},
     settings: {
-      min_buy_in: 0,
-      max_buy_in: 0,
+      buyInEnabled: false,
+      expired: false,
+      minBuyIn: 0,
+      maxBuyIn: 0,
       denominations: []
     }
 };

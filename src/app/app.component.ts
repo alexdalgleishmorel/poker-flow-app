@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 
-import { PoolService } from './services/pool/pool.service';
+import { GameService } from './services/game/game.service';
 
 export const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -13,7 +13,7 @@ export const currencyFormatter = new Intl.NumberFormat('en-US', {
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private poolService: PoolService) {
+  constructor(private gameService: GameService) {
     toggleDarkTheme(getPrefersDark());
   }
 
@@ -27,7 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private handleVisibilityChange = () => {
     if (document.visibilityState === 'visible') {
-      this.poolService.updateNotification.next(1);
+      this.gameService.updateNotification.next(1);
     }
   }
 }

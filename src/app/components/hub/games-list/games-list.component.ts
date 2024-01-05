@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { GameData, GameService } from 'src/app/services/game/game.service';
 
 @Component({
   selector: 'app-games-list',
@@ -12,27 +12,27 @@ import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
 export class GamesListComponent implements OnInit {
   @Input() activeGames: boolean = true;
 
-  public pools?: PoolData[];
+  public games?: GameData[];
   public noNewData: boolean = false;
 
   private itemOffset: number = 0;
   private itemsPerPage: number = 15;
 
-  constructor(private authService: AuthService, private poolService: PoolService) {}
+  constructor(private authService: AuthService, private gameService: GameService) {}
 
   /**
    * Initializes the list data, subscribes to data updates and re-initializes the list in those cases
    */
   ngOnInit() {
     this.initializeData();
-    this.poolService.updateNotification.subscribe(() => this.initializeData());
+    this.gameService.updateNotification.subscribe(() => this.initializeData());
   }
 
   /**
    * Removes existing data and resets the item offset, then requests new data
    */
   initializeData() {
-    this.pools = undefined;
+    this.games = undefined;
     this.itemOffset = 0;
     this.getData();
   }
@@ -47,11 +47,11 @@ export class GamesListComponent implements OnInit {
     if (!userID) {
       return;
     }
-    this.poolService.getPoolsByUserID(userID, this.itemOffset, this.itemsPerPage, this.activeGames)
-      .then(pools => {
-        this.pools = this.pools ? [...this.pools.concat(pools)] : pools;
-        this.itemOffset += pools.length;
-        if (!pools.length) {
+    this.gameService.getGamesByUserID(userID, this.itemOffset, this.itemsPerPage, this.activeGames)
+      .then(games => {
+        this.games = this.games ? [...this.games.concat(games)] : games;
+        this.itemOffset += games.length;
+        if (!games.length) {
           this.noNewData = true;
         }
         if (event) {

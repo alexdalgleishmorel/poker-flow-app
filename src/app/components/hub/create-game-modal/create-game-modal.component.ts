@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
 import { DEFAULT_DENOMINATION_COUNT, DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
-import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
+import { GameService, GameSettings } from 'src/app/services/game/game.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-create-game-modal',
@@ -12,9 +13,9 @@ import { PoolService, PoolSettings } from 'src/app/services/pool/pool.service';
   styleUrls: ['./create-game-modal.component.scss']
 })
 export class CreateGameModalComponent {
-  public poolNameFormControl = new FormControl('', [Validators.required]);
-  public poolNameFormGroup: FormGroup = this._formBuilder.group({
-    poolName: this.poolNameFormControl,
+  public gameNameFormControl = new FormControl('', [Validators.required]);
+  public gameNameFormGroup: FormGroup = this._formBuilder.group({
+    gameName: this.gameNameFormControl,
   });
 
   public minBuyInFormControl = new FormControl(DEFAULT_MIN_BUY_IN, [Validators.required]);
@@ -25,19 +26,22 @@ export class CreateGameModalComponent {
   });
 
   public mainFormGroup: FormGroup = this._formBuilder.group({
-    poolNameFormGroup: this.poolNameFormGroup,
+    gameNameFormGroup: this.gameNameFormGroup,
     buyInFormGroup: this.buyInFormGroup
   });
 
-  public poolSettings: PoolSettings = {
-    min_buy_in: DEFAULT_MIN_BUY_IN,
-    max_buy_in: DEFAULT_MAX_BUY_IN,
-    denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT)
+  public gameSettings: GameSettings = {
+    minBuyIn: DEFAULT_MIN_BUY_IN,
+    maxBuyIn: DEFAULT_MAX_BUY_IN,
+    denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT),
+    buyInEnabled: true,
+    expired: false
   };
 
   constructor(
+    private authService: AuthService,
     private modalCtrl: ModalController,
-    private poolService: PoolService,
+    private gameService: GameService,
     private router: Router,
     private _formBuilder: FormBuilder
   ) {
@@ -52,13 +56,13 @@ export class CreateGameModalComponent {
       value = Number(value);
       this.validateMinBuyIn(value);
       this.validateMaxBuyIn(this.maxBuyInFormControl.value);
-      this.poolSettings.min_buy_in = value ? value : DEFAULT_MIN_BUY_IN;
+      this.gameSettings.minBuyIn = value ? value : DEFAULT_MIN_BUY_IN;
     });
     this.maxBuyInFormControl.valueChanges.subscribe(value => {
       value = Number(value);
       this.validateMaxBuyIn(value);
       this.validateMinBuyIn(this.minBuyInFormControl.value);
-      this.poolSettings.max_buy_in = value ? value : DEFAULT_MAX_BUY_IN;
+      this.gameSettings.maxBuyIn = value ? value : DEFAULT_MAX_BUY_IN;
     });
   }
 
@@ -118,17 +122,20 @@ export class CreateGameModalComponent {
    * Creates a game based on the combined form values, navigating to the new game if successful
    */
   createGame() {
-    if (!this.mainFormGroup.valid) {
+    const userID = this.authService.getCurrentUser()?.id;
+
+    if (!this.mainFormGroup.valid || !userID) {
       return;
     }
 
-    this.poolSettings.denominations.sort((a,b)=>a-b);
-    this.poolService.createPool(
-      this.poolNameFormControl.value!,
-      this.poolSettings
-    ).then((poolData: any) => {
-      this.router.navigate(['/', `pool`, poolData.id]);
-      this.modalCtrl.dismiss(poolData);
+    this.gameSettings.denominations.sort((a,b)=>a-b);
+    this.gameService.createGame(
+      this.gameNameFormControl.value!,
+      this.gameSettings,
+      userID
+    ).then(gameData => {
+      this.router.navigate(['/', `game`, gameData.id]);
+      this.modalCtrl.dismiss(gameData);
     });
   }
 

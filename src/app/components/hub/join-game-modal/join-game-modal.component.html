@@ -9,15 +9,15 @@
           labelPlacement="stacked"
           label="Game ID"
           errorText="Required" 
-          [formControl]="poolIDFormControl"
+          [formControl]="gameIDFormControl"
         >
         </ion-input>
     <div class="modal-buttons-container">
       <ion-button
           class="create-button"
           color="primary"
-          (click)="closeWithPoolID()"
-          [disabled]="!poolIDFormControl.getRawValue()"
+          (click)="closeWithGameID()"
+          [disabled]="!gameIDFormControl.getRawValue()"
           shape="round"
           expand="block"
       >

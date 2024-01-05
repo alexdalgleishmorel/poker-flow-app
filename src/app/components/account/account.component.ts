@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastController } from '@ionic/angular';
-import { catchError, map, debounceTime, of } from 'rxjs';
+import { debounceTime, of } from 'rxjs';
 
 import { getPrefersDark, toggleDarkTheme } from 'src/app/app.component';
 import { AuthService, Profile } from 'src/app/services/auth/auth.service';
-import { PoolService } from 'src/app/services/pool/pool.service';
+import { GameService } from 'src/app/services/game/game.service';
 
 @Component({
   selector: 'app-account',
@@ -27,7 +27,7 @@ export class AccountComponent implements OnInit {
     emailFormControl: this.emailFormControl
   });
 
-  constructor(private authService: AuthService, private poolService: PoolService, private toastController: ToastController) {
+  constructor(private authService: AuthService, private gameService: GameService, private toastController: ToastController) {
     this.darkModeFormControl = new FormControl(getPrefersDark());
     this.subscribeToThemeChanges();
   }
@@ -46,7 +46,7 @@ export class AccountComponent implements OnInit {
   subscribeToThemeChanges() {
     this.darkModeFormControl.valueChanges.subscribe(prefersDark => {
       toggleDarkTheme(!!prefersDark);
-      this.poolService.colorThemeSubject.next(1);
+      this.gameService.colorThemeSubject.next(1);
     });
   }
 

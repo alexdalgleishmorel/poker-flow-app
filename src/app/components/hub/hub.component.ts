@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 
 import { CreateGameModalComponent } from './create-game-modal/create-game-modal.component';
 import { JoinGameModalComponent } from './join-game-modal/join-game-modal.component';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
+import { GameData, GameService } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -15,7 +15,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class HubComponent {
   public disabled: boolean = false;
   public currentList: ListState = ListState.ACTIVE;
-  public poolData?: PoolData[];
+  public gameData?: GameData[];
 
   readonly ACTIVE: ListState = ListState.ACTIVE;
   readonly PAST: ListState = ListState.PAST;
@@ -23,7 +23,7 @@ export class HubComponent {
   constructor(
     private authService: AuthService, 
     private modalCtrl: ModalController, 
-    private poolService: PoolService, 
+    private gameService: GameService, 
     private router: Router
   ) {}
 
@@ -31,7 +31,7 @@ export class HubComponent {
    * Sends an update notification when the view is entered, to ensure proper data is displayed
    */
   ionViewWillEnter() {
-    this.poolService.updateNotification.next(1);
+    this.gameService.updateNotification.next(1);
   }
 
   /**
@@ -59,11 +59,11 @@ export class HubComponent {
 
     document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
-    const poolID = (await modal.onWillDismiss()).data;
+    const gameID = (await modal.onWillDismiss()).data;
     const userID = this.authService.getCurrentUser()?.id;
 
-    if (poolID && userID) {
-      this.poolService.joinPool(poolID, userID).then(() => this.router.navigate(['/', `pool`, poolID]));
+    if (gameID && userID) {
+      this.gameService.joinGame(gameID, userID).then(() => this.router.navigate(['/', `game`, gameID]));
     }
   }
 

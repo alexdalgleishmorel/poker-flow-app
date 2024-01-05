@@ -1,0 +1,76 @@
+<ion-content *ngIf="gameData else loading">
+    <ion-accordion-group>
+        <ion-accordion>
+            <ion-item slot="header">
+              <ion-label><b>Denominations</b></ion-label>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+                <app-chip-view [denominations]="gameData ? gameData.settings.denominations : []" [viewOnly]="true"></app-chip-view>
+            </div>
+          </ion-accordion>
+        <ion-accordion>
+          <ion-item slot="header">
+            <ion-label><b>Buy-Ins</b></ion-label>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-toggle [formControl]="buyInEnabledFormControl">Enabled</ion-toggle>
+            <div class="spacer"></div>
+            <ion-input
+                label="Minimum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                [maxlength]="15"
+                [formControl]="minBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
+                (focusout)="onMinBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(0)"
+            >
+            </ion-input>
+            <div class="spacer"></div>
+            <ion-input
+                label="Maximum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                [maxlength]="15"
+                [formControl]="maxBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
+                (focusout)="onMaxBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(1)"
+            >
+            </ion-input>
+            <div class="saveButtonContainer">
+                <ion-button
+                    *ngIf="isGameAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="primary"
+                    (click)="saveSettings()"
+                    [disabled]="!settingsFormGroup.dirty || settingsFormGroup.invalid"
+                >
+                    SAVE
+                </ion-button>
+                <ion-button
+                    *ngIf="isGameAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="light"
+                    (click)="cancelChanges()"
+                    [disabled]="!settingsFormGroup.dirty"
+                >
+                    CANCEL
+                </ion-button>
+            </div>
+          </div>
+        </ion-accordion>
+    </ion-accordion-group>
+</ion-content>
+
+<ng-template #loading>
+    <div class="content">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>

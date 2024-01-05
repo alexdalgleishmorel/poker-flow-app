@@ -1,0 +1,46 @@
+<div class="table-container">
+    <ion-searchbar (ionInput)="handleSearch($event)" *ngIf="unfilteredData?.length"></ion-searchbar>
+    <ion-content>
+        <div *ngIf="dataSource.length > 0 else emptyTable">
+            <ion-list>
+                <ion-item *ngFor="let game of dataSource; let index" (click)="openGame(game)">
+                    <ion-icon name="people-outline" color="primary"></ion-icon>
+                    <div class="spacer"></div>
+                    <ion-text>
+                        <br/>
+                        <ion-text><b>{{ game.name }}</b></ion-text>
+                        <br/>
+                        <sub>
+                            <ion-text color="primary">
+                                {{game.contributors.length}} {{game.contributors.length === 1 ? 'player' : 'players'}}
+                            </ion-text>
+                        </sub>
+                        <br/>
+                        <br/>
+                    </ion-text>
+                </ion-item>
+            </ion-list>
+            <ion-infinite-scroll (ionInfinite)="onInfiniteScroll($event)" [disabled]="noNewData">
+                <ion-infinite-scroll-content loadingSpinner="circular"></ion-infinite-scroll-content>
+            </ion-infinite-scroll>
+            <div class="list-padding"></div>
+        </div>
+    </ion-content>
+</div>
+
+<ng-template #emptyTable>
+    <div class="empty-message-container">
+        <div class="empty-message">
+            No games found. 
+            <br/><br/>
+            <ion-text color="primary">
+                <b>Create</b>
+            </ion-text> or 
+            <ion-text color="tertiary">
+                <b>join</b>
+            </ion-text> 
+            <br/>
+            a game to get started.
+        </div>
+    </div>
+</ng-template>

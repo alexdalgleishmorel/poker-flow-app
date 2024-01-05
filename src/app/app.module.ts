@@ -13,26 +13,26 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthInterceptor, AuthService } from './services/auth/auth.service';
 import { HubComponent } from './components/hub/hub.component';
 import { LoginComponent } from './components/login/login.component';
-import { PoolService } from './services/pool/pool.service';
+import { GameService } from './services/game/game.service';
 import { LoginFormComponent } from './components/login/login-form/login-form.component';
 import { SignupFormComponent } from './components/login/signup-form/signup-form.component';
 import { GamesListComponent } from './components/hub/games-list/games-list.component';
-import { UserPoolsTableComponent } from './components/hub/games-list/user-pools-table/user-pools-table.component';
-import { PoolComponent } from './components/pool/pool.component';
-import { ChartContainerComponent } from './components/pool/chart-container/chart-container.component';
-import { DonutChartComponent } from './components/pool/chart-container/donut-chart/donut-chart.component';
-import { ActivityTableComponent } from './components/pool/activity-container/activity-table/activity-table.component';
-import { ActivityContainerComponent } from './components/pool/activity-container/activity-container.component';
-import { GameSettingsComponent } from './components/pool/settings/settings.component';
+import { UserGamesTableComponent } from './components/hub/games-list/user-games-table/user-games-table.component';
+import { GameComponent } from './components/game/game.component';
+import { ChartContainerComponent } from './components/game/chart-container/chart-container.component';
+import { DonutChartComponent } from './components/game/chart-container/donut-chart/donut-chart.component';
+import { ActivityTableComponent } from './components/game/activity-container/activity-table/activity-table.component';
+import { ActivityContainerComponent } from './components/game/activity-container/activity-container.component';
+import { GameSettingsComponent } from './components/game/settings/settings.component';
 import { ChipViewComponent } from './components/common/chip-view/chip-view.component';
 import { ThousandSuffixesPipe } from './app.component';
 import { LoadingSpinnerComponent } from './components/common/loading-spinner/loading-spinner.component';
 import { ChipSelectComponent } from './components/common/chip-select/chip-select.component';
 import { CreateGameModalComponent } from './components/hub/create-game-modal/create-game-modal.component';
-import { BuyInModalComponent } from './components/pool/buy-in-modal/buy-in-modal.component';
+import { BuyInModalComponent } from './components/game/buy-in-modal/buy-in-modal.component';
 import { AccountComponent } from './components/account/account.component';
-import { ShareGameComponent } from './components/pool/share/share.component';
-import { ChipDepositModalComponent } from './components/pool/chip-deposit-modal/chip-deposit-modal.component';
+import { ShareGameComponent } from './components/game/share/share.component';
+import { ChipDepositModalComponent } from './components/game/chip-deposit-modal/chip-deposit-modal.component';
 import { JoinGameModalComponent } from './components/hub/join-game-modal/join-game-modal.component';
 import { BASE_API_URL } from './services/api/api.service';
 
@@ -55,14 +55,14 @@ const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['webs
     LoginFormComponent,
     ActivityContainerComponent,
     ActivityTableComponent,
-    PoolComponent,
+    GameComponent,
     ChartContainerComponent,
     DonutChartComponent,
     GameSettingsComponent,
     ShareGameComponent,
     SignupFormComponent,
     ThousandSuffixesPipe,
-    UserPoolsTableComponent
+    UserGamesTableComponent
   ],
   imports: [
     AppRoutingModule,
@@ -77,7 +77,7 @@ const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['webs
   ],
   providers: [
     AuthService,
-    PoolService,
+    GameService,
     FormBuilder,
     {
       provide: HTTP_INTERCEPTORS,

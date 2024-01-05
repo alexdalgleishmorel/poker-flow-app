@@ -1,10 +1,10 @@
-<div class="content" *ngIf="pools else loading">
-    <app-user-pools-table 
-        [dataSource]="pools"
+<div class="content" *ngIf="games else loading">
+    <app-user-games-table 
+        [dataSource]="games"
         [noNewData]="noNewData" 
         (getMoreData)="getData($event)"
     >
-    </app-user-pools-table>
+    </app-user-games-table>
 </div>
 
 <ng-template #loading>

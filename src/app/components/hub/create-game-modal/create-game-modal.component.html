@@ -6,7 +6,7 @@
             mode="md"
             fill="outline"
             labelPlacement="stacked"
-            [formControl]="poolNameFormControl"
+            [formControl]="gameNameFormControl"
             errorText="Required"
         >
         </ion-input>
@@ -14,7 +14,7 @@
         <ion-text color="primary"><h3>Chip Values</h3></ion-text>
         <ion-text>Select a chip to set its value.</ion-text>
         <div class="vertical-spacer"></div>
-        <app-chip-select [(denominations)]="poolSettings.denominations" [maxBuyIn]="poolSettings.max_buy_in"></app-chip-select>
+        <app-chip-select [(denominations)]="gameSettings.denominations" [maxBuyIn]="gameSettings.maxBuyIn"></app-chip-select>
         <div class="section-spacer"></div>
         <ion-text color="primary"><h3>Buy-In Values</h3></ion-text>
         <div class="vertical-spacer"></div>
@@ -48,7 +48,7 @@
     </div>
     <div class="modal-buttons-container">
         <ion-button
-            *ngIf="poolNameFormControl.value else missingPoolNameMessage"
+            *ngIf="gameNameFormControl.value else missingGameNameMessage"
             class="create-button"
             color="primary"
             (click)="createGame()"
@@ -70,7 +70,7 @@
     </div>
 </ion-content>
 
-<ng-template #missingPoolNameMessage>
+<ng-template #missingGameNameMessage>
     <ion-text color="warning" class="centered-row">
         <ion-icon name="alert-circle-outline"></ion-icon>
         <div class="tiny-spacer"></div>
