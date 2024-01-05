@@ -1,16 +1,24 @@
-import { HttpClient, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 
-import { BASE_API_URL } from '../api/api.service';
+import { ApiService } from '../api/api.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthService) {}
 
+  /**
+   * Intercepts outgoing HTTP requests and adds an authorization token to the headers
+   * 
+   * @param {HttpRequest<any>} request The outgoing HTTP request
+   * @param {HttpHandler} next The handler to pass the request onto when done
+   * 
+   * @returns {Observable<HttpEvent<any>>}
+   */
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     request = this.addToken(request, this.authService.getToken());
     return next.handle(request).pipe(
@@ -20,7 +28,15 @@ export class AuthInterceptor implements HttpInterceptor {
     );
   }
 
-  private addToken(request: HttpRequest<any>, token: string | null) {
+  /**
+   * Adds the provided token to the given HTTP request
+   * 
+   * @param {HttpRequest<any>} request The outgoing HTTP request
+   * @param {string} token The token to add to the request headers
+   * 
+   * @returns {HttpRequest<any>}
+   */
+  private addToken(request: HttpRequest<any>, token: string | null): HttpRequest<any> {
     return request.clone({
       setHeaders: { 'Authorization': `Bearer ${token}` }
     });
@@ -36,18 +52,29 @@ export class AuthService {
 
   public isLoggedIn$ = this.loggedIn$.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private apiService: ApiService, private router: Router) {}
 
+  /**
+   * Updates the loggedIn observable, and adds the jwt value provided in the token to local storage
+   * 
+   * @param {any} token The token containing the jwt value
+   */
   recordLogin(token: any): void {
     this.loggedIn$.next(true);
     localStorage.setItem(this.JWT_TOKEN, token.jwt);
   }
 
+  /**
+   * Updates the loggedIn observable, and removes the jwt value from local storage
+   */
   recordLogout(): void {
     this.loggedIn$.next(false);
     localStorage.removeItem(this.JWT_TOKEN);
   }
 
+  /**
+   * @returns {Profile|undefined} The current user profile if it exists, otherwise undefined
+   */
   getCurrentUser(): Profile | undefined {
     const token = this.getToken();
     if (token) {
@@ -60,34 +87,58 @@ export class AuthService {
     }
   }
 
-  getToken() {
-    return localStorage.getItem(this.JWT_TOKEN);
+  /**
+   * @returns {string} The JWT token stored in memory
+   */
+  getToken = (): string => localStorage.getItem(this.JWT_TOKEN) || '';
+
+  /**
+   * Attempts to register a profile given the provided user information
+   * 
+   * @param {SignUpRequest} user The user data to use for profile creation
+   * 
+   * @returns {Profile<void>}
+   */
+  signup = (user: SignUpRequest): Promise<void> => this.apiService.post(`/signup`, user);
+
+  async login(loginRequest: LoginRequest): Promise<Profile> {
+    const data = await this.apiService.post(`/login`, loginRequest);
+    this.recordLogin(data);
+    return data;
   }
 
-  signup(user: SignUpRequest): Observable<void> {
-    return this.http.post<any>(`${BASE_API_URL}/signup`, user);
-  }
+  /**
+   * Logs the user out, then redirects them to the login page
+   */
+  logoutAndRedirectToLogin = () => {
+    this.recordLogout();
+    this.router.navigate(['/login']);
+  };
 
-  login(loginRequest: LoginRequest): Observable<Profile> {
-    return this.http.post<any>(`${BASE_API_URL}/login`, loginRequest).pipe(tap(data => this.recordLogin(data)));
-  }
+  /**
+   * Determines whether the given email is already registered or not
+   * 
+   * @param {string} email The email to verify 
+   * 
+   * @returns {boolean} Whether the email is already registered
+   */
+  verifyEmailUniqueness = (email: string): Promise<boolean> => this.apiService.post(`/verifyUniqueEmail`, { email: email });
 
-  logout() {
-    return this.http.get<any>(`${BASE_API_URL}/logout`).pipe(tap(() => this.recordLogout()));
-  }
+  /**
+   * Updates the user profile with the given profile information
+   * 
+   * @param {Profile} profile The profile information to use for the update
+   * 
+   * @returns {Promise<any>}
+   */
+  async updateProfileInformation(profile: Profile): Promise<any> {
+    const id = this.getCurrentUser()?.id;
 
-  logoutAndRedirectToLogin() {
-    this.logout().subscribe(() => this.router.navigate(['/', 'login']));
-  }
+    if (!id) { return Promise.reject(); }
 
-  verifyEmailUniqueness(email: string): Observable<boolean> {
-    return this.http.post<any>(`${BASE_API_URL}/verifyUniqueEmail`, { email: email });
-  }
-
-  updateProfileInformation(profile: Profile) {
-    return this.http.post<any>(`${BASE_API_URL}/updateUser`, {...profile, id: this.getCurrentUser()?.id}).pipe(
-      tap(data => this.recordLogin(data))
-    );
+    const data = await this.apiService.post(`/updateUser`, profile);
+    this.recordLogin(data);
+    return data;
   }
 }
 
@@ -104,8 +155,8 @@ export interface SignUpRequest {
 }
 
 export interface Profile {
-  id?: number;
-  email?: string;
-  firstName?: string;
-  lastName?: string;
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
 }

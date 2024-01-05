@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 
 import { ErrorMessages, requestLogin } from '../login.component';
 import { AuthService, SignUpRequest } from 'src/app/services/auth/auth.service';
@@ -51,36 +50,24 @@ export class SignupFormComponent {
     };
 
     this.authService.signup(signUpRequest)
-      .pipe(
-        catchError((error) => {
-          if (error.status === 401) {
-            this.signUpErrorMessages.setMessage(this.signUpErrorMessages.emailAlreadyExistsError);
-            this.emailRegistrationFormControl.setErrors({'email': true});
-          } else {
-            this.signUpErrorMessages.setMessage(this.signUpErrorMessages.genericError);
-          }
-          return throwError(() => new Error(error));
-        })
-      )
-      .subscribe(() => {
-        requestLogin(
-          {
-            email: signUpRequest.email,
-            password: signUpRequest.password
-          },
-          this.authService
-        )
-          .pipe(
-            catchError((error) => {
-              this.signUpErrorMessages.setMessage(error.message);
-              return throwError(() => new Error(error.message));
-            })
-          )
-          .subscribe(() => {
+      .then(() => {
+        requestLogin({email: signUpRequest.email, password: signUpRequest.password}, this.authService)
+          .then(() => {
             this.signUpFormGroup.reset();
             this.router.navigate(['']);
+          })
+          .catch(error => {
+            this.signUpErrorMessages.setMessage(error.message);
           });
-      });
+      })
+      .catch((error) => {
+        if (error.status === 401) {
+          this.signUpErrorMessages.setMessage(this.signUpErrorMessages.emailAlreadyExistsError);
+          this.emailRegistrationFormControl.setErrors({'email': true});
+        } else {
+          this.signUpErrorMessages.setMessage(this.signUpErrorMessages.genericError);
+        }
+      })
   }
 
   /**

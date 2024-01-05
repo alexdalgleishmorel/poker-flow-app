@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
 
 import { AuthService, LoginRequest, Profile } from 'src/app/services/auth/auth.service';
 
@@ -33,32 +32,31 @@ export class LoginComponent {
  * @param {AuthService} authService The authService to use for the request
  * @returns {Observable<Profile>} A profile observable
  */
-export function requestLogin(loginRequest: LoginRequest, authService: AuthService): Observable<Profile> {
+export async function requestLogin(loginRequest: LoginRequest, authService: AuthService): Promise<Profile> {
   const loginErrorMessages: ErrorMessages = new ErrorMessages();
-  return authService.login(loginRequest)
-    .pipe(
-      catchError((error) => {
-        if (error.status === 404) {
-          loginErrorMessages.setMessage(loginErrorMessages.emailNotFoundError);
-        }
-        else if (error.status === 401) {
-          loginErrorMessages.setMessage(loginErrorMessages.invalidCredentialError);
-        } else {
-          loginErrorMessages.setMessage(loginErrorMessages.genericError);
-        }
-        return throwError(() => new Error(loginErrorMessages.getMessage()));
-      })
-    );
+  try {
+    return await authService.login(loginRequest);
+  } catch (error: any) {
+    if (error.status === 404) {
+      error.message = loginErrorMessages.emailNotFoundError;
+    }
+    else if (error.status === 401) {
+      error.message = loginErrorMessages.invalidCredentialError;
+    } else {
+      error.message = loginErrorMessages.genericError;
+    }
+    return Promise.reject(error);
+  }
 }
 
 /**
  * Handles error message logic for the login and signup form
  */
 export class ErrorMessages {
-  public emailAlreadyExistsError: string = 'Invalid email/password.';
-  public emailNotFoundError: string = 'Invalid email/password.';
-  public genericError: string = 'Something went wrong, please try again later.';
-  public invalidCredentialError: string = 'Invalid email/password.';
+  public emailAlreadyExistsError: string = 'Invalid email/password';
+  public emailNotFoundError: string = 'Invalid email/password';
+  public genericError: string = 'Something went wrong, please try again later';
+  public invalidCredentialError: string = 'Invalid email/password';
 
   private currentMessage: string = '';
 

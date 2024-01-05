@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 
 import { ErrorMessages, requestLogin } from '../login.component';
 import { AuthService, LoginRequest } from 'src/app/services/auth/auth.service';
@@ -40,15 +39,13 @@ export class LoginFormComponent {
     };
 
     requestLogin(loginRequest, this.authService)
-      .pipe(
-        catchError((error) => {
-          this.loginErrorMessages.setMessage(error.message);
-          return throwError(() => new Error(error.message));
-        })
-      )
-      .subscribe(() => {
+      .then(() => {
         this.loginFormGroup.reset();
         this.router.navigate(['']);
-      });
+      })
+      .catch(error => {
+        this.loginErrorMessages.setMessage(error.message);
+        return error;
+      })
   }
 }

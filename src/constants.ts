@@ -14,7 +14,7 @@ export const EMPTY_POOL_DATA = {
     member_ids: [],
     contributors: [],
     transactions: [],
-    admin: {},
+    admin: {id: -1, email: '', firstName: '', lastName: ''},
     settings: {
       min_buy_in: 0,
       max_buy_in: 0,

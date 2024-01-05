@@ -84,7 +84,9 @@ export class PoolService {
     if (!userID) {
       return Promise.resolve();
     }
-    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, itemOffset, itemsPerPage);
+    return this.apiService.get(`/pool/${active ? 'active' : 'expired'}/user/${userID}`, {
+      params: { itemOffset: itemOffset, itemsPerPage: itemsPerPage }
+    });
   }
 
   getPoolByID(poolID: string): Promise<any> {

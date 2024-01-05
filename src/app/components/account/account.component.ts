@@ -107,26 +107,26 @@ export class AccountComponent implements OnInit {
    * Saves the profile information, showing a success toast if successful. Resets account page to a view-only state.
    */
   saveProfileInformation() {
+    const userID = this.authService.getCurrentUser()?.id;
+    if (!userID) {
+      return;
+    }
+
     this.authService.updateProfileInformation({
+      id: userID,
       firstName: this.firstNameFormControl.value,
       lastName: this.lastNameFormControl.value,
       email: this.emailFormControl.value
-    }).subscribe({
-      next: async () => {
-        this.initProfileInformation();
-        const toast = await this.toastController.create({
-          message: `Profile Updated`,
-          cssClass: 'centered-text',
-          duration: 1000,
-          position: 'top',
-          color: 'success'
-        });
-        await toast.present();
-      },
-      error: ()  => {
-        this.initProfileInformation();
-      }
-    });
+    }).then(async () => {
+      const toast = await this.toastController.create({
+        message: `Profile Updated`,
+        cssClass: 'centered-text',
+        duration: 1000,
+        position: 'top',
+        color: 'success'
+      });
+      await toast.present();
+    }).finally(() => this.initProfileInformation());
   }
 
   /**
@@ -157,18 +157,16 @@ export class AccountComponent implements OnInit {
       return;
     }
 
-    this.authService.verifyEmailUniqueness(email).pipe(
-      map(unique => {
-        this.emailValidationInFlight = false;
-        unique ? this.emailFormControl.setErrors(null) : this.emailFormControl.setErrors({ 'duplicate': true });
-      }),
-      catchError(() => {
-        this.emailFormControl.setErrors({ 'failed': true })
+    this.authService.verifyEmailUniqueness(email)
+      .catch(() => {
+        this.emailFormControl.setErrors({ 'failed': true });
         return of();
       })
-    ).subscribe(() => {
-      this.emailValidationInFlight = false;
-    });
+      .then(unique => {
+        this.emailValidationInFlight = false;
+        unique ? this.emailFormControl.setErrors(null) : this.emailFormControl.setErrors({ 'duplicate': true });
+      })
+      .finally(() => this.emailValidationInFlight = false);
   }
 
   /**

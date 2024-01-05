@@ -14,18 +14,12 @@ export class ApiService {
    * Makes a get request to the provided endpoint
    * 
    * @param {string} endpoint The target API endpoint 
-   * @param {number} itemOffset An optional value for retrieving an array of items
-   * @param {number} itemsPerPage An optional value for retrieving an array of items
+   * @param {object} params An object containing the URL params for the get request
    * 
    * @returns {Promise<any>}
    */
-  get(endpoint: string, itemOffset: number = 0, itemsPerPage: number = 15): Promise<any> {
-    return lastValueFrom(this.http.get(`${BASE_API_URL}${endpoint}`, {
-      params: {
-        itemOffset: itemOffset,
-        itemsPerPage: itemsPerPage
-      }
-    }));
+  get(endpoint: string, params?: object): Promise<any> {
+    return lastValueFrom(this.http.get(`${BASE_API_URL}${endpoint}`, params));
   }
 
   /**
