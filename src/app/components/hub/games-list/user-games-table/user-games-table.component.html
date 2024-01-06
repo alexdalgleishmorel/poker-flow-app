@@ -30,9 +30,7 @@
 
 <ng-template #emptyTable>
     <div class="empty-message-container">
-        <div class="empty-message">
-            No games found
-            <br/><br/>
+        <div class="empty-message" *ngIf="filteredData.length === unfilteredData.length else emptySearch">
             <ion-text color="primary">
                 <b>Create</b>
             </ion-text> or 
@@ -42,5 +40,10 @@
             <br/>
             a game to get started
         </div>
+        <div *ngIf="unfilteredData.length" class="list-padding"></div>
     </div>
+</ng-template>
+
+<ng-template #emptySearch>
+    <app-empty-search-message></app-empty-search-message>
 </ng-template>

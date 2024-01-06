@@ -32,12 +32,15 @@
 
 <ng-template #emptyTable>
     <div class="content">
-        <div class="empty-table-text">
-            <span class="buy-in-text">
-                <ion-text color="primary"><b>BUY-IN</b></ion-text>
-            </span>
+        <div class="empty-table-text" *ngIf="filteredData.length === unfilteredData.length else emptySearch">
+            <ion-text color="primary"><b>BUY-IN</b></ion-text>
             <br/>
             to get started
         </div>
+        <div *ngIf="unfilteredData.length" class="list-padding"></div>
     </div>
+</ng-template>
+
+<ng-template #emptySearch>
+    <app-empty-search-message></app-empty-search-message>
 </ng-template>

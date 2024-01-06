@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { InfiniteScrollCustomEvent } from '@ionic/angular';
 
@@ -9,15 +9,15 @@ import { GameData } from 'src/app/services/game/game.service';
   templateUrl: './user-games-table.component.html',
   styleUrls: ['./user-games-table.component.scss']
 })
-export class UserGamesTableComponent implements OnInit {
+export class UserGamesTableComponent implements OnInit, OnChanges {
   @Input() dataSource: GameData[] = [];
   @Input() disabled: boolean = false;
   @Input() noNewData: boolean = false;
   @Output() getMoreData: EventEmitter<InfiniteScrollCustomEvent> = new EventEmitter<InfiniteScrollCustomEvent>();
 
   public displayedColumns: string[] = [];
+  public filteredData: GameData[] = [];
   public unfilteredData: GameData[] = [];
-  private filteredData: GameData[] = [];
 
   constructor(private router: Router) {}
 
@@ -26,6 +26,14 @@ export class UserGamesTableComponent implements OnInit {
    */
   ngOnInit() {
     this.unfilteredData = this.dataSource;
+  }
+
+  /**
+   * Resets the search criteria on data source changes
+   */
+  ngOnChanges() {
+    this.unfilteredData = this.dataSource;
+    this.filteredData = [];
   }
 
   /**
@@ -56,6 +64,7 @@ export class UserGamesTableComponent implements OnInit {
     this.dataSource = this.unfilteredData;
 
     if (!searchValue) {
+      this.filteredData = this.unfilteredData;
       return;
     }
 

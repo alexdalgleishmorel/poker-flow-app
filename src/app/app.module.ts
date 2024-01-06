@@ -35,6 +35,7 @@ import { ShareGameComponent } from './components/game/share/share.component';
 import { ChipDepositModalComponent } from './components/game/chip-deposit-modal/chip-deposit-modal.component';
 import { JoinGameModalComponent } from './components/hub/join-game-modal/join-game-modal.component';
 import { BASE_API_URL } from './services/api/api.service';
+import { EmptySearchMessageComponent } from './components/common/empty-search-message/empty-search-message.component';
 
 const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['websocket'], reconnection: true}};
 
@@ -48,6 +49,7 @@ const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['webs
     ChipViewComponent,
     ChipSelectComponent,
     CreateGameModalComponent,
+    EmptySearchMessageComponent,
     HubComponent,
     JoinGameModalComponent,
     LoadingSpinnerComponent,

@@ -11,8 +11,8 @@ import { GameTransaction, TransactionType } from 'src/app/services/game/game.ser
 export class ActivityTableComponent implements OnInit {
   @Input() transactions: GameTransaction[] = [];
 
+  public filteredData: GameTransaction[] = [];
   public unfilteredData: GameTransaction[] = [];
-  private filteredData: GameTransaction[] = [];
 
   /**
    * Initializes the unfiltered data to be the provided data source
@@ -53,6 +53,7 @@ export class ActivityTableComponent implements OnInit {
     this.transactions = this.unfilteredData;
 
     if (!searchValue) {
+      this.filteredData = this.unfilteredData;
       return;
     }
 
