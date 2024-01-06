@@ -47,6 +47,10 @@ export function getPrefersDark(): boolean {
   return localStorage.getItem(PREFERS_DARK_COLOR_SCHEME) ? getPrefersDarkFromStorage() : window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
+export function getLogoSVGName(prefix: string): string {
+  return getPrefersDark() ? prefix.concat('logo-dark.svg') : prefix.concat('logo-light.svg');
+}
+
 @Pipe({
   name: 'thousandSuff'
 })

@@ -1,8 +1,7 @@
 <ion-content [scrollY]="false">
   <div class="content">
     <div class="spacer"></div>
-    <ion-card-subtitle color="medium">WELCOME TO</ion-card-subtitle>
-    <ion-card-title color="primary">PokerFlow</ion-card-title>
+    <img class="logo" [src]="getLogoName('../../../assets/')" alt="Pokerflow Logo"/>
     <div class="spacer"></div>
     <ion-segment #segmentBar [scrollable]="true" [value]="LOGIN">
       <ion-segment-button [value]="LOGIN" (click)="updateForm(LOGIN)">

@@ -16,3 +16,9 @@ ion-spinner {
     justify-content: center;
     align-items: center;
 }
+
+.logo {
+    position: absolute;
+    width: calc(min(15vw, 15vh));
+    height: calc(min(15vw, 15vh));
+}

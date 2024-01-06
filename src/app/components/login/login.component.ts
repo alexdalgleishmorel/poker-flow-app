@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 
+import { getLogoSVGName } from 'src/app/app.component';
 import { AuthService, LoginRequest, Profile } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -23,6 +24,12 @@ export class LoginComponent {
   updateForm(formType: FormType) {
     this.currentForm = formType;
   }
+
+  /**
+   * @param {string} prefix The path to the assets directory containing the logo
+   * @returns {string} The full file path of the logo, based on light or dark theme
+   */
+  getLogoName = (prefix: string): string => getLogoSVGName(prefix);
 }
 
 /**
