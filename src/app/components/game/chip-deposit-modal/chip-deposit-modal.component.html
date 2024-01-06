@@ -72,7 +72,13 @@
             >
             </ion-icon>
         </div>
-        <app-chip-view (chipSelect)="onChipSelect($event)" [denominations]="denominations" [assignments]="denominationCounts"></app-chip-view>
+        <app-chip-view
+            (chipSelect)="onChipSelect($event)"
+            [denominations]="denominations"
+            [denominationColors]="denominationColors"
+            [assignments]="denominationCounts"
+        >
+        </app-chip-view>
         <div class="spacer"></div>
         <ion-text color="warning" *ngIf="totalCashoutExceededValue">
             {{getFormattedCurrency(totalCashoutExceededValue)}} exceeds maximum of {{getFormattedCurrency(maximumCashout)}}

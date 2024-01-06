@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN } from '@constants';
+import { DEFAULT_DENOMINATIONS, DEFAULT_DENOMINATION_COLORS, DEFAULT_MAX_BUY_IN } from '@constants';
 
 @Component({
   selector: 'app-chip-select',
@@ -10,8 +10,10 @@ import { DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN } from '@constants';
 })
 export class ChipSelectComponent implements OnChanges {
   @Input() denominations: number[] = DEFAULT_DENOMINATIONS;
+  @Input() denominationColors: string[] = DEFAULT_DENOMINATION_COLORS;
   @Input() maxBuyIn: number = DEFAULT_MAX_BUY_IN;
   @Output() denominationsChange = new EventEmitter<number[]>;
+  @Output() denominationColorsChange = new EventEmitter<string[]>;
 
   public chipDenominationControl: FormControl;
   public selectedSlot: number = 0;
@@ -135,6 +137,7 @@ export class ChipSelectComponent implements OnChanges {
    */
   removeChip(index: number) {
     this.denominations.splice(index, 1);
+    this.denominationColors.splice(index, 1);
     this.chipSelect(this.selectedSlot);
   }
 
@@ -143,6 +146,7 @@ export class ChipSelectComponent implements OnChanges {
    */
   addChip() {
     this.denominations.push(DEFAULT_DENOMINATIONS[this.denominations.length%DEFAULT_DENOMINATIONS.length]);
+    this.denominationColors.push(DEFAULT_DENOMINATION_COLORS[this.denominations.length%DEFAULT_DENOMINATION_COLORS.length]);
     this.chipSelect(this.denominations.length-1);
   }
 }

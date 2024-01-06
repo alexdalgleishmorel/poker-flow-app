@@ -12,6 +12,7 @@ import { GameService } from 'src/app/services/game/game.service';
 })
 export class ChipDepositModalComponent implements OnInit {
   @Input() denominations: number[] = [];
+  @Input() denominationColors: string[] = [];
   @Input() maximumCashout: number = 0;
 
   public currentDenominationIndex: number = -1;

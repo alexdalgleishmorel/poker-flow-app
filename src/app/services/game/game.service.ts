@@ -150,6 +150,7 @@ export interface GameSettings {
   minBuyIn: number;
   maxBuyIn: number;
   denominations: number[];
+  denominationColors: string[];
   buyInEnabled: boolean;
   expired: boolean;
 }

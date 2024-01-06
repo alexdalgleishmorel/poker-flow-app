@@ -105,7 +105,8 @@ export class GameComponent implements OnInit {
         userID: this.authService.getCurrentUser()?.id,
         minBuyIn: this.gameData.settings.minBuyIn,
         maxBuyIn: this.gameData.settings.maxBuyIn,
-        denominations: this.gameData.settings.denominations
+        denominations: this.gameData.settings.denominations,
+        denominationColors: this.gameData.settings.denominationColors
       },
       cssClass: 'modal-fullscreen'
     });
@@ -133,6 +134,7 @@ export class GameComponent implements OnInit {
       component: ChipDepositModalComponent,
       componentProps: {
         denominations: this.gameData.settings.denominations,
+        denominationColors: this.gameData.settings.denominationColors,
         maximumCashout: this.gameData.availableCashout
       },
       cssClass: 'modal-fullscreen'

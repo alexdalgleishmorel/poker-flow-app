@@ -68,6 +68,7 @@
         <div class="spacer"></div>
         <app-chip-view 
             [denominations]="buyInFormControl.value ? denominations : []"
+            [denominationColors]="denominationColors"
             [assignments]="assignments"
             [distributionView]="distributionView && selectedSlot >= 0"
             [chipLockStatuses]="chipLockStatuses"

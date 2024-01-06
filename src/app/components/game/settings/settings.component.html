@@ -5,7 +5,11 @@
               <ion-label><b>Denominations</b></ion-label>
             </ion-item>
             <div class="ion-padding" slot="content">
-                <app-chip-view [denominations]="gameData ? gameData.settings.denominations : []" [viewOnly]="true"></app-chip-view>
+                <app-chip-view
+                    [denominations]="gameData ? gameData.settings.denominations : []"
+                    [denominationColors]="gameData.settings.denominationColors"
+                    [viewOnly]="true">
+                </app-chip-view>
             </div>
           </ion-accordion>
         <ion-accordion>

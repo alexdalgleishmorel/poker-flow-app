@@ -1,6 +1,9 @@
 export const POLLING_INTERVAL: number = 5000;
 export const DEFAULT_DENOMINATION_COUNT: number = 4;
 export const DEFAULT_DENOMINATIONS: number[] = [0.1, 0.5, 1, 5, 10, 25, 100, 500, 1000, 5000];
+export const DEFAULT_DENOMINATION_COLORS: string[] = [
+  '#FFFFFF', '#FF0000', '#0B6E4F', '#000000', '#0000FF', '#FE019A', '#CC8899', '#FF5F00', '#FFEE00', '#8A6240',
+];
 export const DEFAULT_MIN_BUY_IN: number = 5;
 export const DEFAULT_MAX_BUY_IN: number = 100;
 export const POKERFLOW_GREEN: string = '#388E3C';
@@ -20,7 +23,8 @@ export const EMPTY_GAME_DATA = {
       expired: false,
       minBuyIn: 0,
       maxBuyIn: 0,
-      denominations: []
+      denominations: [],
+      denominationColors: []
     }
 };
 

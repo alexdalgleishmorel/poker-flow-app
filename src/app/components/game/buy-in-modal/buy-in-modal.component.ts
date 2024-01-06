@@ -12,6 +12,7 @@ import { GameService, TransactionType } from 'src/app/services/game/game.service
 })
 export class BuyInModalComponent implements OnInit, AfterViewInit {
   @Input() denominations: number[] = [];
+  @Input() denominationColors: string[] = [];
   @Input() maxBuyIn: number = 0;
   @Input() minBuyIn: number = 0;
   @Input() gameID: string = '';

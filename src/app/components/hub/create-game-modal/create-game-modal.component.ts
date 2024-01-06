@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 
-import { DEFAULT_DENOMINATION_COUNT, DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
+import { DEFAULT_DENOMINATION_COLORS, DEFAULT_DENOMINATION_COUNT, DEFAULT_DENOMINATIONS, DEFAULT_MAX_BUY_IN, DEFAULT_MIN_BUY_IN } from '@constants';
 import { GameService, GameSettings } from 'src/app/services/game/game.service';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -34,6 +34,7 @@ export class CreateGameModalComponent {
     minBuyIn: DEFAULT_MIN_BUY_IN,
     maxBuyIn: DEFAULT_MAX_BUY_IN,
     denominations: DEFAULT_DENOMINATIONS.slice(0, DEFAULT_DENOMINATION_COUNT),
+    denominationColors: DEFAULT_DENOMINATION_COLORS.slice(0, DEFAULT_DENOMINATION_COUNT),
     buyInEnabled: true,
     expired: false
   };

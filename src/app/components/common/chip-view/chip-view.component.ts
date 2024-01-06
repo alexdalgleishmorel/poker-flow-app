@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { DEFAULT_DENOMINATION_COLORS } from '@constants';
 
 @Component({
   selector: 'app-chip-view',
@@ -9,6 +10,7 @@ export class ChipViewComponent {
   /* Inputs/outputs relating to core functionality */
   @Input() assignments: number[] = [];
   @Input() denominations: number[] = [];
+  @Input() denominationColors: string[] = DEFAULT_DENOMINATION_COLORS;
   @Input() viewOnly: boolean = false;
   @Output() chipSelect: EventEmitter<number> = new EventEmitter<number>();
 
