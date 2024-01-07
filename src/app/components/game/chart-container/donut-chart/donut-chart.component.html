@@ -1,9 +1,4 @@
-<div class="chart-container">
-    <div [class.loading-container]="!chart">
-        <app-loading-spinner class="spinner" *ngIf="!chart"></app-loading-spinner>
-        <canvas id="game-donut-chart">{{chart}}</canvas>
-    </div>
-    <div class="logo-container" *ngIf="chart">
-        <img class="logo" [src]="getLogoName('../../../../assets/')" alt="Pokerflow Logo"/>
-    </div>
+<div [class.loading-container]="!chart">
+    <app-loading-spinner class="spinner" *ngIf="!chart"></app-loading-spinner>
+    <canvas id="game-donut-chart">{{chart}}</canvas>
 </div>
