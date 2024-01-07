@@ -50,21 +50,21 @@
                     *ngIf="isGameAdmin()"
                     shape="round"
                     expand="block"
-                    color="primary"
-                    (click)="saveSettings()"
-                    [disabled]="!settingsFormGroup.dirty || settingsFormGroup.invalid"
-                >
-                    SAVE
-                </ion-button>
-                <ion-button
-                    *ngIf="isGameAdmin()"
-                    shape="round"
-                    expand="block"
                     color="light"
                     (click)="cancelChanges()"
                     [disabled]="!settingsFormGroup.dirty"
                 >
                     CANCEL
+                </ion-button>
+                <ion-button
+                    *ngIf="isGameAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="primary"
+                    (click)="saveSettings()"
+                    [disabled]="!settingsFormGroup.dirty || settingsFormGroup.invalid"
+                >
+                    SAVE
                 </ion-button>
             </div>
         </ion-card-content>
