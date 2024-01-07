@@ -13,7 +13,7 @@
                 (click)="onSelect(i)"
                 size="large"
                 [style.--border-color]="denominationColors[i]"
-                [color]="selectedSlot === i ? 'tertiary' : (assignments[i] ? 'primary' : 'light')"
+                [color]="selectedSlot === i && !viewOnly ? 'tertiary' : (assignments[i] ? 'primary' : 'light')"
             >
                 {{ denomination | thousandSuff }}
             </ion-fab-button>
