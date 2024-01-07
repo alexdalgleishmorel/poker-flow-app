@@ -40,7 +40,7 @@
     </div>
     <div class="spacer"></div>
     <div class="color-container">
-        <ion-chip [outline]="true">
+        <ion-chip [outline]="true" (click)="openColorPickerModal()">
             <ion-icon name="color-fill-outline"></ion-icon>
             <div class="spacer"></div>
             <div class="circle" [style.background-color]="denominationColors[selectedSlot]" name="radio-button-on-outline"></div>

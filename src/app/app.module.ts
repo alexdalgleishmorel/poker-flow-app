@@ -37,6 +37,7 @@ import { JoinGameModalComponent } from './components/hub/join-game-modal/join-ga
 import { BASE_API_URL } from './services/api/api.service';
 import { EmptySearchMessageComponent } from './components/common/empty-search-message/empty-search-message.component';
 import { TransactionSummaryModalComponent } from './components/game/activity-container/activity-table/transaction-summary-modal/transaction-summary-modal.component';
+import { ColorPickerComponent } from './components/common/chip-select/color-picker/color-picker.component';
 
 const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['websocket'], reconnection: true}};
 
@@ -49,6 +50,7 @@ const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['webs
     ChipDepositModalComponent,
     ChipViewComponent,
     ChipSelectComponent,
+    ColorPickerComponent,
     CreateGameModalComponent,
     EmptySearchMessageComponent,
     HubComponent,

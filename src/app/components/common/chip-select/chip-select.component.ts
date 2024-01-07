@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 
 import { DEFAULT_DENOMINATIONS, DEFAULT_DENOMINATION_COLORS, DEFAULT_MAX_BUY_IN } from '@constants';
+import { ColorPickerComponent } from './color-picker/color-picker.component';
 
 @Component({
   selector: 'app-chip-select',
@@ -18,7 +20,7 @@ export class ChipSelectComponent implements OnChanges {
   public chipDenominationControl: FormControl;
   public selectedSlot: number = 0;
 
-  constructor() {
+  constructor(private modalCtrl: ModalController) {
     this.chipDenominationControl = new FormControl(this.denominations[0], this.denominationValidator());
     this.subscribeToDenominationChanges();
   }
@@ -148,5 +150,20 @@ export class ChipSelectComponent implements OnChanges {
     this.denominations.push(DEFAULT_DENOMINATIONS[this.denominations.length%DEFAULT_DENOMINATIONS.length]);
     this.denominationColors.push(DEFAULT_DENOMINATION_COLORS[this.denominations.length%DEFAULT_DENOMINATION_COLORS.length]);
     this.chipSelect(this.denominations.length-1);
+  }
+
+  /**
+   * Opens the color picker modal
+   */
+  async openColorPickerModal() {
+    let modal = await this.modalCtrl.create({ component: ColorPickerComponent });
+    modal.present();
+
+    const color = (await modal.onWillDismiss()).data;
+
+    if (color) {
+      this.denominationColors[this.selectedSlot] = color;
+      this.denominationColorsChange.emit(this.denominationColors);
+    }
   }
 }
