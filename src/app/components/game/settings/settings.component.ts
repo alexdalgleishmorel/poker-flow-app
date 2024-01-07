@@ -28,6 +28,9 @@ export class GameSettingsComponent implements OnInit {
     buyInEnabledFormControl: 'buy_in_enabled',
   }
 
+  private lastCheckedMinBuyIn: number = 0;
+  private lastCheckedMaxBuyIn: number = 0;
+
   constructor(
     private authService: AuthService, 
     private gameService: GameService,
@@ -75,14 +78,26 @@ export class GameSettingsComponent implements OnInit {
    */
   subscribeToMinMaxBuyInChanges() {
     this.minBuyInFormControl.valueChanges.subscribe(value => {
-      value = Number(value);
-      this.validateMinBuyIn(value);
-      this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+      if (value !== this.lastCheckedMinBuyIn) {
+        value = Number(value);
+        this.validateMinBuyIn(value);
+        this.validateMaxBuyIn(this.maxBuyInFormControl.value);
+        this.lastCheckedMinBuyIn = value;
+        if (value) {
+          this.minBuyInFormControl.setValue(value);
+        }
+      }
     });
     this.maxBuyInFormControl.valueChanges.subscribe(value => {
-      value = Number(value);
-      this.validateMaxBuyIn(value);
-      this.validateMinBuyIn(this.minBuyInFormControl.value);
+      if (value !== this.lastCheckedMaxBuyIn) {
+        value = Number(value);
+        this.validateMaxBuyIn(value);
+        this.validateMinBuyIn(this.minBuyInFormControl.value);
+        this.lastCheckedMaxBuyIn = value;
+        if (value) {
+          this.maxBuyInFormControl.setValue(value);
+        }
+      }
     });
   }
 
