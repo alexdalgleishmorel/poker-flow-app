@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, AfterViewInit } from '@angular/
 import Chart from 'chart.js/auto';
 
 import { POKERFLOW_GREEN } from '@constants';
-import { getPrefersDark } from 'src/app/app.component';
+import { getLogoSVGName, getPrefersDark } from 'src/app/app.component';
 import { GameData, GameMember, GameService } from 'src/app/services/game/game.service';
 
 @Component({
@@ -160,4 +160,10 @@ export class DonutChartComponent implements AfterViewInit, OnDestroy, OnChanges 
       this.updateChart();
     }
   }
+
+  /**
+   * @param {string} prefix The path to the assets directory containing the logo
+   * @returns {string} The full file path of the logo, based on light or dark theme
+   */
+  getLogoName = (prefix: string): string => getLogoSVGName(prefix);
 }
