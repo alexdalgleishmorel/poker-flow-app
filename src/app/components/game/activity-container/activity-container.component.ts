@@ -9,6 +9,8 @@ import { GameService, GameTransaction } from 'src/app/services/game/game.service
 })
 export class ActivityContainerComponent  implements OnInit {
   public transactions?: GameTransaction[];
+  public denominations: number[] = [];
+  public denominationColors: string[] = [];
 
   constructor(private gameService: GameService) {}
 
@@ -18,6 +20,8 @@ export class ActivityContainerComponent  implements OnInit {
   ngOnInit() {
     this.gameService.currentGameSubject.subscribe(gameData => {
       this.transactions = [...gameData.transactions].reverse();
+      this.denominations = gameData.settings.denominations;
+      this.denominationColors = gameData.settings.denominationColors;
     });
   }
 }

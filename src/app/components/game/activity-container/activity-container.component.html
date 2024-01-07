@@ -1,5 +1,10 @@
 <div class="content" *ngIf="transactions else loading">
-    <app-activity-table [transactions]="transactions"></app-activity-table>
+    <app-activity-table
+        [transactions]="transactions"
+        [denominations]="denominations"
+        [denominationColors]="denominationColors"
+    >
+    </app-activity-table>
 </div>
 
 <ng-template #loading>

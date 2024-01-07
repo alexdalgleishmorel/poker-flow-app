@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import { currencyFormatter } from 'src/app/app.component';
 
+import { DEFAULT_DENOMINATION_COLORS } from '@constants';
+import { TransactionSummaryModalComponent } from './transaction-summary-modal/transaction-summary-modal.component';
 import { GameTransaction, TransactionType } from 'src/app/services/game/game.service';
 
 @Component({
@@ -10,9 +13,13 @@ import { GameTransaction, TransactionType } from 'src/app/services/game/game.ser
 })
 export class ActivityTableComponent implements OnInit {
   @Input() transactions: GameTransaction[] = [];
+  @Input() denominations: number[] = [];
+  @Input() denominationColors: string[] = [];
 
   public filteredData: GameTransaction[] = [];
   public unfilteredData: GameTransaction[] = [];
+
+  constructor(private modalCtrl: ModalController) {}
 
   /**
    * Initializes the unfiltered data to be the provided data source
@@ -76,5 +83,22 @@ export class ActivityTableComponent implements OnInit {
    */
   getFormattedCurrency(value: number): string {
     return currencyFormatter.format(value);
+  }
+
+  /**
+   * Opens a transaction summary modal for the provided transaction
+   * 
+   * @param {GameTransaction} transaction The transaction to display
+   */
+  async openTransactionSummaryModal(transaction: GameTransaction) {
+    let modal = await this.modalCtrl.create({
+      component: TransactionSummaryModalComponent,
+      componentProps: {
+        transaction: transaction,
+        denominations: this.denominations,
+        denominationColors: this.denominationColors
+      }
+    });
+    modal.present();
   }
 }

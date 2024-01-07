@@ -137,6 +137,7 @@ export interface GameTransaction {
   date: string;
   type: TransactionType;
   amount: number;
+  denominations: number[];
 }
 
 export interface GameTransactionRequest {

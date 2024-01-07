@@ -3,10 +3,10 @@
     <ion-content>
         <div *ngIf="transactions && transactions.length > 0 else emptyTable">
             <ion-list [inset]="true" *ngIf="transactions && transactions.length > 0 else emptyTable">
-                <ion-item *ngFor="let transaction of transactions; let index">
+                <ion-item *ngFor="let transaction of transactions; let index" (click)="openTransactionSummaryModal(transaction)">
                     <ion-label>
                         <ion-text>
-                            <b>{{ transaction.profile.firstName }} {{transaction.profile.lastName}}</b>
+                            <b>{{transaction.profile.firstName}} {{transaction.profile.lastName}}</b>
                             <br/>
                             <sub>
                                 <ion-text color="primary">{{getLocaleDateString(transaction.date)}}</ion-text>
