@@ -153,7 +153,7 @@ export class ChipSelectComponent implements OnChanges {
   }
 
   /**
-   * Opens the color picker modal
+   * Opens the color picker modal and assigns the chosen value to the currently selected chip
    */
   async openColorPickerModal() {
     let modal = await this.modalCtrl.create({ component: ColorPickerComponent });
