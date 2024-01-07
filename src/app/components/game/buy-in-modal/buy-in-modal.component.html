@@ -102,12 +102,20 @@
     <div class="modal-buttons-container">
         <ion-button
             color="primary"
-            (click)="closeWithSuccess()"
+            (click)="postTransactionAndCloseModal()"
             [disabled]="form.invalid"
             shape="round"
             expand="block"
         >
             CHIPS COLLECTED
+        </ion-button>
+        <ion-button
+            color="light"
+            (click)="cancelBuyIn()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
         </ion-button>
     </div>
 </ng-template>

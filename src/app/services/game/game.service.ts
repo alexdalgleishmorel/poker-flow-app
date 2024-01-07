@@ -144,6 +144,7 @@ export interface GameTransactionRequest {
   profileID: number;
   type: TransactionType;
   amount: number;
+  denominations: number[];
 }
 
 export interface GameSettings {

@@ -143,10 +143,10 @@ export class GameComponent implements OnInit {
 
     document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
 
-    const totalDepositValue = (await modal.onWillDismiss()).data;
+    const result = (await modal.onWillDismiss()).data;
     const userID = this.authService.getCurrentUser()?.id;
 
-    if (!totalDepositValue || !userID) {
+    if (!result.totalDepositValue || !userID) {
       return;
     }
 
@@ -155,7 +155,8 @@ export class GameComponent implements OnInit {
       gameID: this.gameData?.id,
       profileID: userID,
       type: TransactionType.CASH_OUT,
-      amount: totalDepositValue
+      amount: result.totalDepositValue,
+      denominations: result.denominations
     }).then(() => this.displayTransactionSuccess('CASH-OUT'));
   }
 

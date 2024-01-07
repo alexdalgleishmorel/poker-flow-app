@@ -75,22 +75,23 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Closes the modal as a success
+   * Posts the transaction and closes the modal on success
    */
-  closeWithSuccess() {
-    this.modalCtrl.dismiss(true);
-  }
-
-  /**
-   * Confirms the buy-in by posting it as a transaction
-   */
-  confirmBuyIn() {
+  postTransactionAndCloseModal() {
     this.gameService.postTransaction({
       gameID: this.gameID,
       profileID: this.userID,
       type: TransactionType.BUY_IN,
-      amount: this.buyInFormControl.value
-    }).then(() => this.buyInConfirmed = true);
+      amount: this.buyInFormControl.value,
+      denominations: this.assignments
+    }).then(() => this.modalCtrl.dismiss(true));
+  }
+
+  /**
+   * Triggers a transition to the distribution view
+   */
+  confirmBuyIn() {
+    this.buyInConfirmed = true;
   }
 
   /**
@@ -247,7 +248,7 @@ export class BuyInModalComponent implements OnInit, AfterViewInit {
 
   /**
    * Adjusts the chip assignments to reach the target chip amount for the currently selected
-   * denonmination, changing only the unlocked chip denomination amounts to achieve the target
+   * denomination, changing only the unlocked chip denomination amounts to achieve the target
    * 
    * @param {number} targetChipAmount The target chip count to have for the currently selected denomination
    */

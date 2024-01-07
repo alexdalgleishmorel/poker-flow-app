@@ -51,14 +51,14 @@ export class ChipDepositModalComponent implements OnInit {
    * Closes the modal with the deposit total
    */
   completeDeposit() {
-    this.modalCtrl.dismiss(this.totalCashout);
+    this.modalCtrl.dismiss({totalDepositValue: this.totalCashout, denominations: this.denominationCounts});
   }
 
   /**
    * Closes the modal as a cancellation
    */
   cancelDeposit() {
-    this.modalCtrl.dismiss(null);
+    this.modalCtrl.dismiss({totalDepositValue: 0});
   }
 
   /**
