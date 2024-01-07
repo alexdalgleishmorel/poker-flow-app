@@ -3,7 +3,7 @@
     <ion-content>
         <div *ngIf="transactions && transactions.length > 0 else emptyTable">
             <ion-list [inset]="true" *ngIf="transactions && transactions.length > 0 else emptyTable">
-                <ion-item *ngFor="let transaction of transactions; let index" (click)="openTransactionSummaryModal(transaction)">
+                <ion-item class="transaction-item" *ngFor="let transaction of transactions; let index" (click)="openTransactionSummaryModal(transaction)">
                     <ion-label>
                         <ion-text>
                             <b>{{transaction.profile.firstName}} {{transaction.profile.lastName}}</b>
