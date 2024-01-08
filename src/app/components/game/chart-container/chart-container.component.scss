@@ -15,6 +15,10 @@
     align-items: center;
     width: 50vh;
     height: 50vh;
+    @include laptop {
+        width: 40vh;
+        width: 40vh;
+    }
 }
 
 .dynamic-spacer {
