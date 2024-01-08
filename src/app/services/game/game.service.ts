@@ -3,7 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 
 import { ApiService } from '../api/api.service';
-import { AuthService, Profile } from '../auth/auth.service';
+import { Profile } from '../auth/auth.service';
 import { EMPTY_GAME_DATA } from '@constants';
 
 @Injectable({
@@ -12,10 +12,14 @@ import { EMPTY_GAME_DATA } from '@constants';
 export class GameService {
   public colorThemeSubject: Subject<number> = new Subject<number>();
   public currentGameSubject: BehaviorSubject<GameData> = new BehaviorSubject<GameData>(EMPTY_GAME_DATA);
-  public updateNotification: Subject<number> = new Subject<number>();
+  public updateGamesListRequest: Subject<number> = new Subject<number>();
+  public updateCurrentPoolRequest: Subject<number> = new Subject<number>();
 
-  constructor(private apiService: ApiService, private authService: AuthService, private socket: Socket) {
-    this.socket.on('game_updated', () => this.updateNotification.next(1));
+  constructor(private apiService: ApiService, private socket: Socket) {
+    this.socket.on('game_updated', (data: GameData) => {
+      this.currentGameSubject.next(data);
+      this.updateGamesListRequest.next(1);
+    });
   }
 
   /**

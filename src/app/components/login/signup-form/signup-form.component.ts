@@ -61,7 +61,7 @@ export class SignupFormComponent {
         requestLogin({email: signUpRequest.email, password: signUpRequest.password}, this.authService)
           .then(() => {
             this.signUpFormGroup.reset();
-            this.gameService.updateNotification.next(1);
+            this.gameService.updateGamesListRequest.next(1);
             this.router.navigate(['']);
           })
           .catch(error => {

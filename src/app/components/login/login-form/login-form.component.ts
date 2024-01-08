@@ -47,7 +47,7 @@ export class LoginFormComponent {
     requestLogin(loginRequest, this.authService)
       .then(() => {
         this.loginFormGroup.reset();
-        this.gameService.updateNotification.next(1);
+        this.gameService.updateGamesListRequest.next(1);
         this.router.navigate(['']);
       })
       .catch(error => {

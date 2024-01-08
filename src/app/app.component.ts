@@ -27,7 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private handleVisibilityChange = () => {
     if (document.visibilityState === 'visible') {
-      this.gameService.updateNotification.next(1);
+      this.gameService.updateGamesListRequest.next(1);
+      this.gameService.updateCurrentPoolRequest.next(1);
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
+import { Socket } from 'ngx-socket-io';
 import { Subscription } from 'rxjs';
 
 import { BuyInModalComponent } from './buy-in-modal/buy-in-modal.component';
@@ -31,6 +32,7 @@ export class GameComponent implements OnInit {
     private modalCtrl: ModalController,
     private gameService: GameService,
     private router: Router,
+    private socket: Socket,
     private toastController: ToastController,
   ) {}
 
@@ -65,19 +67,39 @@ export class GameComponent implements OnInit {
   }
 
   /**
-   * Subscribes to update notifications, which trigger a new data request for the current game data
+   * Subscribes to game updates
    */
   ionViewWillEnter() {
-    this.updateSubscription = this.gameService.updateNotification.subscribe(() => {
+    this.updateSubscription = this.gameService.updateCurrentPoolRequest.subscribe(() => {
       this.gameService.getGameByID(this.getID()).then(gameData => this.gameService.currentGameSubject.next(gameData));
     });
+    this.subscribeToGame(this.getID());
   }
 
   /**
-   * Unsubscribes from update notifications when the view is left
+   * Unsubscribes from game updates
    */
   ionViewWillLeave() {
     this.updateSubscription?.unsubscribe();
+    this.unsubscribeFromGame(this.getID());
+  }
+  
+  /**
+   * Subscribes to websocket updates for the given game ID
+   * 
+   * @param {string} gameID The ID of the game
+   */
+  subscribeToGame(gameID: string) {
+    this.socket.emit('subscribe_to_game', { game_id: gameID });
+  }
+
+  /**
+   * Unsubscribes from websocket updates for the given game ID
+   * 
+   * @param {string} gameID The ID of the game
+   */
+  unsubscribeFromGame(gameID: string) {
+    this.socket.emit('unsubscribe_from_game', { game_id: gameID });
   }
 
   /**
