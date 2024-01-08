@@ -36,7 +36,10 @@ const config: SocketIoConfig = { url: BASE_API_URL, options: {transports: ['webs
     GameModule,
     HttpClientModule,
     HubModule,
-    IonicModule.forRoot(),
+    IonicModule.forRoot({
+      scrollPadding: false,
+      scrollAssist: false
+    }),
     LoginModule,
     ReactiveFormsModule,
     SocketIoModule.forRoot(config),
