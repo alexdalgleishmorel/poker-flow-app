@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
 import { GameService } from './services/game/game.service';
 
@@ -49,29 +49,4 @@ export function getPrefersDark(): boolean {
 
 export function getLogoSVGName(prefix: string): string {
   return getPrefersDark() ? prefix.concat('logo-dark.svg') : prefix.concat('logo-light.svg');
-}
-
-@Pipe({
-  name: 'thousandSuff'
-})
-export class ThousandSuffixesPipe implements PipeTransform {
-  transform(input: any, args?: any): any {
-    var exp, suffixes = ['K', 'M', 'B', 'T', 'P', 'E'];
-
-    if (Number.isNaN(input) || input < 0) {
-      return null;
-    }
-
-    if (input < 1) {
-      return '¢' + (input*100).toFixed(args);
-    }
-
-    if (input < 1000) {
-      return '$' + input;
-    }
-
-    exp = Math.floor(Math.log(input) / Math.log(1000));
-
-    return '$' + (input / Math.pow(1000, exp)).toFixed(args) + suffixes[exp - 1];
-  }
 }

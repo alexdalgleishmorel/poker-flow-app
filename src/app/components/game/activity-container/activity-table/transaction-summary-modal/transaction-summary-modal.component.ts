@@ -47,7 +47,6 @@ export class TransactionSummaryModalComponent {
    * @returns {string} A date formatted to the locale timezone
    */
   getLocaleDateString(date: string): string {
-    console.log(date);
     return new Date(date).toLocaleString(
       [], {year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit'}
     );
