@@ -27,7 +27,7 @@ export const EMPTY_GAME_DATA = {
 
 const BLUE_COLOR_GROUP = { name: 'BLUE',      shades: ['#0000FF', '#ADD8E6', '#87CEEB', '#4682B4', '#000080'] };
 const WHITE_COLOR_GROUP = { name: 'WHITE',    shades: ['#FFFFFF', '#F5F5F5', '#E8E8E8', '#DCDCDC', '#D0D0D0'] };
-const RED_COLOR_GROUP = { name: 'RED',        shades: ['#FF0000', '#FFCCCC', '#FF6666', '#CC0000', '#800000'] };
+const RED_COLOR_GROUP = { name: 'RED',        shades: ['#FF0000', '#CC0000', '#990000', '#660000', '#330000'] };
 const GREEN_COLOR_GROUP = { name: 'GREEN',    shades: ['#008000', '#CCFFCC', '#66CC66', '#009933', '#006600'] };
 const BLACK_COLOR_GROUP = { name: 'BLACK',    shades: ['#000000', '#202020', '#404040', '#606060', '#808080'] };
 const ORANGE_COLOR_GROUP = { name: 'ORANGE',  shades: ['#FFA500', '#FFE5CC', '#FFCC99', '#FF9933', '#CC6600'] };
