@@ -1,0 +1,23 @@
+.color-chip-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.description-container {
+    text-align: center;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+ion-card-subtitle {
+    text-align: center;
+}
+
+ion-chip {
+    width: 50px;
+    border: 1px solid #000000;
+}

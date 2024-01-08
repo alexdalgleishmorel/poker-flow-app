@@ -1,0 +1,46 @@
+<div class="table-container">
+    <ion-searchbar (ionInput)="handleSearch($event)" *ngIf="unfilteredData?.length"></ion-searchbar>
+    <ion-content>
+        <div *ngIf="transactions && transactions.length > 0 else emptyTable">
+            <ion-list [inset]="true" *ngIf="transactions && transactions.length > 0 else emptyTable">
+                <ion-item class="transaction-item" *ngFor="let transaction of transactions; let index" (click)="openTransactionSummaryModal(transaction)">
+                    <ion-label>
+                        <ion-text>
+                            <b>{{transaction.profile.firstName}} {{transaction.profile.lastName}}</b>
+                            <br/>
+                            <sub>
+                                <ion-text color="primary">{{getLocaleDateString(transaction.date)}}</ion-text>
+                            </sub>
+                        </ion-text>
+                    </ion-label>
+                    <ion-text class="transaction-text">
+                        <ion-text 
+                            [color]="isBuyIn(transaction.type) ? 'primary' : 'tertiary'"
+                        >
+                            <b>{{isBuyIn(transaction.type) ? 'BUY-IN' : 'CASH-OUT'}}</b>
+                        </ion-text>
+                        <br/>
+                        {{getFormattedCurrency(transaction.amount)}}
+                    </ion-text>
+                    <br/>
+                </ion-item>
+            </ion-list>
+            <div class="list-padding"></div>
+        </div>
+    </ion-content>
+</div>
+
+<ng-template #emptyTable>
+    <div class="content">
+        <div class="empty-table-text" *ngIf="filteredData.length === unfilteredData.length else emptySearch">
+            <ion-text color="primary"><b>BUY-IN</b></ion-text>
+            <br/>
+            to get started
+        </div>
+        <div *ngIf="unfilteredData.length" class="list-padding"></div>
+    </div>
+</ng-template>
+
+<ng-template #emptySearch>
+    <app-empty-search-message></app-empty-search-message>
+</ng-template>

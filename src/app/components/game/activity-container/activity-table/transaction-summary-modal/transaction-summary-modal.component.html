@@ -1,0 +1,32 @@
+<ion-footer>
+  <div class="modal-buttons-container">
+      <ion-button
+          color="primary"
+          (click)="closeModal()"
+          shape="round"
+          expand="block"
+      >
+        DISMISS
+      </ion-button>
+  </div>
+</ion-footer>
+<ion-content [scrollY]="false">
+  <div class="content" *ngIf="transaction"> 
+    <div class="spacer"></div>
+    <div class="transaction-title">
+      <ion-text color="primary"><b>{{getTransactionRepresentation(transaction.type)}}</b></ion-text>
+      <ion-text>{{getFormattedCurrency(transaction.amount)}}</ion-text>
+    </div>
+    <div class="spacer"></div>
+    <app-chip-view
+      [denominations]="denominations"
+      [assignments]="transaction.denominations"
+      [denominationColors]="denominationColors"
+      [viewOnly]="true"
+    >
+    </app-chip-view>
+    <div class="spacer"></div>
+    <ion-text>{{transaction.profile.firstName}} {{transaction.profile.lastName}}</ion-text>
+    <ion-text color="medium">{{getLocaleDateString(transaction.date)}}</ion-text>
+  </div>
+</ion-content>

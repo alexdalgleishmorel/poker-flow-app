@@ -1,0 +1,79 @@
+<ion-content *ngIf="gameData else loading">
+    <ion-card>
+        <ion-card-header>
+        <ion-card-subtitle color="primary">DENOMINATIONS</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+        <app-chip-view
+            [denominations]="gameData ? gameData.settings.denominations : []"
+            [denominationColors]="gameData.settings.denominationColors"
+            [viewOnly]="true">
+        </app-chip-view>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-subtitle color="primary">BUY-INS</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="toggle-container"><ion-toggle [formControl]="buyInEnabledFormControl"></ion-toggle></div>
+            <div class="spacer"></div>
+            <ion-input
+                label="Minimum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                [maxlength]="15"
+                [formControl]="minBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
+                (focusout)="onMinBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(0)"
+            >
+            </ion-input>
+            <div class="spacer"></div>
+            <ion-input
+                label="Maximum"
+                mode="md"
+                fill="outline"
+                labelPlacement="stacked"
+                [maxlength]="15"
+                [formControl]="maxBuyInFormControl"
+                (ionFocus)="onFocus(minBuyInFormControl)"
+                (focusout)="onMaxBuyInFocusOut()"
+                (keypress)="decimalFilter($event)"
+                [errorText]="getErrorMessage(1)"
+            >
+            </ion-input>
+            <div class="saveButtonContainer">
+                <ion-button
+                    *ngIf="isGameAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="light"
+                    (click)="cancelChanges()"
+                    [disabled]="!settingsFormGroup.dirty"
+                >
+                    CANCEL
+                </ion-button>
+                <ion-button
+                    *ngIf="isGameAdmin()"
+                    shape="round"
+                    expand="block"
+                    color="primary"
+                    (click)="saveSettings()"
+                    [disabled]="!settingsFormGroup.dirty || settingsFormGroup.invalid"
+                >
+                    SAVE
+                </ion-button>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <div class="spacer"></div>
+</ion-content>
+
+<ng-template #loading>
+    <div class="content">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>

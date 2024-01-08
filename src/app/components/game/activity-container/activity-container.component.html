@@ -1,0 +1,14 @@
+<div class="content" *ngIf="transactions else loading">
+    <app-activity-table
+        [transactions]="transactions"
+        [denominations]="denominations"
+        [denominationColors]="denominationColors"
+    >
+    </app-activity-table>
+</div>
+
+<ng-template #loading>
+    <div class="content">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>

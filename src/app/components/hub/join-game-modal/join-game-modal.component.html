@@ -1,0 +1,37 @@
+<ion-content [scrollY]="false">
+  <div class="content">
+    <ion-text color="primary"><h3>Game ID</h3></ion-text>
+        <ion-text>Enter the ID of the game to join</ion-text>
+        <div class="spacer"></div>
+        <ion-input
+          mode="md"
+          fill="outline"
+          labelPlacement="stacked"
+          label="Game ID"
+          errorText="Required" 
+          [formControl]="gameIDFormControl"
+        >
+        </ion-input>
+    <div class="modal-buttons-container">
+      <ion-button
+          class="create-button"
+          color="primary"
+          (click)="closeWithGameID()"
+          [disabled]="!gameIDFormControl.getRawValue()"
+          shape="round"
+          expand="block"
+      >
+          JOIN GAME
+      </ion-button>
+      <ion-button
+          class="cancel-button"
+          color="light"
+          (click)="cancel()"
+          shape="round"
+          expand="block"
+      >
+          CANCEL
+      </ion-button>
+    </div>
+  </div>  
+</ion-content>

@@ -1,0 +1,17 @@
+#game-donut-chart {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    position: absolute;
+}

@@ -1,0 +1,14 @@
+<div class="content" *ngIf="games else loading">
+    <app-user-games-table 
+        [dataSource]="games"
+        [noNewData]="noNewData" 
+        (getMoreData)="getData($event)"
+    >
+    </app-user-games-table>
+</div>
+
+<ng-template #loading>
+    <div class="content">
+        <app-loading-spinner></app-loading-spinner>
+    </div>
+</ng-template>

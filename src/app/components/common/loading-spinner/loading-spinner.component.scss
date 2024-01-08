@@ -17,15 +17,8 @@ ion-spinner {
     align-items: center;
 }
 
-.retry-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.spacer {
-    padding: 10px;
-}
-
-.small-spacer {
-    padding: 5px;
+.logo {
+    position: absolute;
+    width: calc(min(15vw, 15vh));
+    height: calc(min(15vw, 15vh));
 }

@@ -1,0 +1,55 @@
+<ion-footer>
+  <div *ngIf="!gameData?.settings?.expired else expiredMessage" class="main-buttons-container">
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="buyIn()"
+        [disabled]="disabled || !gameData?.settings?.buyInEnabled"
+        color="primary"
+    >
+        BUY-IN
+    </ion-button>
+    <ion-button
+        shape="round"
+        expand="block"
+        (click)="cashOut()"
+        [disabled]="disabled || !gameData?.availableCashout"
+        color="tertiary"
+    >
+        CASH-OUT
+    </ion-button>
+  </div>
+</ion-footer>
+<ion-content [scrollY]="false">
+  <div class="content">
+    <ion-segment #segmentBar [scrollable]="true" [value]="POT">
+      <ion-segment-button [value]="POT" (click)="onGameViewChange(POT)">
+        <ion-icon name="pie-chart-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="TRANSACTIONS" (click)="onGameViewChange(TRANSACTIONS)">
+        <ion-icon name="swap-horizontal-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="SHARE" (click)="onGameViewChange(SHARE)" *ngIf="!gameData?.settings?.expired">
+        <ion-icon name="share-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="SETTINGS" (click)="onGameViewChange(SETTINGS)" *ngIf="!gameData?.settings?.expired">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+    <ion-content [scrollY]="false">
+      <app-chart-container *ngIf="currentView === POT"></app-chart-container>
+      <app-activity-container *ngIf="currentView === TRANSACTIONS"></app-activity-container>
+      <app-share-game *ngIf="currentView === SHARE"></app-share-game>
+      <app-game-settings *ngIf="currentView === SETTINGS"></app-game-settings>
+    </ion-content>
+  </div>
+</ion-content>
+
+<ng-template #expiredMessage>
+  <div class="main-buttons-container centered">
+    <ion-text color="primary"><b>GAME EXPIRED</b></ion-text>
+    <div class="small-spacer"></div>
+    <ion-text color="medium">Available cashout has been fully withdrawn</ion-text>
+    <div class="spacer"></div>
+  </div>
+</ng-template>

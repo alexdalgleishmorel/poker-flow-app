@@ -1,0 +1,121 @@
+<ion-footer>
+    <div *ngIf="!buyInConfirmed else confirmedFooter">
+        <div class="modal-buttons-container">
+            <ion-button
+                color="primary"
+                (click)="confirmBuyIn()"
+                [disabled]="form.invalid"
+                shape="round"
+                expand="block"
+            >
+                CONFIRM
+            </ion-button>
+            <ion-button
+                color="light"
+                (click)="cancelBuyIn()"
+                shape="round"
+                expand="block"
+            >
+                CANCEL
+            </ion-button>
+        </div>
+    </div>
+</ion-footer>
+<ion-content [scrollY]="false">
+    <div class="content" *ngIf="!buyInConfirmed else confirmed">
+        <div class="buy-in-container" (click)="hiddenInput.setFocus()">
+            <ion-text color="medium">TOTAL BUY-IN</ion-text>
+            <ion-text class="buy-in-value" color="primary">
+                <b>{{getFormattedCurrency(buyInFormControl.value)}}</b>
+            </ion-text>
+            <ion-text *ngIf="getErrorMessage()" [class.invisible]="getErrorMessage() === 'EMPTY'" color="danger">{{getErrorMessage()}}</ion-text>
+            <ion-input
+                class="hidden-input"
+                #hiddenInput
+                (input)="handleManualBuyIn($event)"
+                (ionFocus)="handleManualFocus()"
+                [formControl]="manualInputFormControl"
+            >
+            </ion-input>
+        </div>
+        <div class="spacer"></div>
+        <div class="range-container" *ngIf="minBuyIn !== maxBuyIn">
+            <ion-range [min]="minBuyIn" [max]="maxBuyIn" [step]="buyInStep" (ionInput)="onBuyInSliderChange($event)" [formControl]="buyInFormControl"></ion-range>
+            <ion-text color="medium">Slide to adjust buy-in</ion-text>
+        </div>
+    </div>
+</ion-content>
+
+<ng-template #confirmed>
+    <div class="content">
+        <ion-text *ngIf="!distributionView" class="confirmed-text" color="primary">
+            <b>COLLECT YOUR CHIPS</b>
+        </ion-text>
+        <div class="spacer"></div>
+        <ion-text *ngIf="!distributionView" color="medium">
+            Below are the suggested chip amounts
+        </ion-text>
+        <div *ngIf="distributionView" color="medium">
+            <ion-text color="medium" class="centered-row" *ngIf="selectedSlot >= 0">
+                Use
+                <div class="tiny-spacer"></div>
+                <ion-icon name="lock-open-outline" color="primary"></ion-icon>
+                <div class="tiny-spacer"></div>
+                to lock in a chip amount
+            </ion-text>
+            <ion-text *ngIf="selectedSlot < 0" color="medium">Select a chip to get started</ion-text>
+        </div>
+        <div class="spacer"></div>
+        <app-chip-view 
+            [denominations]="buyInFormControl.value ? denominations : []"
+            [denominationColors]="denominationColors"
+            [assignments]="assignments"
+            [distributionView]="distributionView && selectedSlot >= 0"
+            [chipLockStatuses]="chipLockStatuses"
+            (chipLockStatusesChange)="onChipLockStatusesChange($event)"
+            (chipSelect)="onChipSelect($event)"
+        >
+        </app-chip-view>
+        <div class="spacer"></div>
+        <ion-button
+            *ngIf="!distributionView"
+            color="light"
+            (click)="enableDistributionView()"
+            shape="round"
+            expand="block"
+        >
+            ADJUST AMOUNTS
+        </ion-button>
+        <div class="range-container" *ngIf="distributionView && selectedSlot >= 0">
+            <ion-range 
+                (ionInput)="onDistributionSliderChange($event)"
+                [min]="0"
+                [max]="chipDistributionMax"
+                [formControl]="chipDistributionFormControl">
+            </ion-range>
+            <ion-text color="medium">Slide to adjust chip amount</ion-text>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #confirmedFooter>
+    <div class="modal-buttons-container">
+        <ion-button
+            color="primary"
+            (click)="postTransactionAndCloseModal()"
+            [disabled]="form.invalid"
+            shape="round"
+            expand="block"
+        >
+            CHIPS COLLECTED
+        </ion-button>
+        <ion-button
+            color="light"
+            (click)="cancelBuyIn()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
+</ng-template>

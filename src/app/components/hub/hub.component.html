@@ -10,6 +10,7 @@
             CREATE GAME
         </ion-button>
         <ion-button
+            id="join-game"
             shape="round"
             expand="block"
             [disabled]="disabled"
@@ -20,18 +21,22 @@
         </ion-button>
     </div>
   </ion-footer>
-<ion-content class="hub-table-container" [scrollY]="false">
-    <ion-tabs>
-
-        <ion-tab-bar slot="top">
-            <ion-tab-button tab="active-games">
-            <ion-label>ACTIVE GAMES</ion-label>
-            </ion-tab-button>
-        
-            <ion-tab-button tab="past-games">
-            <ion-label>PAST GAMES</ion-label>
-            </ion-tab-button>
-        </ion-tab-bar>
-        
-    </ion-tabs>
+<ion-content [scrollY]="false">
+    <div class="content">
+        <ion-segment #segmentBar [scrollable]="true" [value]="ACTIVE">
+            <ion-segment-button [value]="ACTIVE" (click)="updateList(ACTIVE)">
+                ACTIVE GAMES
+            </ion-segment-button>
+            <ion-segment-button [value]="PAST" (click)="updateList(PAST)">
+                PAST GAMES
+            </ion-segment-button>
+        </ion-segment>
+        <ion-content [scrollY]="false">
+            <app-games-list *ngIf="currentList == ACTIVE else pastGames" [activeGames]="true"></app-games-list>
+        </ion-content>
+    </div>
 </ion-content>
+
+<ng-template #pastGames>
+    <app-games-list [activeGames]="false"></app-games-list>
+</ng-template>

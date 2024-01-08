@@ -1,9 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { PoolData, PoolService } from 'src/app/services/pool/pool.service';
-import { IonModal, ModalController } from '@ionic/angular';
-import { CreateGameModalComponent } from '../create-game-modal/create-game-modal.component';
-import { JoinGameModalComponent } from '../join-game-modal/join-game-modal.component';
-import { DeviceService } from 'src/app/services/device/device.service';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+
+import { CreateGameModalComponent } from './create-game-modal/create-game-modal.component';
+import { JoinGameModalComponent } from './join-game-modal/join-game-modal.component';
+import { GameData, GameService } from 'src/app/services/game/game.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-hub',
@@ -11,53 +13,64 @@ import { DeviceService } from 'src/app/services/device/device.service';
   styleUrls: ['./hub.component.scss']
 })
 export class HubComponent {
-  @ViewChild('createGameModal') createGameModal!: IonModal;
-  @ViewChild('joinGameModal') joinGameModal!: IonModal;
-  
   public disabled: boolean = false;
-  public poolData?: PoolData[];
+  public currentList: ListState = ListState.ACTIVE;
+  public gameData?: GameData[];
+
+  readonly ACTIVE: ListState = ListState.ACTIVE;
+  readonly PAST: ListState = ListState.PAST;
 
   constructor(
-    private deviceService: DeviceService,
-    private modalCtrl: ModalController,
-    private poolService: PoolService
+    private authService: AuthService, 
+    private modalCtrl: ModalController, 
+    private gameService: GameService, 
+    private router: Router
   ) {}
 
-  ionViewWillEnter() {
-    this.poolService.newDataRequest.next(true);
-  }
-
   /**
-   * Finds a PokerFlow device, creates a new game associated
-   * with that device and navigates to its pool view
+   * Opens a create game modal
    */
   async createGame() {
     const modal = await this.modalCtrl.create({
-      component: CreateGameModalComponent
+      component: CreateGameModalComponent,
+      cssClass: 'modal-fullscreen'
     });
     modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
+
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
   }
 
   /**
-   * Finds a PokerFlow device, displays available games associated 
-   * with that device, and allows the user to join a game
+   * Opens a join game modal
    */
   async joinNewGame() {
     const modal = await this.modalCtrl.create({
-      component: JoinGameModalComponent
+      component: JoinGameModalComponent,
+      cssClass: 'modal-fullscreen'
     });
     modal.present();
-    this.deviceService.connectionCancelled.subscribe(cancelled => {
-      if (cancelled) {
-        modal.dismiss();
-        this.deviceService.connectionCancelled.next(false);
-      }
-    });
+
+    document.querySelector('.modal-fullscreen')?.shadowRoot?.querySelector('.modal-wrapper')?.setAttribute('style', 'width:100%; height:100%;');
+
+    const gameID = (await modal.onWillDismiss()).data;
+    const userID = this.authService.getCurrentUser()?.id;
+
+    if (gameID && userID) {
+      this.gameService.joinGame(gameID, userID).then(() => this.router.navigate(['/', `game`, gameID]));
+    }
   }
+
+  /**
+   * Updates the currently active list to the given listState
+   * 
+   * @param {ListState} listState The listState to update to
+   */
+  updateList(listState: ListState) {
+    this.currentList = listState;
+  }
+}
+
+enum ListState {
+  ACTIVE = 'ACTIVE',
+  PAST = 'PAST'
 }

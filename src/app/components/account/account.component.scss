@@ -1,0 +1,51 @@
+@import '../../../mixins.scss';
+
+ion-title {
+    text-align: center;
+}
+
+ion-spinner {
+    width: 10px;
+    height: 10px;
+}
+
+.email-label {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.logout-container {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.tiny-spacer {
+    padding: 1px;
+}
+
+.small-spacer {
+    padding: 5px;
+}
+
+.spacer {
+    padding: 10px;
+}
+
+.dynamic-spacer {
+    @include laptop {
+        padding: 5px;
+    }
+}

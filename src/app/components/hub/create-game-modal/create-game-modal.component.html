@@ -1,0 +1,84 @@
+<ion-content>
+    <div class="form-container">
+        <ion-text color="primary"><h3>Name Your Game</h3></ion-text>
+        <ion-input
+            label="Name"
+            mode="md"
+            fill="outline"
+            labelPlacement="stacked"
+            [formControl]="gameNameFormControl"
+            errorText="Required"
+        >
+        </ion-input>
+        <div class="section-spacer"></div>
+        <ion-text color="primary"><h3>Chip Values</h3></ion-text>
+        <ion-text>Select a chip to set its value</ion-text>
+        <div class="vertical-spacer"></div>
+        <app-chip-select
+            [(denominations)]="gameSettings.denominations"
+            [(denominationColors)]="gameSettings.denominationColors"
+            [maxBuyIn]="gameSettings.maxBuyIn">
+        </app-chip-select>
+        <div class="section-spacer"></div>
+        <ion-text color="primary"><h3>Buy-In Values</h3></ion-text>
+        <div class="vertical-spacer"></div>
+        <ion-input
+            label="Minimum Buy-In"
+            mode="md"
+            fill="outline"
+            labelPlacement="stacked"
+            [maxlength]="15"
+            [formControl]="minBuyInFormControl"
+            (ionFocus)="onFocus(minBuyInFormControl)"
+            (focusout)="onMinBuyInFocusOut()"
+            (keypress)="decimalFilter($event)"
+            [errorText]="getErrorMessage(0)"
+        >
+        </ion-input>
+        <div class="spacer"></div>
+        <ion-input
+            label="Maximum Buy-In"
+            mode="md"
+            fill="outline"
+            labelPlacement="stacked"
+            [maxlength]="15"
+            [formControl]="maxBuyInFormControl"
+            (ionFocus)="onFocus(maxBuyInFormControl)"
+            (focusout)="onMaxBuyInFocusOut()"
+            (keypress)="decimalFilter($event)"
+            [errorText]="getErrorMessage(1)"
+        >
+        </ion-input>
+    </div>
+    <div class="modal-buttons-container">
+        <ion-button
+            *ngIf="gameNameFormControl.value else missingGameNameMessage"
+            class="create-button"
+            color="primary"
+            (click)="createGame()"
+            [disabled]="!mainFormGroup.valid"
+            shape="round"
+            expand="block"
+        >
+            CREATE GAME
+        </ion-button>
+        <ion-button
+            class="cancel-button"
+            color="light"
+            (click)="cancel()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
+</ion-content>
+
+<ng-template #missingGameNameMessage>
+    <ion-text color="warning" class="centered-row">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <div class="tiny-spacer"></div>
+        Missing a name for the game
+    </ion-text>
+    <div class="spacer"></div>
+</ng-template>

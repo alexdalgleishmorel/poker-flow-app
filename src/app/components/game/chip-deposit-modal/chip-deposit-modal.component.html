@@ -1,0 +1,95 @@
+<ion-footer>
+    <div class="modal-buttons-container">
+        <div class="range-container" *ngIf="currentDenominationIndex >= 0">
+            <ion-range 
+                [min]="0"
+                [max]="getMaximumChipCount()"
+                [step]="1"
+                (ionInput)="onSliderChange($event)"
+                [formControl]="denominationCountControl"
+            >
+            </ion-range>
+            <ion-text color="medium">Slide to adjust owned chips</ion-text>
+        </div>
+        <ion-button
+            class="deposit-button"
+            color="primary"
+            (click)="completeDeposit()"
+            shape="round"
+            expand="block"
+            [disabled]="!totalCashout"
+        >
+            DONE
+        </ion-button>
+        <ion-button
+            class="cancel-button"
+            color="light"
+            (click)="cancelDeposit()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
+</ion-footer>
+
+<ion-content>
+    <div class="content">
+        <div class="total-cash-out-container">
+            <ion-text color="medium">TOTAL CASH-OUT</ion-text>
+            <ion-text class="cash-out-value" color="primary"><b>{{getFormattedCurrency(totalCashout)}}</b></ion-text>
+        </div>
+        <div class="spacer"></div>
+        <div class="denomination-changer" *ngIf="currentDenominationIndex >= 0 else selectDenominationMessage">
+            <ion-icon
+                class="navigation-arrow"
+                size="large" 
+                name="arrow-back-outline"
+                (click)="lastDenomination()"
+                *ngIf="currentDenominationIndex !== 0 else emptyIcon"
+            >
+            </ion-icon>
+            <div class="chip-content" (click)="hiddenInput.setFocus()">
+                <ion-fab-button size="large" color="tertiary">
+                    {{ displayedDenomination | thousandSuff }}
+                </ion-fab-button>
+                <ion-text color="primary"><h2><b>{{denominationCounts[currentDenominationIndex]}}</b></h2></ion-text>
+                <ion-input
+                    class="hidden-input"
+                    #hiddenInput
+                    (input)="handleManualInput($event)"
+                    (ionFocus)="handleManualFocus()"
+                    [formControl]="manualInputFormControl"
+                >
+                </ion-input>
+            </div>
+            <ion-icon
+                class="navigation-arrow"
+                size="large"
+                name="arrow-forward-outline"
+                (click)="nextDenomination()"
+                *ngIf="currentDenominationIndex !== denominations.length-1 else emptyIcon"
+            >
+            </ion-icon>
+        </div>
+        <app-chip-view
+            (chipSelect)="onChipSelect($event)"
+            [denominations]="denominations"
+            [denominationColors]="denominationColors"
+            [assignments]="denominationCounts"
+        >
+        </app-chip-view>
+        <div class="spacer"></div>
+        <ion-text color="warning" *ngIf="totalCashoutExceededValue">
+            {{getFormattedCurrency(totalCashoutExceededValue)}} exceeds maximum of {{getFormattedCurrency(maximumCashout)}}
+        </ion-text>
+    </div>
+</ion-content>
+
+<ng-template #emptyIcon>
+    <ion-icon size="large"></ion-icon>
+</ng-template>
+
+<ng-template #selectDenominationMessage>
+    <ion-text color="medium">Select a denomination to get started</ion-text>
+</ng-template>

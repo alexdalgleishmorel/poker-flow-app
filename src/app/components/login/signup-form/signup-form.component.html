@@ -1,0 +1,75 @@
+<form [formGroup]="signUpFormGroup">
+  <div class="form-container">
+    <ion-input 
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
+      label="First Name"
+      [formControl]="firstNameFormControl"
+      errorText="Required"
+      (keyup.enter)="signup()"
+    >
+    </ion-input>
+    <div class="spacer"></div>
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
+      label="Last Name"
+      [formControl]="lastNameFormControl"
+      errorText="Required"
+      (keyup.enter)="signup()"
+    >
+    </ion-input>
+    <div class="spacer"></div>
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
+      label="Email"
+      type="email" 
+      [formControl]="emailRegistrationFormControl"
+      errorText="Invalid email"
+      (keyup.enter)="signup()"
+    >
+    </ion-input>
+    <div class="spacer"></div>
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
+      label="Password" 
+      type="password"
+      [formControl]="firstPasswordFormControl"
+      errorText="Required"
+      (keyup.enter)="signup()"
+    >
+    </ion-input>
+    <div class="spacer"></div>
+    <ion-input
+      mode="md"
+      fill="outline"
+      labelPlacement="stacked"
+      label="Confirm password" 
+      type="password"
+      [formControl]="secondPasswordFormControl"
+      errorText="Passwords do not match"
+      (keyup.enter)="signup()"
+    >
+    </ion-input>
+    <div *ngIf="signUpErrorMessages.getMessage()">
+      <div class="spacer"></div>
+      <ion-text color="danger" class="error-message">
+        {{signUpErrorMessages.getMessage()}}
+      </ion-text>
+    </div>
+    <div class="spacer"></div>
+    <ion-button
+        shape="round"
+        (click)="signup()"
+        [disabled]="signUpFormGroup.invalid"
+    >
+        JOIN NOW
+    </ion-button>
+  </div>
+</form>

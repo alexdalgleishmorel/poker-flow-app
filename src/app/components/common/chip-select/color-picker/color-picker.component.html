@@ -1,0 +1,39 @@
+<ion-footer>
+    <div class="modal-buttons-container">
+        <ion-button
+            color="light"
+            (click)="closeModalWithNoColor()"
+            shape="round"
+            expand="block"
+        >
+            CANCEL
+        </ion-button>
+    </div>
+</ion-footer>
+<ion-content>
+    <div class="spacer"></div>
+    <div class="description-container">
+        <ion-card-subtitle color="primary"><b>SELECT A COLOR</b></ion-card-subtitle>
+    </div>
+    <div *ngFor="let colorGroup of colorGroups">
+        <ion-card>
+            <ion-card-content>
+                <ion-card-subtitle><b>{{colorGroup.name}}</b></ion-card-subtitle>
+                <div class="color-chip-container">
+                    <ion-chip
+                        *ngFor="let color of colorGroup.shades"
+                        [style.background-color]="color"
+                        (click)="closeModalWithColor(color)">
+                    </ion-chip>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+    <!-- <ion-card *ngFor="let colorGroup of colorGroups">
+        <ion-card-content>
+            <div class="color-chip-container" *ngFor="let color of colorGroup.shades">
+                <ion-chip [style.background-color]="color" (click)="closeModalWithColor(color)"></ion-chip>
+            </div>
+        </ion-card-content>
+    </ion-card> -->
+</ion-content>

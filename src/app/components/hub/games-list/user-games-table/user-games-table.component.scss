@@ -1,0 +1,22 @@
+.spacer {
+    padding: 10px;
+}
+
+.table-container {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-message-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-message {
+    text-align: center;
+    font-size: xx-large;
+}
