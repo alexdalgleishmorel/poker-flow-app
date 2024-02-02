@@ -42,4 +42,4 @@ After the game, players can review everyone's buy-ins and cashouts, facilitating
 7. **[Socket IO](https://www.npmjs.com/package/ngx-socket-io)**
 
 ## Demo Video
-***Coming Soon***
+https://youtu.be/QoeoyLg-N_g
